@@ -59,7 +59,6 @@
     <Compile Include="Model\DataPoint.cs" />
     <Compile Include="Model\DataSet.cs" />
     <Compile Include="Model\Filter.cs" />
-    <Compile Include="Model\Interval.cs" />
     <Compile Include="Model\Series.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
