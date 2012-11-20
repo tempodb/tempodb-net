@@ -11,8 +11,8 @@ namespace Client
 	///      .Key("your-api-key")
 	///      .Secret("your-api-secret")
 	///      .Host("api.tempo-db.com")
-	///      .Port(80)
-	///		 .Version("v1")	
+	///      .Port(443)
+	///		 .Version("v1")
 	///      .Secure(true)
 	///      .Build();
 	///  }

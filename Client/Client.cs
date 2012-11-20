@@ -237,6 +237,9 @@ namespace Client
 			              		RequestFormat = DataFormat.Json,
 			              		JsonSerializer = new JsonSerializer()
 			              	};
+
+			request.AddHeader("Accept-Encoding", "gzip,deflate");
+
 			if (body != null)
 			{
 				request.AddBody(body);
