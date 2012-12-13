@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Client.Model;
 using MbUnit.Framework;
 using Moq;
+using RestSharp;
 
 namespace Client.Tests
 {
@@ -15,7 +17,7 @@ namespace Client.Tests
         private const string TEST_SERIES_KEY_1 = "asdf";
         private const string TEST_SERIES_KEY_2 = "my_favorite_series";
 
-		private Client GetClient(RestSharp.RestClient restClient = null)
+		private Client GetClient(RestClient restClient = null)
 		{
 			return new ClientBuilder()
 								.Host("api.tempo-db.com")
@@ -27,17 +29,89 @@ namespace Client.Tests
 								.Build();
 		}
 
+        private Mock<RestClient>  GetMockRestClient<T>(T response, Expression<Func<RestRequest,bool>> requestValidator = null) where T : new()
+        {
+            if (requestValidator == null)
+                requestValidator = req => true;
+
+            var res = new RestSharp.RestResponse<T>
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                ResponseStatus = RestSharp.ResponseStatus.Completed,
+                Data = response
+            };
+
+            var restClient = new Mock<RestSharp.RestClient>();
+            restClient.Setup(cl => cl.Execute<T>(It.Is<RestRequest>(requestValidator))).Returns(res);
+            return restClient;
+        }
 
 
 		[Test]
 		public void ItShouldReadSeriesDataByKey()
 		{
-			var client = GetClient();
-			var results = client.ReadByKey(TEST_SERIES_KEY_1, new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+            Series series = new Series
+            {
+                Key = "testkey"
+            };
+            DataSet ret = new DataSet
+            {
+                Series = series
+            };
+
+            var client = GetClient(GetMockRestClient<DataSet>(ret).Object);
+			var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 			Assert.IsNotNull(results);
 			Assert.IsNotNull(results.Series);
-			Assert.IsNotEmpty(results.Data);
+            Assert.AreEqual("testkey", results.Series.Key);
 		}
+
+        [Test]
+        public void ItShouldReadSeriesDataByKey_RequestMethod()
+        {
+            Expression<Func<RestRequest, bool>> assertion =  req => req.Method == Method.GET;
+
+            var client = GetClient(GetMockRestClient<DataSet>(new DataSet(),assertion).Object);
+            var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+        }
+
+        [Test]
+        public void ItShouldReadSeriesDataByKey_RequestStartTime()
+        {
+            Expression<Func<RestRequest, bool>> assertion = req => ContainsParameter(req.Parameters, "start", "2012-06-23T00:00:00.000-07:00");
+            
+            var client = GetClient(GetMockRestClient<DataSet>(new DataSet(), assertion).Object);
+            var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+        }
+
+        [Test]
+        public void ItShouldReadSeriesDataByKey_RequestEndTime()
+        {
+            Expression<Func<RestRequest, bool>> assertion = req => ContainsParameter(req.Parameters, "end", "2012-06-24T00:00:00.000-07:00");
+
+            var client = GetClient(GetMockRestClient<DataSet>(new DataSet(), assertion).Object);
+            var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+        }
+
+        [Test]
+        public void ItShouldReadSeriesDataByKey_RequestUrl()
+        {
+            Expression<Func<RestRequest, bool>> assertion = req => req.Resource == "/series/{property}/{value}/data" && 
+                ContainsParameter(req.Parameters, "property", "key") && 
+                ContainsParameter(req.Parameters, "value", "testkey");
+
+            var client = GetClient(GetMockRestClient<DataSet>(new DataSet(), assertion).Object);
+            var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+        }
+        
+        [Test]
+        public void ItShouldReadSeriesDataByKey_RequestInterval()
+        {
+            Expression<Func<RestRequest, bool>> assertion = req => ContainsParameter(req.Parameters, "interval", "raw");
+
+            var client = GetClient(GetMockRestClient<DataSet>(new DataSet(), assertion).Object);
+            var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+        }
 
 		[Test]
 		public void ItShouldReadSeriesDataById()
@@ -55,15 +129,9 @@ namespace Client.Tests
             List<DataSet> ret = new List<DataSet>();
             ret.Add(new DataSet());
 
-            var res = new RestSharp.RestResponse<List<DataSet>>
-            {
-                StatusCode = System.Net.HttpStatusCode.OK,
-                ResponseStatus = RestSharp.ResponseStatus.Completed,
-                Data = ret
-            };
 
-            var restClient = new Mock<RestSharp.RestClient>();
-            restClient.Setup(cl => cl.Execute<List<DataSet>>(It.IsAny<RestSharp.RestRequest>())).Returns(res);
+
+            var restClient = GetMockRestClient<List<DataSet>>(ret, req => req.Method == Method.GET);
 
             var client = GetClient(restClient.Object);
             var filter = new Filter();
@@ -84,25 +152,13 @@ namespace Client.Tests
 			Assert.IsNotEmpty(results.Data);
 		}
 
-		[Test]
-		public void ItShouldReadSeriesDataByIdWithFoldingFunction()
-		{
-			var client = GetClient();
-			var results = client.ReadById(TEST_SERIES_ID, new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Hours(1), FoldingFunction.Count);
-			Assert.IsNotNull(results);
-			Assert.IsNotNull(results.Series);
-			Assert.IsNotEmpty(results.Data);
-		}
-
-		[Test]
-		public void ItShouldReadRawDataWithFoldingFunction()
-		{
-			var client = GetClient();
-			var filter = new Filter();
-			filter.AddKey(TEST_SERIES_KEY_1);
-			filter.AddKey(TEST_SERIES_KEY_2);
-			var results = client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Hours(1), FoldingFunction.Max);
-			Assert.IsNotEmpty(results);
-		}
+        public static bool ContainsParameter(List<Parameter> parameters, string name, string value)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Name.ToString() == name && parameter.Value.ToString() == value) return true;
+            }
+            return false;
+        }
 	}
 }

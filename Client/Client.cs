@@ -74,6 +74,7 @@ namespace Client
 		public T Execute<T>(RestRequest request) where T : new()
 		{
 			RestClient client = GetRestClient();
+           
 			IRestResponse<T> response = client.Execute<T>(request);
 
 			if (response.StatusCode != HttpStatusCode.OK)
