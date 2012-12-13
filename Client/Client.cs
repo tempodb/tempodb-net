@@ -29,6 +29,8 @@ namespace Client
 		private readonly bool _secure;
 		private readonly string _version;
 
+        private RestClient _restClient; 
+
 		//	private readonly DateTimeFormatter iso8601 = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
 		///  <param name="key"> Api key </param>
@@ -36,7 +38,7 @@ namespace Client
 		///  <param name="host"> Hostname of the api server </param>
 		///  <param name="port"> Port that the api server is listening on </param>
 		///  <param name="secure"> Uses http if false, https if true </param>
-		public Client(string key, string secret, string host, int port, string version, bool secure)
+		public Client(string key, string secret, string host, int port, string version, bool secure, RestClient restClient = null)
 		{
 			_key = key;
 			_secret = secret;
@@ -44,6 +46,7 @@ namespace Client
 			_port = port;
 			_version = version;
 			_secure = secure;
+            _restClient = restClient;
 		}
 
 		/// <summary>
@@ -91,18 +94,26 @@ namespace Client
 
 		private RestClient GetRestClient()
 		{
-			string protocol = _secure ? "https://" : "http://";
-			string portString = (_port == 80) ? "" : ":" + _port;
-			string baseUrl = protocol + _host + portString + "/" + _version;
+            if (_restClient == null)
+            {
 
-			var client = new RestClient
-			             	{
-			             		BaseUrl = baseUrl,
-			             		Authenticator = new HttpBasicAuthenticator(_key, _secret)
-			             	};
+                string protocol = _secure ? "https://" : "http://";
+                string portString = (_port == 80) ? "" : ":" + _port;
+                string baseUrl = protocol + _host + portString + "/" + _version;
 
-			client.AddHandler("*", new JsonDeserializer());
-			return client;
+                var client = new RestClient
+                                {
+                                    BaseUrl = baseUrl,
+                                    Authenticator = new HttpBasicAuthenticator(_key, _secret)
+                                };
+
+                client.AddHandler("*", new JsonDeserializer());
+                return client;
+            }
+            else
+            {
+                return _restClient;
+            }
 		}
 
 

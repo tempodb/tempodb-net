@@ -8,16 +8,17 @@ namespace Client.Tests
 	public class SeriesTests
 	{
 
-		private const string API_KEY = "your-api-key";
-		private const string API_SECRET = "your-api-secret";
-		private const string TEST_SERIES_ID_1 = "existing-series-id-1";
-		private const string TEST_SERIES_ID_2 = "existing-series-id-2";
-		private const string TEST_SERIES_KEY_1 = "existing-series-key-1";
-		private const string TEST_SERIES_KEY_2 = "existing-series-key-2";
-		private const string TEST_SERIES_TAG = "existing-series-tag";
-		private const string TEST_ATTRIBUTE_KEY = "existing-attribute-key";
-		private const string TEST_ATTRIBUTE_VALUE = "existing-attribute-value";
+        private const string API_KEY = "fddc9934f6784a739cc82e2833521218";
+        private const string API_SECRET = "6d1f4fae625b4847968b472d3feb5ba5";
+        private const string TEST_SERIES_ID_1 = "17b836c0635844a686249969c5b768c6";
+        private const string TEST_SERIES_KEY_1 = "asdf";
+        private const string TEST_SERIES_KEY_2 = "my_favorite_series";
 
+
+        private const string TEST_SERIES_ID_2 = "1adba64a618745b28c6e7762f88f3722";
+        private const string TEST_SERIES_TAG = "temp";
+        private const string TEST_ATTRIBUTE_KEY = "sensor";
+        private const string TEST_ATTRIBUTE_VALUE = "1";
 
 		private Client GetClient()
 		{

@@ -1,3 +1,5 @@
+using RestSharp;
+
 namespace Client
 {
 	/// <summary>
@@ -27,6 +29,7 @@ namespace Client
 		private int _portRenamed = 443;
 		private bool _secureRenamed = true;
 		private string _versionRenamed = "v1";
+        private RestClient _restClientRenamed = null;
 
 		/// <summary>
 		///  Returns the built Client instance
@@ -34,7 +37,7 @@ namespace Client
 		///  <returns> A new Client instance </returns>
 		public Client Build()
 		{
-			return new Client(_keyRenamed, _secretRenamed, _hostRenamed, _portRenamed, _versionRenamed, _secureRenamed);
+			return new Client(_keyRenamed, _secretRenamed, _hostRenamed, _portRenamed, _versionRenamed, _secureRenamed, _restClientRenamed);
 		}
 
 		/// <summary>
@@ -98,5 +101,15 @@ namespace Client
 			_secureRenamed = secure;
 			return this;
 		}
+
+        /// <summary>
+        ///  Sets the rest client
+        /// </summary>
+        ///  <param name="restClient"> RestClient </param>
+        public ClientBuilder RestClient(RestClient restClient) 
+        {
+            _restClientRenamed = restClient;
+            return this;
+        }
 	}
 }
