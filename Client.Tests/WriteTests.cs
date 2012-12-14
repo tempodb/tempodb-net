@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using Client.Model;
 using MbUnit.Framework;
+using RestSharp;
+using System.Linq.Expressions;
+using Moq;
 
 namespace Client.Tests
 {
@@ -26,43 +29,51 @@ namespace Client.Tests
 		}
 
 		[Test]
-		public void ItShouldAddDataPointToSeriesByKey()
+		public void ItShouldAddDataPointToSeriesByKey_RequestMethod()
 		{
-			var client = GetClient();
+            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST;
+
+            var client = TestCommon.GetClient(TestCommon.GetMockRestClient(assertion).Object);
 			var data = new List<DataPoint>();
 			double valueToAdd = new Random().NextDouble()*1000D;
 			data.Add(new DataPoint(DateTime.Now, valueToAdd));
-			client.WriteByKey(TEST_SERIES_KEY_1, data);
-
+			client.WriteByKey("testkey", data);
 		}
 
-		[Test]
-		public void ItShouldAddDataPointToSeriesById()
+        [Test]
+		public void ItShouldAddDataPointToSeriesByKey_JsonObject()
 		{
-			var client = GetClient();
+            Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "application/json", "[{\"t\":\"2012-12-12T00:00:00.000-08:00\",\"v\":12.34}]");
+
+            var client = TestCommon.GetClient(TestCommon.GetMockRestClient(assertion).Object);
 			var data = new List<DataPoint>();
-			double valueToAdd = new Random().NextDouble() * 1000D;
-			data.Add(new DataPoint(DateTime.Now, valueToAdd));
-			client.WriteById(TEST_SERIES_ID, data);
-
+			data.Add(new DataPoint(new DateTime(2012,12,12), 12.34));
+			client.WriteByKey("testkey", data);
 		}
 
+        
+		
 		[Test]
-		public void ItShouldAddBulkDataToMultipleSeries()
+		public void ItShouldAddBulkDataToMultipleSeries_RequestCount()
 		{
-			var baseDateTime = new DateTime(2012,06,23);
-			var client = GetClient();
-			for (int i = 0; i < 100; i++)
+            var numPoints = 100;
+
+            var mockClient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockClient.Object);
+
+            var baseDateTime = new DateTime(2012, 06, 23);
+			for (int i = 0; i < numPoints; i++)
 			{
 				var points = new List<BulkPoint>
 			             	{
-								new BulkKeyPoint(TEST_SERIES_KEY_1, 12.555D * new Random().NextDouble()), 
-								new BulkKeyPoint(TEST_SERIES_KEY_2, 555D * new Random().NextDouble())
+								new BulkKeyPoint("testkey1", 12.555D * new Random().NextDouble()), 
+								new BulkKeyPoint("testkey2", 555D * new Random().NextDouble())
 							};
 
 				var dataSet = new BulkDataSet(baseDateTime.AddMinutes(5*i), points);
 				client.WriteBulkData(dataSet);
 			}
+            mockClient.Verify(cl => cl.Execute(It.IsAny<RestRequest>()), Times.Exactly(100));
 		}
 	}
 }
