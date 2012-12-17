@@ -121,5 +121,50 @@ namespace Client.Tests
                 Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":{},\"tags\":null}", result);
             }
         }
+
+        [TestFixture]
+        public class BulkIdSerializationTests
+        {
+            [Test]
+            public void SmokeTest()
+            {
+                BulkPoint bdp = new BulkIdPoint("point-id", 12.34);
+                var result = JsonSerializationTests.serializer.Serialize(bdp);
+
+                Assert.AreEqual("{\"id\":\"point-id\",\"v\":12.34}", result);
+            }
+        }
+
+        [TestFixture]
+        public class BulkKeySerializationTests
+        {
+            [Test]
+            public void SmokeTest()
+            {
+                BulkPoint bdp = new BulkKeyPoint("point-key", 12.34);
+                var result = JsonSerializationTests.serializer.Serialize(bdp);
+
+                Assert.AreEqual("{\"key\":\"point-key\",\"v\":12.34}", result);
+            }
+        }
+
+        [TestFixture]
+        public class BulkDataSetSerializationTests
+        {
+            [Test]
+            public void SmokeTest()
+            {
+                var data = new List<BulkPoint>
+                {
+                    new BulkIdPoint("id1", 12.34),
+                    new BulkKeyPoint("mykey", 56.78),
+                    new BulkIdPoint("id2", 90.12)
+                };
+                var bds = new BulkDataSet(new DateTime(2012, 1, 1), data);
+                var result = JsonSerializationTests.serializer.Serialize(bds);
+
+                Assert.AreEqual("{\"t\":\"2012-01-01T00:00:00.000-08:00\",\"data\":[{\"id\":\"id1\",\"v\":12.34},{\"key\":\"mykey\",\"v\":56.78},{\"id\":\"id2\",\"v\":90.12}]}", result);                    
+            }
+        }
     }
 }
