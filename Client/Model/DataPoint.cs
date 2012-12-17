@@ -20,17 +20,18 @@ namespace Client.Model
 			Value = value;
 		}
 
-		[JsonProperty(PropertyName = "t")]
-		public DateTime Timestamp { get; set; }
+        [JsonProperty(PropertyName = "t")]
+        public DateTime Timestamp { get; set; }
 
-		[JsonProperty(PropertyName = "v")]
-		public double Value { get; set; }
-
+        [JsonProperty(PropertyName = "v")]
+        public double Value { get; set; }
 	
 		public override string ToString()
 		{
 			return string.Format("DataPoint({0}, {1})", Timestamp, Value);
 		}
+
+
 	}
 
 
