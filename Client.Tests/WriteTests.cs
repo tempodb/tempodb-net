@@ -41,13 +41,17 @@ namespace Client.Tests
 		}
 
         [Test]
-		public void ItShouldAddDataPointToSeriesByKey_JsonObject()
+		public void ItShouldAddDataPointToSeriesByKey_IncludesPoints()
 		{
-            Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "application/json", "[{\"t\":\"2012-12-12T00:00:00.000-08:00\",\"v\":12.34}]");
+            Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "12.34") &&
+                TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "56.78") &&
+                TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "90.12");
 
             var client = TestCommon.GetClient(TestCommon.GetMockRestClient(assertion).Object);
 			var data = new List<DataPoint>();
 			data.Add(new DataPoint(new DateTime(2012,12,12), 12.34));
+            data.Add(new DataPoint(new DateTime(2012, 12, 12, 0, 0, 1), 56.78));
+            data.Add(new DataPoint(new DateTime(2012, 12, 12, 0, 0, 2), 90.12));
 			client.WriteByKey("testkey", data);
 		}
 

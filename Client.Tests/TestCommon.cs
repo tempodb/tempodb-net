@@ -61,5 +61,14 @@ namespace Client.Tests
             }
             return false;
         }
+
+        public static bool ContainsParameterByPattern(List<Parameter> parameters, string name, string value)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Name.ToString() == name && parameter.Value.ToString().Contains(value)) return true;
+            }
+            return false;
+        }
     }
 }
