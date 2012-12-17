@@ -21,11 +21,8 @@ namespace Client.Tests
                                 .Build();
         }
 
-        public static Mock<RestClient> GetMockRestClient<T>(T response, Expression<Func<RestRequest, bool>> requestValidator = null) where T : new()
+        public static Mock<RestClient> GetMockRestClient<T>(T response) where T : new()
         {
-            if (requestValidator == null)
-                requestValidator = req => true;
-
             var res = new RestSharp.RestResponse<T>
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
@@ -34,22 +31,19 @@ namespace Client.Tests
             };
 
             var restClient = new Mock<RestClient>();
-            restClient.Setup(cl => cl.Execute<T>(It.Is<RestRequest>(requestValidator))).Returns(res);
+            restClient.Setup(cl => cl.Execute<T>(It.IsAny<RestRequest>())).Returns(res);
             return restClient;
         }
 
-        public static Mock<RestClient> GetMockRestClient(Expression<Func<RestRequest, bool>> requestValidator = null)
+        public static Mock<RestClient> GetMockRestClient()
         {
-            if (requestValidator == null)
-                requestValidator = req => true;
-
             var res = new RestSharp.RestResponse
             {
                 StatusCode = System.Net.HttpStatusCode.OK
             };
 
             var restClient = new Mock<RestClient>();
-            restClient.Setup(cl => cl.Execute(It.Is<RestRequest>(requestValidator))).Returns(res);
+            restClient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(res);
             return restClient;
         }
 
