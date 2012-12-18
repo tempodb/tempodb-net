@@ -15,7 +15,7 @@ namespace Client.Tests
         public static JsonSerializer serializer = new JsonSerializer();
 
         [TestFixture]
-        public class DataPointSerializationTests
+        public class DataPointTests
         {
             [Test]
             public void SmokeTest()
@@ -36,7 +36,7 @@ namespace Client.Tests
         }
 
         [TestFixture]
-        public class SeriesSerializationTests
+        public class SeriesTests
         {
             [Test]
             public void SmokeTest()
@@ -123,7 +123,7 @@ namespace Client.Tests
         }
 
         [TestFixture]
-        public class BulkIdSerializationTests
+        public class BulkIdTests
         {
             [Test]
             public void SmokeTest()
@@ -136,7 +136,7 @@ namespace Client.Tests
         }
 
         [TestFixture]
-        public class BulkKeySerializationTests
+        public class BulkKeyTests
         {
             [Test]
             public void SmokeTest()
@@ -149,7 +149,7 @@ namespace Client.Tests
         }
 
         [TestFixture]
-        public class BulkDataSetSerializationTests
+        public class BulkDataSetTests
         {
             [Test]
             public void SmokeTest()

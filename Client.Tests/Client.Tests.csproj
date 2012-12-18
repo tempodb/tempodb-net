@@ -61,9 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataPointModelTests.cs" />
+    <Compile Include="JsonDeserializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadTests.cs" />
     <Compile Include="JsonSerializationTests.cs" />
+    <Compile Include="SeriesModelTests.cs" />
     <Compile Include="SeriesTests.cs" />
     <Compile Include="TestCommon.cs" />
     <Compile Include="WriteTests.cs" />

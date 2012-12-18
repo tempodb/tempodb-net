@@ -1,156 +1,355 @@
 ﻿using System;
+using System.Collections.Generic;
 using Client.Model;
 using MbUnit.Framework;
+using Moq;
+using RestSharp;
 
 namespace Client.Tests
 {
-	[TestFixture]
-	public class SeriesTests
-	{
+    [TestFixture]
+    class CreateSeries
+    {
+        [Test]
+        public void SmokeTest()
+        {
+            var series = new Series
+            {
+                Id = "series-id",
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
 
-        private const string API_KEY = "fddc9934f6784a739cc82e2833521218";
-        private const string API_SECRET = "6d1f4fae625b4847968b472d3feb5ba5";
-        private const string TEST_SERIES_ID_1 = "17b836c0635844a686249969c5b768c6";
-        private const string TEST_SERIES_KEY_1 = "asdf";
-        private const string TEST_SERIES_KEY_2 = "my_favorite_series";
+            var results = client.CreateSeries("series-key");
+
+            Assert.AreEqual("series-id", results.Id);
+            Assert.AreEqual("series-key", results.Key);
+        }
+
+        [Test]
+        public void NoKey()
+        {
+            var series = new Series
+            {
+                Id = "series-id"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.CreateSeries();
+
+            Assert.AreEqual("series-id", results.Id);
+            Assert.AreEqual(null, results.Key);
+        }
+
+        [Test]
+        public void RequestMethod()
+        {
+            var series = new Series
+            {
+                Id = "series-id",
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.CreateSeries("series-key");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.POST)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var series = new Series
+            {
+                Id = "series-id",
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.CreateSeries("series-key");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/")));
+        }
+
+        [Test]
+        public void RequestParameters()
+        {
+            var series = new Series
+            {
+                Id = "series-id",
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.CreateSeries("series-key");
+            
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "series-key"))));
+        }
+        
+    }
+
+    [TestFixture]
+    class GetSeries
+    {
+        [Test]
+        public void SmokeTest()
+        {
+            var series = new Series
+            {
+                Id = "series-id"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesById("series-id");
+
+            Assert.AreEqual("series-id", results.Id);
+        }
+
+        [Test]
+        public void RequestMethod()
+        {
+            var series = new Series
+            {
+                Id = "series-id"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesById("series-id");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.GET)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var series = new Series
+            {
+                Id = "series-id"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesById("series-id");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}")));
+        }
+
+        [Test]
+        public void RequestParameters()
+        {
+            var series = new Series
+            {
+                Id = "series-id"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesById("series-id");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "series-id"))));
+        }
+
+        [Test]
+        public void KeySmokeTest()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesByKey("series-key");
+
+            Assert.AreEqual("series-key", results.Key);
+        }
+
+        [Test]
+        public void KeyRequestMethod()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesByKey("series-key");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.GET)));
+        }
+
+        [Test]
+        public void KeyRequestUrl()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesByKey("series-key");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/key/{key}")));
+        }
+
+        [Test]
+        public void KeyRequestParameters()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<Series>(series);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var results = client.GetSeriesByKey("series-key");
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "series-key"))));
+        }
+
+    }
 
 
-        private const string TEST_SERIES_ID_2 = "1adba64a618745b28c6e7762f88f3722";
-        private const string TEST_SERIES_TAG = "temp";
-        private const string TEST_ATTRIBUTE_KEY = "sensor";
-        private const string TEST_ATTRIBUTE_VALUE = "1";
+    [TestFixture]
+    class ListSeries
+    {
+        [Test]
+        public void SmokeTest()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series>{series});
+            var client = TestCommon.GetClient(mockclient.Object);
 
-		private Client GetClient()
-		{
-			return new ClientBuilder()
-								.Host("api.tempo-db.com")
-								.Key(API_KEY)
-								.Port(443)
-								.Secret(API_SECRET)
-								.Secure(true)
-								.Build();
-		}
+            var result = client.ListSeries();
 
-		[Test]
-		public void ItShouldCreateSeriesWithKey()
-		{
-			var key = Guid.NewGuid().ToString();
-			var client = GetClient();
-			var series = client.CreateSeries(key);
-			Assert.IsNotNull(series);
-			Assert.AreEqual(key, series.Key);
-		}
+            Assert.IsNotEmpty(result);
+            Assert.AreEqual(1, result.Count);
+        }
 
+        [Test]
+        public void RequestMethod()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series> { series });
+            var client = TestCommon.GetClient(mockclient.Object);
 
-		// Unreleased functionality
-		//[Test]
-		//public void ItShouldCreateSeriesWithComplexKey()
-		//{
-		//    const string key = "building:1.floor:2.pressure.1";
-		//    var client = GetClient();
-		//    var series = client.CreateSeries(key);
-		//    Assert.IsNotNull(series);
-		//    Assert.AreEqual(key, series.Key);
-		//}
+            var result = client.ListSeries();
 
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Method == Method.GET)));
+        }
 
+        [Test]
+        public void RequestUrl()
+        {
+            var series = new Series
+            {
+                Key = "series-key"
+            };
+            var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series> { series });
+            var client = TestCommon.GetClient(mockclient.Object);
 
-		[Test]
-		public void ItShouldCreateSeriesWithoutKey()
-		{
-			var client = GetClient();
-			var series = client.CreateSeries();
-			Assert.IsNotNull(series);
-			Assert.AreEqual(series.Id, series.Key);
-		}
+            var result = client.ListSeries();
 
-		[Test]
-		public void ItShouldGetSeriesByKey()
-		{
-			var client = GetClient();
-			var series = client.GetSeriesByKey(TEST_SERIES_KEY_1);
-			Assert.IsNotNull(series);
-			Assert.AreEqual(series.Id, TEST_SERIES_ID_1);
-		}
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Resource == "/series")));
+        }
 
-		[Test]
-		public void ItShouldGetSeriesById()
-		{
-			var client = GetClient();
-			var series = client.GetSeriesById(TEST_SERIES_ID_1);
-			Assert.IsNotNull(series);
-			Assert.AreEqual(series.Key, TEST_SERIES_KEY_1);
-		}
+        [Test]
+        public void Filter()
+        {
+            var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series> {});
+            var client = TestCommon.GetClient(mockclient.Object);
 
-		[Test]
-		public void ItShouldListUnfilteredSeries()
-		{
-			var client = GetClient();
-			var series = client.ListSeries();
-			Assert.IsNotEmpty(series);
-		}
+            var filter = new Filter();
+            filter.AddAttribute("key1", "value1");
+            filter.AddAttribute("key2", "value2");
+            filter.AddId("id1");
+            filter.AddId("id2");
+            filter.AddTag("tag1");
+            filter.AddTag("tag2");
 
+            var result = client.ListSeries(filter);
 
-		[Test]
-		public void ItShouldListSeriesFilteredByKey()
-		{
-			var client = GetClient();
-			var filter = new Filter();
-			filter.AddKey(TEST_SERIES_KEY_1);
-			filter.AddKey(TEST_SERIES_KEY_2);
-			var series = client.ListSeries(filter);
-			Assert.Count(2,series);
-		}
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key1]", "value1"))));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key2]", "value2"))));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tag", "tag1"))));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tag", "tag2"))));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "id1"))));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "id2"))));
+        }
 
-		[Test]
-		public void ItShouldListSeriesFilteredById()
-		{
-			var client = GetClient();
-			var filter = new Filter();
-			filter.AddId(TEST_SERIES_ID_1);
-			filter.AddId(TEST_SERIES_ID_2);
-			var series = client.ListSeries(filter);
-			Assert.Count(2, series);
-		}
-		
-		[Test]
-		public void ItShouldListSeriesFilteredByAttribute()
-		{
-			var client = GetClient();
-			var filter = new Filter();
-			filter.AddAttribute(TEST_ATTRIBUTE_KEY,TEST_ATTRIBUTE_VALUE);
-			var series = client.ListSeries(filter);
-			Assert.Count(1, series);
-		}
+    }
 
-		[Test]
-		public void ItShouldListSeriesFilteredByTag()
-		{
-			var client = GetClient();
-			var filter = new Filter();
-			filter.AddTag(TEST_SERIES_TAG);
-			var series = client.ListSeries(filter);
-			Assert.Count(1, series);
-		}
+    [TestFixture]
+    class UpdateSeries
+    {
+        [Test]
+        public void SmokeTest()
+        {
+            var seriesResponse = new Series
+            {
+                Id = "series-id",
+                Tags = new List<string> { "updated" }
+            };
 
+            var mockclient = TestCommon.GetMockRestClient<Series>(seriesResponse);
+            var client = TestCommon.GetClient(mockclient.Object);
 
-		[Test]
-		public void ItShouldUpdateSeries()
-		{
-			var client = GetClient();
-			var series = client.GetSeriesById(TEST_SERIES_ID_1);
-			string newAttributeName = Guid.NewGuid().ToString();
-			string newAttributeValue = Guid.NewGuid().ToString();
-			series.Attributes.Add(newAttributeName, newAttributeValue);
+            var result = client.UpdateSeries(seriesResponse);
 
-			string newTag = Guid.NewGuid().ToString();
-			series.Tags.Add(newTag);
+            Assert.AreEqual(1, result.Tags.Count);
+            Assert.AreEqual("updated", result.Tags[0]);
+        }
 
-			var updatedSeries = client.UpdateSeries(series);
-				
-			Assert.AreEqual(series.Attributes.Count, updatedSeries.Attributes.Count);
-			Assert.AreEqual(series.Tags.Count, updatedSeries.Tags.Count);
+        [Test]
+        public void RequestMethod()
+        {
+            var seriesResponse = new Series
+            {
+                Id = "series-id",
+                Tags = new List<string> { "updated" }
+            };
 
-		}
-	}
+            var mockclient = TestCommon.GetMockRestClient<Series>(seriesResponse);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var result = client.UpdateSeries(seriesResponse);
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.PUT)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var seriesResponse = new Series
+            {
+                Id = "series-id",
+                Tags = new List<string> { "updated" }
+            };
+
+            var mockclient = TestCommon.GetMockRestClient<Series>(seriesResponse);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var result = client.UpdateSeries(seriesResponse);
+
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}/")));
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "series-id"))));
+        }
+    }
+
+	
 }
