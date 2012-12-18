@@ -97,7 +97,7 @@ namespace Client.Tests
             }
 
             [Test]
-            public void RequestUrl()
+            public void _Id()
             {
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
