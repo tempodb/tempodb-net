@@ -2,67 +2,68 @@
 using System.Collections.Generic;
 using Client.Model;
 using MbUnit.Framework;
+using RestSharp;
+using System.Linq.Expressions;
+using Moq;
 
 namespace Client.Tests
 {
 	[TestFixture]
 	public class WriteTests
 	{
-		private const string API_KEY = "your-api-key";
-		private const string API_SECRET = "your-api-secret";
-		private const string TEST_SERIES_ID = "existing-series-id";
-		private const string TEST_SERIES_KEY_1 = "existing-series-key-1";
-		private const string TEST_SERIES_KEY_2 = "existing-series-key-2";
-
-		private Client GetClient()
-		{
-			return new ClientBuilder()
-								.Host("api.tempo-db.com")
-								.Key(API_KEY)
-								.Port(443)
-								.Secret(API_SECRET)
-								.Secure(true)
-								.Build();
-		}
-
 		[Test]
-		public void ItShouldAddDataPointToSeriesByKey()
+		public void RequestMethod()
 		{
-			var client = GetClient();
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
 			var data = new List<DataPoint>();
 			double valueToAdd = new Random().NextDouble()*1000D;
 			data.Add(new DataPoint(DateTime.Now, valueToAdd));
-			client.WriteByKey(TEST_SERIES_KEY_1, data);
+			client.WriteByKey("testkey", data);
 
+            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST;
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
 		}
 
-		[Test]
-		public void ItShouldAddDataPointToSeriesById()
+        [Test]
+		public void IncludesPoints()
 		{
-			var client = GetClient();
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
 			var data = new List<DataPoint>();
-			double valueToAdd = new Random().NextDouble() * 1000D;
-			data.Add(new DataPoint(DateTime.Now, valueToAdd));
-			client.WriteById(TEST_SERIES_ID, data);
+			data.Add(new DataPoint(new DateTime(2012,12,12), 12.34));
+            data.Add(new DataPoint(new DateTime(2012, 12, 12, 0, 0, 1), 56.78));
+            data.Add(new DataPoint(new DateTime(2012, 12, 12, 0, 0, 2), 90.12));
+			client.WriteByKey("testkey", data);
 
-		}
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "12.34"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "56.78"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "90.12"))));
+        }
 
 		[Test]
-		public void ItShouldAddBulkDataToMultipleSeries()
+		public void RequestCount()
 		{
-			var baseDateTime = new DateTime(2012,06,23);
-			var client = GetClient();
-			for (int i = 0; i < 100; i++)
+            var numPoints = 100;
+
+            var mockClient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockClient.Object);
+
+            var baseDateTime = new DateTime(2012, 06, 23);
+			for (int i = 0; i < numPoints; i++)
 			{
 				var points = new List<BulkPoint>
 			             	{
-								new BulkKeyPoint(TEST_SERIES_KEY_1, 12.555D * new Random().NextDouble()), 
-								new BulkKeyPoint(TEST_SERIES_KEY_2, 555D * new Random().NextDouble())
+								new BulkKeyPoint("testkey1", 12.555D * new Random().NextDouble()), 
+								new BulkKeyPoint("testkey2", 555D * new Random().NextDouble())
 							};
 
 				var dataSet = new BulkDataSet(baseDateTime.AddMinutes(5*i), points);
 				client.WriteBulkData(dataSet);
 			}
+            mockClient.Verify(cl => cl.Execute(It.IsAny<RestRequest>()), Times.Exactly(100));
 		}
 	}
 }

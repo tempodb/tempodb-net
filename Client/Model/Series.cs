@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Client.Model
@@ -32,5 +34,25 @@ namespace Client.Model
 		{
 			return string.Format("Series: \n\tid:\t{0}\n\tkey:\t{1}\n\tname:\t{2}\n\ttags:\t{3}\n\tattr:\t{4}", Id, Key, Name, Tags, Attributes);
 		}
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Series;
+
+            return other != null &&
+                Id.Equals(other.Id) &&
+                Key.Equals(other.Key);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode() ^
+                Key.GetHashCode() ^
+                Name.GetHashCode() ^
+                Attributes.GetHashCode() ^
+                Tags.GetHashCode();
+        }
+
+
 	}
 }
