@@ -12,7 +12,7 @@ namespace Client.Tests
 	public class WriteTests
 	{
 		[Test]
-		public void ItShouldAddDataPointToSeriesByKey_RequestMethod()
+		public void RequestMethod()
 		{
             var mockclient = TestCommon.GetMockRestClient();
             var client = TestCommon.GetClient(mockclient.Object);
@@ -27,7 +27,7 @@ namespace Client.Tests
 		}
 
         [Test]
-		public void ItShouldAddDataPointToSeriesByKey_IncludesPoints()
+		public void IncludesPoints()
 		{
             var mockclient = TestCommon.GetMockRestClient();
             var client = TestCommon.GetClient(mockclient.Object);
@@ -44,7 +44,7 @@ namespace Client.Tests
         }
 
 		[Test]
-		public void ItShouldAddBulkDataToMultipleSeries_RequestCount()
+		public void RequestCount()
 		{
             var numPoints = 100;
 
