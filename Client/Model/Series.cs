@@ -15,19 +15,26 @@ namespace Client.Model
 	/// </summary>
 	public class Series
 	{
-		[JsonProperty(PropertyName = "id")]
+        public Series()
+        {
+            Name = "";
+            Attributes = new Dictionary<string, string>();
+            Tags = new List<string>();
+        }
+
+		[JsonProperty(PropertyName = "id", Required = Required.Always)]
 		public string Id { get; set; }
 
-		[JsonProperty(PropertyName = "key")]
+		[JsonProperty(PropertyName = "key", Required = Required.Always)]
 		public string Key { get; set; }
 
-		[JsonProperty(PropertyName = "name")]	
+		[JsonProperty(PropertyName = "name", Required = Required.Always)]	
 		public string Name { get; set; }
 
-		[JsonProperty(PropertyName = "attributes")]
+		[JsonProperty(PropertyName = "attributes", Required = Required.Always)]
 		public Dictionary<string, string> Attributes { get; set; }
 
-		[JsonProperty(PropertyName = "tags")]
+		[JsonProperty(PropertyName = "tags", Required = Required.Always)]
 		public List<string> Tags { get; set; } 
 	
 		public override string ToString()

@@ -48,7 +48,7 @@ namespace Client.Tests
                 };
 
                 var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":null}", result);
+                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{},\"tags\":[]}", result);
             }
 
             [Test]
@@ -62,7 +62,7 @@ namespace Client.Tests
                 };
 
                 var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"series-name\",\"attributes\":null,\"tags\":null}", result);
+                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"series-name\",\"attributes\":{},\"tags\":[]}", result);
             }
 
             [Test]
@@ -76,7 +76,7 @@ namespace Client.Tests
                 };
 
                 var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":[\"tag1\",\"tag2\"]}", result);
+                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{},\"tags\":[\"tag1\",\"tag2\"]}", result);
             }
 
             [Test]
@@ -90,35 +90,7 @@ namespace Client.Tests
                 };
 
                 var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":{\"key1\":\"val1\",\"key2\":\"val2\"},\"tags\":null}", result);
-            }
-
-            [Test]
-            public void EmptyTags()
-            {
-                Series series = new Series
-                {
-                    Id = "series-id",
-                    Key = "series-key",
-                    Tags = new List<string>()
-                };
-
-                var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":[]}", result);
-            }
-
-            [Test]
-            public void EmptyAttributes()
-            {
-                Series series = new Series
-                {
-                    Id = "series-id",
-                    Key = "series-key",
-                    Attributes = new Dictionary<string, string>()
-                };
-
-                var result = JsonSerializationTests.serializer.Serialize(series);
-                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":{},\"tags\":null}", result);
+                Assert.AreEqual("{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{\"key1\":\"val1\",\"key2\":\"val2\"},\"tags\":[]}", result);
             }
         }
 
