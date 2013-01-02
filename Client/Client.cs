@@ -13,7 +13,7 @@ namespace Client
 	///  Your api key and secret is required. The Client also allows you to specify
 	///  the hostname, port, and protocol (http or https). This is used if you are on
 	///  a private cluster. The default hostname and port should work for the standard cluster.
-	///  <p>
+	///  <p/>
 	///  All access to data is made through a client instance.
 	/// </summary>
 	public class Client
@@ -37,7 +37,9 @@ namespace Client
 		///  <param name="secret"> Api secret </param>
 		///  <param name="host"> Hostname of the api server </param>
 		///  <param name="port"> Port that the api server is listening on </param>
-		///  <param name="secure"> Uses http if false, https if true </param>
+        ///  <param name="version"> The API version</param>
+        ///  <param name="secure"> Uses http if false, https if true </param>
+        ///  <param name="restClient"> Optional Rest Client.  </param>
 		public Client(string key, string secret, string host, int port, string version, bool secure, RestClient restClient = null)
 		{
 			_key = key;
@@ -241,7 +243,7 @@ namespace Client
         /// <summary>
 		///  Deletes a range of data by id
 		/// </summary>
-		///  <param name="Id"> The id of the series into which the data points will be deleted</param>
+		///  <param name="seriesId"> The id of the series into which the data points will be deleted</param>
 		///  <param name="start"> Start of range </param>
         ///  <param name="end"> End of range </param>
         public void DeleteById(string seriesId, DateTime start, DateTime end)
@@ -252,7 +254,7 @@ namespace Client
         /// <summary>
         ///  Deletes a range of data by key
         /// </summary>
-        ///  <param name="key"> The key of the series into which the data points will be deleted</param>
+        ///  <param name="seriesKey"> The key of the series into which the data points will be deleted</param>
         ///  <param name="start"> Start of range </param>
         ///  <param name="end"> End of range </param>
         public void DeleteByKey(string seriesKey, DateTime start, DateTime end)
