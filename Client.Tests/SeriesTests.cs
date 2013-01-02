@@ -303,6 +303,7 @@ namespace Client.Tests
             var seriesResponse = new Series
             {
                 Id = "series-id",
+                Key = "series-key",
                 Tags = new List<string> { "updated" }
             };
 
@@ -321,6 +322,7 @@ namespace Client.Tests
             var seriesResponse = new Series
             {
                 Id = "series-id",
+                Key = "series-key",
                 Tags = new List<string> { "updated" }
             };
 
@@ -338,6 +340,7 @@ namespace Client.Tests
             var seriesResponse = new Series
             {
                 Id = "series-id",
+                Key = "series-key",
                 Tags = new List<string> { "updated" }
             };
 

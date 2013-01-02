@@ -40,7 +40,7 @@ namespace Client
         ///  <param name="version"> The API version</param>
         ///  <param name="secure"> Uses http if false, https if true </param>
         ///  <param name="restClient"> Optional Rest Client.  </param>
-		public Client(string key, string secret, string host, int port, string version, bool secure, RestClient restClient = null)
+		public Client(string key, string secret, string host = "api.tempo-db.com", int port = 443, string version = "v1", bool secure = true, RestClient restClient = null)
 		{
 			_key = key;
 			_secret = secret;
