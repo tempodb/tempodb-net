@@ -89,7 +89,8 @@ The Bulk classes exist to facilitate using the bulk write endpoint, which provid
 an abstract base class for the bulk data points is used, as well as 2 concrete implementations.
 * BulkKeyPoint - Used to write a datapoint to a series by series key
 * BulkIdPoint - Used to write a datapoint to a series by series id
-#### Constructor
+
+### Constructor
 ```csharp
 BulkPoint bpkey = new BulkKeyPoint("key", 10.0);
 BulkPoint bpid = new BulkIdPoint("id", 10.0);
