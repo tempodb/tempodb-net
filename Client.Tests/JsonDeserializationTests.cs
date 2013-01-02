@@ -50,7 +50,7 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":null}"
+                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{},\"tags\":[]}"
                 };
                 var series = new Series
                 {
@@ -59,6 +59,9 @@ namespace Client.Tests
                 };
 
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
+                Console.WriteLine(series.Name == null);
+                Console.WriteLine(series.Tags == null);
+                Console.WriteLine(result.Tags == null);
                 Assert.AreEqual(series, result);
             }
 
@@ -67,7 +70,7 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"series-name\",\"attributes\":null,\"tags\":null}"
+                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"series-name\",\"attributes\":{},\"tags\":[]}"
                 };
                 
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
@@ -79,7 +82,7 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":[\"tag1\",\"tag2\"]}"
+                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{},\"tags\":[\"tag1\",\"tag2\"]}"
                 };
                 
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse); 
@@ -93,7 +96,7 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":{\"key1\":\"val1\",\"key2\":\"val2\"},\"tags\":null}"
+                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{\"key1\":\"val1\",\"key2\":\"val2\"},\"tags\":[]}"
                 };
                 
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
@@ -101,30 +104,6 @@ namespace Client.Tests
                 Assert.AreEqual("val1", result.Attributes["key1"]);
                 Assert.AreEqual("val2", result.Attributes["key2"]);
 
-            }
-
-            [Test]
-            public void EmptyTags()
-            {
-                var jsonResponse = new RestResponse
-                {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":null,\"tags\":[]}"
-                };
-                
-                var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
-                Assert.AreEqual(0, result.Tags.Count);
-            }
-
-            [Test]
-            public void EmptyAttributes()
-            {
-                var jsonResponse = new RestResponse
-                {
-                    Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":null,\"attributes\":{},\"tags\":null}"
-                };
-
-                var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
-                Assert.AreEqual(0, result.Attributes.Count);
             }
         }
 
