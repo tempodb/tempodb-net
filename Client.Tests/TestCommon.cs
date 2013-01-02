@@ -11,14 +11,7 @@ namespace Client.Tests
     {
         public static Client GetClient(RestClient restClient = null)
         {
-            return new ClientBuilder()
-                                .Host("api.tempo-db.com")
-                                .Key("api-key")
-                                .Port(443)
-                                .Secret("api-secret")
-                                .Secure(true)
-                                .RestClient(restClient)
-                                .Build();
+            return new Client("api-key", "api-secret", restClient: restClient);
         }
 
         public static Mock<RestClient> GetMockRestClient<T>(T response) where T : new()
