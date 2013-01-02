@@ -238,6 +238,39 @@ namespace Client
 			Execute(request);
 		}
 
+        /// <summary>
+		///  Deletes a range of data by id
+		/// </summary>
+		///  <param name="Id"> The id of the series into which the data points will be deleted</param>
+		///  <param name="start"> Start of range </param>
+        ///  <param name="end"> End of range </param>
+        public void DeleteById(string seriesId, DateTime start, DateTime end)
+        {
+            DeleteDataPoints("id", seriesId, start, end);
+        }
+
+        /// <summary>
+        ///  Deletes a range of data by key
+        /// </summary>
+        ///  <param name="key"> The key of the series into which the data points will be deleted</param>
+        ///  <param name="start"> Start of range </param>
+        ///  <param name="end"> End of range </param>
+        public void DeleteByKey(string seriesKey, DateTime start, DateTime end)
+        {
+            DeleteDataPoints("key", seriesKey, start, end);
+        }
+
+        private void DeleteDataPoints(string seriesProperty, string propertyValue, DateTime start, DateTime end)
+        {
+            const string url = "/series/{property}/{value}/data";
+            RestRequest request = BuildRequest(url, Method.DELETE);
+            request.AddUrlSegment("property", seriesProperty);
+            request.AddUrlSegment("value", propertyValue);
+            request.AddParameter(QueryStringParameter.Start, TempoDateTimeConvertor.ConvertDateTimeToString(start));
+            request.AddParameter(QueryStringParameter.End, TempoDateTimeConvertor.ConvertDateTimeToString(end));
+            Execute(request);
+        }
+
 
 		private RestRequest BuildRequest(string url, Method method, object body = null)
 		{
