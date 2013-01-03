@@ -241,6 +241,48 @@ namespace Client
 		}
 
         /// <summary>
+        ///  Increments a DataSet by id
+        /// </summary>
+        ///  <param name="seriesId"> The id of the series into which the data points will be incremented</param>
+        ///  <param name="data"> A list of DataPoints to increment </param>
+        public void IncrementById(string seriesId, IList<DataPoint> data)
+        {
+            IncrementDataPoints(SeriesProperty.Id, seriesId, data);
+        }
+
+        /// <summary>
+        ///  Increments a DataSet by key
+        /// </summary>
+        ///  <param name="seriesKey"> The key of the series into which the data points will be incremented</param>
+        ///  <param name="data"> A list of DataPoints to incremented </param>
+        public void IncrementByKey(string seriesKey, IList<DataPoint> data)
+        {
+            IncrementDataPoints(SeriesProperty.Key, seriesKey, data);
+        }
+
+
+        private void IncrementDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
+        {
+            const string url = "/series/{property}/{value}/increment/";
+            RestRequest request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("property", seriesProperty);
+            request.AddUrlSegment("value", propertyValue);
+            Execute(request);
+        }
+
+
+        /// <summary>
+        ///  Increments a set of datapoints for different series for the same timestamp
+        /// </summary>
+        ///  <param name="dataSet"> A BulkDataSet to increments </param>
+        public virtual void IncrementBulkData(BulkDataSet dataSet)
+        {
+            const string url = "/increment/";
+            RestRequest request = BuildRequest(url, Method.POST, dataSet);
+            Execute(request);
+        }
+
+        /// <summary>
 		///  Deletes a range of data by id
 		/// </summary>
 		///  <param name="seriesId"> The id of the series into which the data points will be deleted</param>
