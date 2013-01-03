@@ -55,10 +55,10 @@ namespace Client.Tests
             for (int i = 0; i < numPoints; i++)
             {
                 var points = new List<BulkPoint>
-			             	{
-								new BulkKeyPoint("testkey1", 12.555D * new Random().NextDouble()), 
-								new BulkKeyPoint("testkey2", 555D * new Random().NextDouble())
-							};
+                {
+                    new BulkKeyPoint("testkey1", 12.555D * new Random().NextDouble()),
+                    new BulkKeyPoint("testkey2", 555D * new Random().NextDouble())
+                };
 
                 var dataSet = new BulkDataSet(baseDateTime.AddMinutes(5 * i), points);
                 client.IncrementBulkData(dataSet);
