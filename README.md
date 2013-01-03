@@ -386,6 +386,87 @@ var bulkSet = new BulkDataSet(new DateTime(2012, 1, 1), data);
 client.WriteBulkData(bulkSet);
 ```
 
+## IncrementById(string seriesId, IList<DataPoint> data)
+Increments the value of the specified series at the given timestamp. The value of the datapoint is the amount to increment. This is similar to a write. However the value is incremented by the datapoint value
+instead of overwritten. Values are incremented atomically, so this is useful for counting events. The series id and a list of DataPoints are required.
+
+### Parameters
+* seriesId - id for the series to increment (string)
+* data - the data to increment (list of DataPoints)
+
+### Returns
+Nothing
+
+### Example
+
+The following example increments three datapoints to the series with id "38268c3b231f1266a392931e15e99231".
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var data = new List<DataPoint>
+{
+  new DataPoint(datetime(2012, 1, 1, 1, 0, 0), 12.34),
+  new DataPoint(datetime(2012, 1, 1, 1, 1, 0), 1.874),
+  new DataPoint(datetime(2012, 1, 1, 1, 2, 0), 21.52),
+};
+client.IncrementById("38268c3b231f1266a392931e15e99231", data);
+```
+
+##  IncrementsByKey(string seriesKey, IList<DataPoint> data)
+Increments the value of the specified series at the given timestamp. The value of the datapoint is the amount to increment. This is similar to a write. However, the value is incremented by the datapoint value
+instead of overwritten. Values are incremented atomically, so this is useful for counting events. The series key and an array of DataPoints are required. Note: a series will be created
+if the provided key does not exist.
+
+### Parameters
+* seriesKey - key for the series to increment (string)
+* data - the data to increment (list of DataPoints)
+
+### Returns
+Nothing
+
+### Example
+
+The following example increments three datapoints to the series with key "my-custom-key".
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var data = new List<DataPoint>
+{
+  new DataPoint(datetime(2012, 1, 1, 1, 0, 0), 12.34),
+  new DataPoint(datetime(2012, 1, 1, 1, 1, 0), 1.874),
+  new DataPoint(datetime(2012, 1, 1, 1, 2, 0), 21.52),
+};
+client.IncrementByKey("my-custom-key", data);
+```
+
+## IncrementsBulkData(BulkDataSet dataSet)
+Increments values to multiple series for a particular timestamp. This function takes a BulkDataSet which contains a timestamp and list of BulkPoints.
+
+### Parameters
+* dataSet - a bulk data set representing a timestamp and multiple values (BulkDataSet)
+
+### Returns
+Nothing
+
+### Example
+
+The following example increments datapoints to four separate series (2 by id, 2 by key) at the same timestamp.
+
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var data = new List<BulkPoint>
+{
+  new BulkIdPoint("38268c3b231f1266a392931e15e99231", 20.31),
+  new BulkIdPoint("c3b23826836a391f12629392311e15e9", 13.351),
+  new BulkKeyPoint("my-key-1", 0.631),
+  new BulkKeyPoint("my-key-2", 612.23)
+};
+var bulkSet = new BulkDataSet(new DateTime(2012, 1, 1), data);
+
+client.IncrementBulkData(bulkSet);
+```
+
 ## DeleteById(string seriesId, DateTime start, DateTime end)
 
 Deletes a range of data specified by series id. The id, start, and end times are required. As with the read api, the start datetime
