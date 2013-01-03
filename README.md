@@ -1,8 +1,8 @@
 # TempoDB .NET API Client
 
-The TempoDB .NET API Client makes calls to the [TempoDB API](http://tempo-db.com/api/). 
+The TempoDB .NET API Client makes calls to the [TempoDB API](http://tempo-db.com/api/).
 
-1. Download tempodb
+1. Download tempodb.
 Currently you must clone the repo
 ``
 git clone https://github.com/tempodb/tempodb-net
@@ -36,7 +36,7 @@ All access to data is made through a client instance.
 Represents one timestamp/value pair.
 #### Constructor
 ```csharp
-var dp = new DataPoint(new DateTime(2013, 1, 1), 10.0); // Or 
+var dp = new DataPoint(new DateTime(2013, 1, 1), 10.0); // Or
 var dp2 = new DataPoint
 {
   Timestamp = new DateTime(2013, 1, 1),
@@ -72,7 +72,7 @@ var series = new Series
 * Tags - (list of strings)
 
 ## DataSet
-Respresents data from a time range of a series. This is essentially a list of DataPoints with some added metadata. This is the object
+Represents data from a time range of a series. This is essentially a list of DataPoints with some added metadata. This is the object
 returned from a query. The DataSet contains series metadata, the start/end times for the queried range, a list of the DataPoints
 and a statistics summary table. The Summary table contains statistics for the time range (sum, mean, min, max, count, etc.)
 ### Members
@@ -85,8 +85,8 @@ and a statistics summary table. The Summary table contains statistics for the ti
 ## Bulk Writes
 The Bulk classes exist to facilitate using the bulk write endpoint, which provides the ability to write to multiple series per timestamp.
 
-## BulkPoint 
-an abstract base class for the bulk data points is used, as well as 2 concrete implementations.
+## BulkPoint
+An abstract base class for the bulk data points is used, as well as 2 concrete implementations.
 * BulkKeyPoint - Used to write a datapoint to a series by series key
 * BulkIdPoint - Used to write a datapoint to a series by series id
 
@@ -96,7 +96,7 @@ BulkPoint bpkey = new BulkKeyPoint("key", 10.0);
 BulkPoint bpid = new BulkIdPoint("id", 10.0);
 ```
 
-### Members 
+### Members
 * Value - [Common] datapoint's value (double)
 * Key - [BulkKeyPoint] key of series being written to (string)
 * Id - [BulkIdPoint] id of series being written to (string)
@@ -134,7 +134,7 @@ Creates and returns a series object, optionally with the given key.
 * key - [Optional] key for the series (string)
 
 ### Returns
-The newly created Series object.
+The newly created Series object
 
 ### Example
 
@@ -153,7 +153,7 @@ Gets a specific series object.
 * id - Series id (string)
 
 ### Returns
-A Series objects.
+A Series object
 
 ### Example
 
@@ -169,11 +169,11 @@ Gets a specific series object.
 * key - Series key (string)
 
 ### Returns
-A Series objects.
+A Series object
 
 ### Example
 
-The following example returns the series with the key: series-key
+The following example returns the series with the key: series-key.
 ```csharp
 var client = new Client("api-key", "api-secret");
 var series  = client.GetSeriesByKey("series-key");
@@ -191,7 +191,7 @@ Using the Filter class you can construct a filter based on:
 * Filter - [Optional] Filter object (Filter)
 
 ### Returns
-A list of series that match the criteria.
+A list of series that match the criteria
 
 ### Example
 
@@ -215,7 +215,7 @@ modified. The easiest way to use this method is through a read-modify-write cycl
 * series - the post updated series (Series)
 
 ### Returns
-The updated Series.
+The updated Series
 
 ### Example
 
@@ -225,12 +225,12 @@ var client = new Client("api-key", "api-secret");
 
 var series = client.GetSeriesByKey("test1") ;
 series.Tags.Append("tag3");
-  
+
 client.UpdateSeries(series);
 ```
 
 ##ReadById(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
-Gets a DataSets for the specified start/end times. The interval parameter allows you to specify a rollup period. For example,
+Gets a DataSet for the specified start/end times. The interval parameter allows you to specify a rollup period. For example,
 "1hour" will roll the data up on the hour using the provided function. The function parameter specifies the folding function
 to use while rolling the data up. A rollup is selected automatically if no interval or function is given. The auto rollup interval
 is calculated by the total time range (end - start) as follows:
@@ -271,7 +271,7 @@ A DataSet
 
 ### Example
 
-The following example returns a data set from 2012-01-01 to 2012-01-02 for the series with id "38268c3b231f1266a392931e15e99231",
+The following example returns a DataSet from 2012-01-01 to 2012-01-02 for the series with id "38268c3b231f1266a392931e15e99231",
 with the maximum value for each hour as well as the raw data.
 
 ```csharp
@@ -315,7 +315,7 @@ Writes datapoints to the specified series. The series id and a list of DataPoint
 * data - the data to write (list of DataPoints)
 
 ### Returns
-Nothing.
+Nothing
 
 ### Example
 
@@ -341,7 +341,7 @@ if the provided key does not exist. Otherwise usage is identical to WriteById.
 * data - the data to write (list of DataPoints)
 
 ### Returns
-Nothing.
+Nothing
 
 ### Example
 
@@ -388,8 +388,8 @@ client.WriteBulkData(bulkSet);
 
 ## DeleteById(string seriesId, DateTime start, DateTime end)
 
-Deletes a range of data specified  by series id. The id, start, and end times are required. As with the read api, the start datetime
-is inclusive and the end datetime is exclusive. i.e. \[start, end)
+Deletes a range of data specified by series id. The id, start, and end times are required. As with the read api, the start datetime
+is inclusive and the end datetime is exclusive. i.e. \[start, end).
 
 ### Parameters
 * seriesId - id for the series to delete from (string)
@@ -398,7 +398,7 @@ is inclusive and the end datetime is exclusive. i.e. \[start, end)
 
 ### Returns
 
-Nothing.
+Nothing
 
 ### Example
 
@@ -410,8 +410,8 @@ client.DeleteById("38268c3b231f1266a392931e15e99231", new DateTime(2012, 1, 1), 
 
 ## DeleteByKey(string serieskey, DateTime start, DateTime end)
 
-Deletes a range of data specified  by series key. The key, start, and end times are required. As with the read api, the start datetime
-is inclusive and the end datetime is exclusive. i.e. \[start, end)
+Deletes a range of data specified by series key. The key, start, and end times are required. As with the read api, the start datetime
+is inclusive and the end datetime is exclusive. i.e. \[start, end).
 
 ### Parameters
 * seriesKey - key for the series to delete from (string)
@@ -420,7 +420,7 @@ is inclusive and the end datetime is exclusive. i.e. \[start, end)
 
 ### Returns
 
-Nothing.
+Nothing
 
 ### Example
 
