@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="DataPointModelTests.cs" />
     <Compile Include="DeleteTests.cs" />
+    <Compile Include="IncrementTests.cs" />
     <Compile Include="JsonDeserializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadTests.cs" />
