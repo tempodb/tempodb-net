@@ -3,7 +3,8 @@
 The TempoDB .NET API Client makes calls to the [TempoDB API](http://tempo-db.com/api/).
 
 1. Download tempodb.
-Currently you must clone the repo
+  * From [NuGet](https://nuget.org/packages/TempoDB)
+  * From source
 ``
 git clone https://github.com/tempodb/tempodb-net
 ``
