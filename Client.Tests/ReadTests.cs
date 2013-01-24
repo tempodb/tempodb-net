@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Client.Model;
+using Moq;
+using NUnit.Framework;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Client.Model;
-using Moq;
-using RestSharp;
-using NUnit.Framework;
 
 
 namespace Client.Tests

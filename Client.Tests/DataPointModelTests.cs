@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Client.Model;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Client.Model;
-using NUnit.Framework;
 
 
 namespace Client.Tests

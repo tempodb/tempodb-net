@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Client.Model;
+﻿using Client.Model;
 using Moq;
-using RestSharp;
 using NUnit.Framework;
+using RestSharp;
+using System;
+using System.Collections.Generic;
 
 
 namespace Client.Tests
