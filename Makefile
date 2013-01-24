@@ -6,6 +6,9 @@ compile:
 compile-test: compile
 	xbuild Client.Tests/Client.Tests.csproj
 
+test: compile-test
+	mono packages/NUnit.Runners.2.6.1/tools/nunit-console.exe Client.Tests/bin/Debug/Client.Tests.dll
+
 clean-build:
 	rm -rf Client/bin
 	rm -rf Client/obj
