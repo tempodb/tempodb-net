@@ -1,0 +1,11 @@
+language: c
+
+install:
+  - sudo apt-get install cmake mono-devel mono-gmcs
+
+script:
+  - make test
+
+notifications:
+  email:
+    - tech@tempo-db.com
