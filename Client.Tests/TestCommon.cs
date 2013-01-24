@@ -5,11 +5,13 @@ using System.Text;
 using Moq;
 using RestSharp;
 
+
 namespace Client.Tests
 {
+
     class TestCommon
     {
-        public static Client GetClient(RestClient restClient = null)
+        public static Client GetClient(RestClient restClient)
         {
             return new Client("api-key", "api-secret", restClient: restClient);
         }
