@@ -73,7 +73,7 @@ namespace Client.Tests
 
             client.CreateSeries("series-key");
 
-            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/")));
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/")));
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace Client.Tests
 
             client.GetSeriesById("series-id");
 
-            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}")));
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/id/{id}")));
         }
 
         [Test]
@@ -198,7 +198,7 @@ namespace Client.Tests
 
             client.GetSeriesByKey("series-key");
 
-            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/key/{key}")));
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/key/{key}")));
         }
 
         [Test]
@@ -264,7 +264,7 @@ namespace Client.Tests
 
             client.ListSeries();
 
-            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Resource == "/series")));
+            mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/")));
         }
 
         [Test]
@@ -348,7 +348,7 @@ namespace Client.Tests
 
             client.UpdateSeries(seriesResponse);
 
-            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}/")));
+            mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/id/{id}/")));
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "series-id"))));
         }
     }

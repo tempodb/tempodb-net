@@ -23,7 +23,7 @@ namespace Client.Tests
             data.Add(new DataPoint(DateTime.Now, valueToAdd));
             client.IncrementByKey("key", data);
 
-            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST && req.Resource == "/series/{property}/{value}/increment/";
+            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST && req.Resource == "/{version}/series/{property}/{value}/increment/";
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
         }
 

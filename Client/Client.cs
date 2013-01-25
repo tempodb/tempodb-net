@@ -123,7 +123,7 @@ namespace Client
 
                 string protocol = _secure ? "https://" : "http://";
                 string portString = (_port == 80) ? "" : ":" + _port;
-                string baseUrl = protocol + _host + portString + "/" + _version;
+                string baseUrl = protocol + _host + portString;
 
                 var client = new RestClient
                                 {
@@ -147,11 +147,12 @@ namespace Client
         ///  <returns> A Series </returns>
         public Series CreateSeries(string key = "")
         {
-            const string url = "/series/";
+            const string url = "/{version}/series/";
 
             var body = new Dictionary<string, string>();
             body.Add("key", key);
             RestRequest request = BuildRequest(url, Method.POST, body);
+            request.AddUrlSegment("version", _version);
             return Execute<Series>(request);
         }
 
@@ -162,8 +163,9 @@ namespace Client
         ///  <returns> The updated Series </returns>
         public Series UpdateSeries(Series series)
         {
-            const string url = "/series/id/{id}/";
+            const string url = "/{version}/series/id/{id}/";
             RestRequest request = BuildRequest(url, Method.PUT, series);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("id", series.Id);
             return Execute<Series>(request);
         }
@@ -174,11 +176,10 @@ namespace Client
         ///  <returns> A list of Series with the matching Key </returns>
         public Series GetSeriesByKey(string key)
         {
-            const string url = "/series/key/{key}";
-
+            const string url = "/{version}/series/key/{key}";
             RestRequest request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("key", key);
-
             return Execute<Series>(request);
         }
 
@@ -188,11 +189,10 @@ namespace Client
         ///  <returns> The Series that matches the specified Id </returns>
         public Series GetSeriesById(string id)
         {
-            const string url = "/series/id/{id}";
-
+            const string url = "/{version}/series/id/{id}";
             RestRequest request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("id", id);
-
             return Execute<Series>(request);
         }
 
@@ -208,8 +208,9 @@ namespace Client
                 filter = new Filter();
             }
 
-            const string url = "/series";
+            const string url = "/{version}/series/";
             RestRequest request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", _version);
             ApplyFilterToRequest(request, filter);
             var result = Execute<List<Series>>(request);
             return result;
@@ -237,8 +238,9 @@ namespace Client
 
         private void WriteDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
         {
-            const string url = "/series/{property}/{value}/data/";
+            const string url = "/{version}/series/{property}/{value}/data/";
             RestRequest request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
             Execute(request);
@@ -250,8 +252,9 @@ namespace Client
         ///  <param name="dataSet"> A BulkDataSet to write </param>
         public virtual void WriteBulkData(BulkDataSet dataSet)
         {
-            const string url = "/data/";
+            const string url = "/{version}/data/";
             RestRequest request = BuildRequest(url, Method.POST, dataSet);
+            request.AddUrlSegment("version", _version);
             Execute(request);
         }
 
@@ -277,8 +280,9 @@ namespace Client
 
         private void IncrementDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
         {
-            const string url = "/series/{property}/{value}/increment/";
+            const string url = "/{version}/series/{property}/{value}/increment/";
             RestRequest request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
             Execute(request);
@@ -290,8 +294,9 @@ namespace Client
         ///  <param name="dataSet"> A BulkDataSet to increments </param>
         public virtual void IncrementBulkData(BulkDataSet dataSet)
         {
-            const string url = "/increment/";
+            const string url = "/{version}/increment/";
             RestRequest request = BuildRequest(url, Method.POST, dataSet);
+            request.AddUrlSegment("version", _version);
             Execute(request);
         }
 
@@ -319,8 +324,9 @@ namespace Client
 
         private void DeleteDataPoints(string seriesProperty, string propertyValue, DateTime start, DateTime end)
         {
-            const string url = "/series/{property}/{value}/data";
+            const string url = "/{version}/series/{property}/{value}/data";
             RestRequest request = BuildRequest(url, Method.DELETE);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
             request.AddParameter(QueryStringParameter.Start, TempoDateTimeConvertor.ConvertDateTimeToString(start));
@@ -361,8 +367,8 @@ namespace Client
         private DataSet ReadDataSet(string seriesProperty, string propertyValue, DateTime start, DateTime end,
                                     string interval = null, string function = null)
         {
-            RestRequest request = BuildRequest("/series/{property}/{value}/data", Method.GET);
-
+            RestRequest request = BuildRequest("/{version}/series/{property}/{value}/data", Method.GET);
+            request.AddUrlSegment("version", _version);
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
 
@@ -384,8 +390,8 @@ namespace Client
         public virtual IList<DataSet> ReadMultipleSeries(DateTime start, DateTime end, Filter filter, string interval = null,
                                                          string function = null)
         {
-            RestRequest request = BuildRequest("/data/", Method.GET);
-
+            RestRequest request = BuildRequest("/{version}/data/", Method.GET);
+            request.AddUrlSegment("version", _version);
             AddReadParameters(request, start, end, interval, function);
 
             if (filter != null)

@@ -23,7 +23,7 @@ namespace Client.Tests
             client.DeleteById("series-id", new DateTime(2012, 1, 1), new DateTime(2012, 1, 1, 1, 0, 0));
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.DELETE)));
-            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/{property}/{value}/data")));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-01-01T00:00:00.000-06:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-01-01T01:00:00.000-06:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "id"))));
@@ -39,7 +39,7 @@ namespace Client.Tests
             client.DeleteByKey("series-key", new DateTime(2012, 1, 1), new DateTime(2012, 1, 1, 1, 0, 0));
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.DELETE)));
-            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/{property}/{value}/data")));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-01-01T00:00:00.000-06:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-01-01T01:00:00.000-06:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "key"))));

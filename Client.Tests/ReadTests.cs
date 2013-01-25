@@ -83,7 +83,7 @@ namespace Client.Tests
 
                 client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
-                mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
+                mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/{property}/{value}/data")));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "key"))));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "value", "testkey"))));
             }
@@ -108,7 +108,7 @@ namespace Client.Tests
 
                 client.ReadById("testid", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
-                mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
+                mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/{version}/series/{property}/{value}/data")));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "id"))));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "value", "testid"))));
             }
@@ -178,7 +178,7 @@ namespace Client.Tests
                 filter.AddKey("series2");
                 client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Raw());
 
-                Expression<Func<RestRequest, bool>> assertion = req => req.Resource == "/data/";
+                Expression<Func<RestRequest, bool>> assertion = req => req.Resource == "/{version}/data/";
                 mockclient.Verify(cl => cl.Execute<List<DataSet>>(It.Is<RestRequest>(assertion)));
 
             }
