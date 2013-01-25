@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CursorTests.cs" />
     <Compile Include="DataPointModelTests.cs" />
     <Compile Include="DeleteTests.cs" />
     <Compile Include="IncrementTests.cs" />

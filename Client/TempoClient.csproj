@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="Cursor.cs" />
     <Compile Include="JsonSerializer.cs" />
     <Compile Include="Model\BulkDataSet.cs" />
     <Compile Include="Model\BulkIdPoint.cs" />
