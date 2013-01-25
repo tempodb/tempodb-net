@@ -1,7 +1,7 @@
 language: c
 
 install:
-  - sudo apt-get install cmake mono-devel mono-gmcs
+  - ./scripts/install-mono.sh
 
 script:
   - make test
