@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Client.Model;
+using Moq;
+using NUnit.Framework;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Client.Model;
-using MbUnit.Framework;
-using Moq;
-using RestSharp;
+
 
 namespace Client.Tests
 {
-	[TestFixture]
-	public class ReadTests
-	{
+    [TestFixture]
+    public class ReadTests
+    {
         [TestFixture]
         class SingleRead
         {
@@ -40,7 +41,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.GET;
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
@@ -51,10 +52,12 @@ namespace Client.Tests
             {
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
+                var start = new DateTime(2012, 6, 23);
+                var end = new DateTime(2012, 6, 24);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadByKey("testkey", start, end, IntervalParameter.Raw());
 
-                Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-06-23T00:00:00.000-07:00");
+                Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-06-23T00:00:00.000-05:00");
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
             }
 
@@ -63,10 +66,12 @@ namespace Client.Tests
             {
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
+                var start = new DateTime(2012, 6, 23);
+                var end = new DateTime(2012, 6, 24);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadByKey("testkey", start, end, IntervalParameter.Raw());
 
-                Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-06-24T00:00:00.000-07:00");
+                Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-06-24T00:00:00.000-05:00");
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
             }
 
@@ -76,12 +81,11 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "key"))));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "value", "testkey"))));
-
             }
 
             [Test]
@@ -90,7 +94,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "interval", "raw");
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
@@ -102,7 +106,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadById("testid", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadById("testid", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => req.Resource == "/series/{property}/{value}/data")));
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "id"))));
@@ -115,7 +119,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Hours(1));
+                client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Hours(1));
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "interval", "1hour");
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
@@ -127,7 +131,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient<DataSet>(new DataSet());
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var results = client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Hours(1), FoldingFunction.Sum);
+                client.ReadByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Hours(1), FoldingFunction.Sum);
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "function", "sum");
                 mockclient.Verify(cl => cl.Execute<DataSet>(It.Is<RestRequest>(assertion)));
@@ -141,10 +145,10 @@ namespace Client.Tests
             [Test]
             public void SmokeTest()
             {
-                List<DataSet> ret = new List<DataSet> { 
+                List<DataSet> ret = new List<DataSet> {
             new DataSet
             {
-                Series = new Series { Key = "series1" } 
+                Series = new Series { Key = "series1" }
             },
             new DataSet
             {
@@ -172,7 +176,7 @@ namespace Client.Tests
                 var filter = new Filter();
                 filter.AddKey("series1");
                 filter.AddKey("series2");
-                var results = client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Raw());
+                client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => req.Resource == "/data/";
                 mockclient.Verify(cl => cl.Execute<List<DataSet>>(It.Is<RestRequest>(assertion)));
@@ -188,7 +192,7 @@ namespace Client.Tests
                 var filter = new Filter();
                 filter.AddKey("series1");
                 filter.AddKey("series2");
-                var results = client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Raw());
+                client.ReadMultipleSeries(new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), filter, IntervalParameter.Raw());
 
                 mockclient.Verify(cl => cl.Execute<List<DataSet>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "series1"))));
                 mockclient.Verify(cl => cl.Execute<List<DataSet>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "series2"))));

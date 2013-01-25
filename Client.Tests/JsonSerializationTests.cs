@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Client.Model;
+using Moq;
+using NUnit.Framework;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Client.Model;
-using MbUnit.Framework;
-using Moq;
-using RestSharp;
+
 
 namespace Client.Tests
 {
@@ -22,7 +23,7 @@ namespace Client.Tests
             {
                 var dp = new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1), 12.34);
                 var result = JsonSerializationTests.serializer.Serialize(dp);
-                Assert.AreEqual("{\"t\":\"2012-01-01T00:00:01.000-08:00\",\"v\":12.34}", result);
+                Assert.AreEqual("{\"t\":\"2012-01-01T00:00:01.000-06:00\",\"v\":12.34}", result);
             }
 
             [Test]
@@ -31,7 +32,7 @@ namespace Client.Tests
                 var dp = new DataPoint();
                 var result = JsonSerializationTests.serializer.Serialize(dp);
 
-                Assert.Contains(result, ":0.0");
+                StringAssert.Contains(":0.0", result);
             }
         }
 
@@ -135,7 +136,7 @@ namespace Client.Tests
                 var bds = new BulkDataSet(new DateTime(2012, 1, 1), data);
                 var result = JsonSerializationTests.serializer.Serialize(bds);
 
-                Assert.AreEqual("{\"t\":\"2012-01-01T00:00:00.000-08:00\",\"data\":[{\"id\":\"id1\",\"v\":12.34},{\"key\":\"mykey\",\"v\":56.78},{\"id\":\"id2\",\"v\":90.12}]}", result);                    
+                Assert.AreEqual("{\"t\":\"2012-01-01T00:00:00.000-06:00\",\"data\":[{\"id\":\"id1\",\"v\":12.34},{\"key\":\"mykey\",\"v\":56.78},{\"id\":\"id2\",\"v\":90.12}]}", result);
             }
         }
     }

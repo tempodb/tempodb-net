@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Client.Model;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Client.Model;
-using MbUnit.Framework;
+
 
 namespace Client.Tests
 {
@@ -41,10 +42,10 @@ namespace Client.Tests
         public void Unequality_Null()
         {
             var dp1 = new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1), 12.34);
-            
+
             Assert.AreNotEqual(dp1, null);
         }
-        
+
         [Test]
         public void Equality_Null()
         {

@@ -30,14 +30,14 @@
     
     <PropertyGroup Condition=" '$(OS)' != 'Windows_NT'">
         <!-- We need to launch nuget.exe with the mono command if we're not on windows -->
-        <NuGetToolsPath>$(SolutionDir).nuget</NuGetToolsPath>
+        <NuGetToolsPath>$(MSBuildThisFileDirectory)</NuGetToolsPath>
         <PackagesConfig>packages.config</PackagesConfig>
-        <PackagesDir>$(SolutionDir)packages</PackagesDir>
+        <PackagesDir>$(MSBuildThisFileDirectory)..\packages</PackagesDir>
     </PropertyGroup>
     
     <PropertyGroup>
         <!-- NuGet command -->
-        <NuGetExePath Condition=" '$(NuGetExePath)' == '' ">$(NuGetToolsPath)\nuget.exe</NuGetExePath>
+        <NuGetExePath Condition=" '$(NuGetExePath)' == '' ">$(NuGetToolsPath)NuGet.exe</NuGetExePath>
         <PackageSources Condition=" $(PackageSources) == '' ">@(PackageSource)</PackageSources>
         
         <NuGetCommand Condition=" '$(OS)' == 'Windows_NT'">"$(NuGetExePath)"</NuGetCommand>

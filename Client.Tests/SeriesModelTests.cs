@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Client.Model;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Client.Model;
-using MbUnit.Framework;
+
 
 namespace Client.Tests
 {
@@ -62,7 +63,7 @@ namespace Client.Tests
 
             Assert.AreNotEqual(s1, s2);
         }
-        
+
         [Test]
         public void Unequality_Key()
         {

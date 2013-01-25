@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Client.Model;
-using MbUnit.Framework;
+﻿using Client.Model;
 using Moq;
+using NUnit.Framework;
 using RestSharp;
+using System;
+using System.Collections.Generic;
+
 
 namespace Client.Tests
 {
@@ -54,7 +55,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.CreateSeries("series-key");
+            client.CreateSeries("series-key");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.POST)));
         }
@@ -70,7 +71,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.CreateSeries("series-key");
+            client.CreateSeries("series-key");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/")));
         }
@@ -86,11 +87,10 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.CreateSeries("series-key");
-            
+            client.CreateSeries("series-key");
+
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "series-key"))));
         }
-        
     }
 
     [TestFixture]
@@ -121,7 +121,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesById("series-id");
+            client.GetSeriesById("series-id");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.GET)));
         }
@@ -136,7 +136,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesById("series-id");
+            client.GetSeriesById("series-id");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}")));
         }
@@ -151,7 +151,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesById("series-id");
+            client.GetSeriesById("series-id");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "series-id"))));
         }
@@ -181,7 +181,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesByKey("series-key");
+            client.GetSeriesByKey("series-key");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.GET)));
         }
@@ -196,7 +196,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesByKey("series-key");
+            client.GetSeriesByKey("series-key");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/key/{key}")));
         }
@@ -211,11 +211,10 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(series);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var results = client.GetSeriesByKey("series-key");
+            client.GetSeriesByKey("series-key");
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "series-key"))));
         }
-
     }
 
 
@@ -248,7 +247,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series> { series });
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var result = client.ListSeries();
+            client.ListSeries();
 
             mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Method == Method.GET)));
         }
@@ -263,7 +262,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<List<Series>>(new List<Series> { series });
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var result = client.ListSeries();
+            client.ListSeries();
 
             mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => req.Resource == "/series")));
         }
@@ -282,7 +281,7 @@ namespace Client.Tests
             filter.AddTag("tag1");
             filter.AddTag("tag2");
 
-            var result = client.ListSeries(filter);
+            client.ListSeries(filter);
 
             mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key1]", "value1"))));
             mockclient.Verify(cl => cl.Execute<List<Series>>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key2]", "value2"))));
@@ -329,7 +328,7 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(seriesResponse);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var result = client.UpdateSeries(seriesResponse);
+            client.UpdateSeries(seriesResponse);
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Method == Method.PUT)));
         }
@@ -347,12 +346,10 @@ namespace Client.Tests
             var mockclient = TestCommon.GetMockRestClient<Series>(seriesResponse);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var result = client.UpdateSeries(seriesResponse);
+            client.UpdateSeries(seriesResponse);
 
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => req.Resource == "/series/id/{id}/")));
             mockclient.Verify(cl => cl.Execute<Series>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "series-id"))));
         }
     }
-
-	
 }

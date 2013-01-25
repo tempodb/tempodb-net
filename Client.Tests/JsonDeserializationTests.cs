@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Client.Model;
+using Moq;
+using NUnit.Framework;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Client.Model;
-using MbUnit.Framework;
-using Moq;
-using RestSharp;
+
 
 namespace Client.Tests
 {
@@ -22,11 +23,11 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"t\":\"2012-01-01T00:00:01.000-08:00\",\"v\":12.34}"
+                    Content = "{\"t\":\"2012-01-01T00:00:01.000+00:00\",\"v\":12.34}"
                 };
 
                 var result = JsonDeserializationTests.deserializer.Deserialize<DataPoint>(jsonResponse);
-                Assert.AreEqual(new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1, DateTimeKind.Local), 12.34), result);
+                Assert.AreEqual(new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1).ToLocalTime(), 12.34), result);
             }
 
             [Test]
@@ -34,11 +35,11 @@ namespace Client.Tests
             {
                 var jsonResponse = new RestResponse
                 {
-                    Content = "{\"t\":\"2012-01-01T00:00:01.000-08:00\",\"v\":1234}"
+                    Content = "{\"t\":\"2012-01-01T00:00:01.000+00:00\",\"v\":1234}"
                 };
 
                 var result = JsonDeserializationTests.deserializer.Deserialize<DataPoint>(jsonResponse);
-                Assert.AreEqual(new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1, DateTimeKind.Local), 1234.0), result);
+                Assert.AreEqual(new DataPoint(new DateTime(2012, 1, 1, 0, 0, 1).ToLocalTime(), 1234.0), result);
             }
         }
 
@@ -59,9 +60,6 @@ namespace Client.Tests
                 };
 
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
-                Console.WriteLine(series.Name == null);
-                Console.WriteLine(series.Tags == null);
-                Console.WriteLine(result.Tags == null);
                 Assert.AreEqual(series, result);
             }
 
@@ -72,7 +70,7 @@ namespace Client.Tests
                 {
                     Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"series-name\",\"attributes\":{},\"tags\":[]}"
                 };
-                
+
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
                 Assert.AreEqual("series-name", result.Name);
             }
@@ -84,8 +82,8 @@ namespace Client.Tests
                 {
                     Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{},\"tags\":[\"tag1\",\"tag2\"]}"
                 };
-                
-                var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse); 
+
+                var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
                 Assert.AreEqual(2, result.Tags.Count);
                 Assert.AreEqual("tag1", result.Tags[0]);
                 Assert.AreEqual("tag2", result.Tags[1]);
@@ -98,7 +96,7 @@ namespace Client.Tests
                 {
                     Content = "{\"id\":\"series-id\",\"key\":\"series-key\",\"name\":\"\",\"attributes\":{\"key1\":\"val1\",\"key2\":\"val2\"},\"tags\":[]}"
                 };
-                
+
                 var result = JsonDeserializationTests.deserializer.Deserialize<Series>(jsonResponse);
                 Assert.AreEqual(2, result.Attributes.Count);
                 Assert.AreEqual("val1", result.Attributes["key1"]);
@@ -172,12 +170,7 @@ namespace Client.Tests
 
                 var result = JsonDeserializationTests.deserializer.Deserialize<DataSet>(jsonResponse);
                 Assert.AreEqual(0, result.Summary.Count);
-
-
             }
         }
     }
-
-    
-
 }
