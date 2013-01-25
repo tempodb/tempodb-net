@@ -1,9 +1,10 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using RestSharp;
 using RestSharp.Deserializers;
 using RestSharp.Serializers;
+using RestSharp;
+using System;
+
 
 namespace Client
 {
