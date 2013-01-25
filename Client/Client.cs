@@ -56,7 +56,7 @@ namespace Client
         /// Executes the rest request, where no response is expected.
         /// </summary>
         /// <param name="request">The request to be executed</param>
-        public void Execute(RestRequest request)
+        public IRestResponse Execute(RestRequest request)
         {
             RestClient client = GetRestClient();
             IRestResponse response = client.Execute(request);
@@ -66,6 +66,7 @@ namespace Client
                 throw new Exception(string.Format("Service call failed with HTTP response [{0}].",
                                                   Enum.GetName(typeof (HttpStatusCode), response.StatusCode)));
             }
+            return response;
         }
 
         /// <summary>
@@ -94,6 +95,25 @@ namespace Client
                         response.ErrorMessage));
             }
             return response.Data;
+        }
+
+        public RestRequest BuildRequest(string url, Method method, object body = null)
+        {
+            var request = new RestRequest {
+                Method = method,
+                Resource = url,
+                Timeout = DEFAULT_TIMEOUT_MILLIS,
+                RequestFormat = DataFormat.Json,
+                JsonSerializer = new JsonSerializer()
+            };
+            request.AddHeader("Accept-Encoding", "gzip,deflate");
+
+            if (body != null)
+            {
+                request.AddBody(body);
+            }
+
+            return request;
         }
 
         private RestClient GetRestClient()
@@ -306,27 +326,6 @@ namespace Client
             request.AddParameter(QueryStringParameter.Start, TempoDateTimeConvertor.ConvertDateTimeToString(start));
             request.AddParameter(QueryStringParameter.End, TempoDateTimeConvertor.ConvertDateTimeToString(end));
             Execute(request);
-        }
-
-        private RestRequest BuildRequest(string url, Method method, object body = null)
-        {
-            var request = new RestRequest
-                            {
-                                Method = method,
-                                Resource = url,
-                                Timeout = DEFAULT_TIMEOUT_MILLIS,
-                                RequestFormat = DataFormat.Json,
-                                JsonSerializer = new JsonSerializer()
-                            };
-
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
-
-            if (body != null)
-            {
-                request.AddBody(body);
-            }
-
-            return request;
         }
 
         /// <summary>
