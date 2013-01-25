@@ -62,5 +62,23 @@ namespace Client.Tests
             }
             Assert.AreEqual(expected, output);
         }
+
+        [Test]
+        public void SmokeTest()
+        {
+            Client client = new Client("key", "secret", "localhost", 4242, "v1", false);
+            DateTime start = new DateTime(2012, 1, 1);
+            DateTime end = new DateTime(2012, 2, 1);
+            string interval = "raw";
+            int count = 0;
+
+            Cursor datapoints = client.ReadByKey2("myagley-1", start, end, interval);
+            foreach(DataPoint dp in datapoints)
+            {
+                count = count + 1;
+                Console.WriteLine(dp);
+            }
+            Console.WriteLine(count);
+        }
     }
 }

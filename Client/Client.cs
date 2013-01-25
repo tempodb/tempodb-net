@@ -378,6 +378,33 @@ namespace Client
             return result;
         }
 
+        public virtual Cursor ReadById2(string seriesId, DateTime start, DateTime end, string interval=null,
+                                         string function=null)
+        {
+            return ReadCursor(SeriesProperty.Id, seriesId, start, end, interval, function);
+        }
+
+        public virtual Cursor ReadByKey2(string seriesKey, DateTime start, DateTime end, string interval=null,
+                                         string function=null)
+        {
+            return ReadCursor(SeriesProperty.Key, seriesKey, start, end, interval, function);
+        }
+
+        private Cursor ReadCursor(string seriesProperty, string propertyValue, DateTime start, DateTime end,
+                                  string interval=null, string function=null)
+        {
+            RestRequest request = BuildRequest("/{version}/series/{property}/{value}/data/segment/", Method.GET);
+            request.AddUrlSegment("version", _version);
+            request.AddUrlSegment("property", seriesProperty);
+            request.AddUrlSegment("value", propertyValue);
+            AddReadParameters(request, start, end, interval, function);
+            var response = Execute(request);
+
+            Segment segment = new Segment(response);
+            SegmentEnumerator segments = new SegmentEnumerator(this, segment);
+            return new Cursor(segments);
+        }
+
         /// <summary>
         ///  Reads a list of DataSet by the provided filter and rolluped by the interval
         /// </summary>
