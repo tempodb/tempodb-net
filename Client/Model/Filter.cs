@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Client.Model
 {
-
     /// <summary>
     ///  Represents a filter on the set of Series. This is used to query a set of series with specific
     ///  properties. A filter can include ids, keys, tags and attributes. An empty filter is created

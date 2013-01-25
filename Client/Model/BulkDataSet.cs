@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 namespace Client.Model
 {
-
     /// <summary>
     ///  Set of data to send for a bulk write. This encapsulates the timestamp and list of BulkPoints
     /// </summary>

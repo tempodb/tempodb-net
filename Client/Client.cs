@@ -120,7 +120,6 @@ namespace Client
             }
         }
 
-
         /// <summary>
         ///  Creates a new series in the database with a key.
         /// </summary>
@@ -149,7 +148,6 @@ namespace Client
             return Execute<Series>(request);
         }
 
-
         /// <summary>
         ///  Gets a series by Key
         /// </summary>
@@ -163,7 +161,6 @@ namespace Client
 
             return Execute<Series>(request);
         }
-
 
         /// <summary>
         ///  Gets a series by Id
@@ -198,7 +195,6 @@ namespace Client
             return result;
         }
 
-
         /// <summary>
         ///  Writes a DataSet by id
         /// </summary>
@@ -219,7 +215,6 @@ namespace Client
             WriteDataPoints(SeriesProperty.Key, seriesKey, data);
         }
 
-
         private void WriteDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
         {
             const string url = "/series/{property}/{value}/data/";
@@ -228,7 +223,6 @@ namespace Client
             request.AddUrlSegment("value", propertyValue);
             Execute(request);
         }
-
 
         /// <summary>
         ///  Writes a set of datapoints for different series for the same timestamp
@@ -261,7 +255,6 @@ namespace Client
             IncrementDataPoints(SeriesProperty.Key, seriesKey, data);
         }
 
-
         private void IncrementDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
         {
             const string url = "/series/{property}/{value}/increment/";
@@ -270,7 +263,6 @@ namespace Client
             request.AddUrlSegment("value", propertyValue);
             Execute(request);
         }
-
 
         /// <summary>
         ///  Increments a set of datapoints for different series for the same timestamp
@@ -316,7 +308,6 @@ namespace Client
             Execute(request);
         }
 
-
         private RestRequest BuildRequest(string url, Method method, object body = null)
         {
             var request = new RestRequest
@@ -353,7 +344,6 @@ namespace Client
             return ReadDataSet(SeriesProperty.Id, seriesId, start, end, interval, function);
         }
 
-
         /// <summary>
         ///  Reads a DataSet by key
         /// </summary>
@@ -382,7 +372,6 @@ namespace Client
             var result = Execute<DataSet>(request);
             return result;
         }
-
 
         /// <summary>
         ///  Reads a list of DataSet by the provided filter and rolluped by the interval

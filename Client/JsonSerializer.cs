@@ -8,7 +8,6 @@ using System;
 
 namespace Client
 {
-
     public class JsonDeserializer : IDeserializer
     {
         public T Deserialize<T>(IRestResponse response)
@@ -20,7 +19,6 @@ namespace Client
         public string Namespace { get; set; }
         public string DateFormat { get; set; }
     }
-
 
     public class JsonSerializer : ISerializer
     {

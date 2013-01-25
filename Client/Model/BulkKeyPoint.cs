@@ -20,5 +20,4 @@ namespace Client.Model
         [JsonProperty(PropertyName = "key")]
         public string Key { get; private set; }
     }
-
 }
