@@ -23,13 +23,11 @@ namespace Client.Tests
         public void Deserialize()
         {
             string content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34}]";
-            RestSharp.RestResponse response = new RestSharp.RestResponse
-            {
+            RestSharp.RestResponse response = new RestSharp.RestResponse {
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Content = content
             };
-            RestSharp.Parameter link = new RestSharp.Parameter
-            {
+            RestSharp.Parameter link = new RestSharp.Parameter {
                 Name = "Link",
                 Value = "</v1/series/key/key1/data/segment/?start=2012-01-01&end=2012-01-02>; rel=\"next\""
             };
@@ -39,6 +37,30 @@ namespace Client.Tests
             Segment expected = new Segment(new List<DataPoint>{new DataPoint(new DateTime(2012, 3, 27), 12.34)}, "/v1/series/key/key1/data/segment/?start=2012-01-01&end=2012-01-02");
             Assert.AreEqual(expected.Data, segment.Data);
             Assert.AreEqual(expected.NextUrl, segment.NextUrl);
+        }
+
+        [Test]
+        public void Iterator()
+        {
+            string content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]";
+            RestSharp.RestResponse response = new RestSharp.RestResponse
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Content = content
+            };
+
+            Segment segment = new Segment(response);
+            List<DataPoint> expected = new List<DataPoint> {
+                new DataPoint(new DateTime(2012, 3, 27, 0, 0, 0), 12.34),
+                new DataPoint(new DateTime(2012, 3, 27, 1, 0, 0), 23.45)
+            };
+
+            List<DataPoint> output = new List<DataPoint>();
+            foreach(DataPoint dp in segment)
+            {
+                output.Add(dp);
+            }
+            Assert.AreEqual(expected, output);
         }
     }
 }

@@ -58,6 +58,14 @@ namespace Client
             NextUrl = nextUrl;
         }
 
+        public IEnumerator<DataPoint> GetEnumerator()
+        {
+            foreach(DataPoint dp in Data)
+            {
+                yield return dp;
+            }
+        }
+
         private List<Dictionary<string, string>> ParseHeaderLinks(string header)
         {
             char[] replaceChars = {' ', '\'', '"'};
