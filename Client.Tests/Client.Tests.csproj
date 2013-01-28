@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <RestorePackages>false</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -53,14 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CursorTests.cs" />
-    <Compile Include="DataPointModelTests.cs" />
     <Compile Include="DeleteTests.cs" />
     <Compile Include="IncrementTests.cs" />
     <Compile Include="JsonDeserializationTests.cs" />
+    <Compile Include="JsonSerializationTests.cs" />
+    <Compile Include="Model\DataPointTests.cs" />
+    <Compile Include="Model\SeriesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadTests.cs" />
-    <Compile Include="JsonSerializationTests.cs" />
-    <Compile Include="SeriesModelTests.cs" />
     <Compile Include="SeriesTests.cs" />
     <Compile Include="TestCommon.cs" />
     <Compile Include="WriteTests.cs" />

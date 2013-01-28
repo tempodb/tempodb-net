@@ -1,10 +1,18 @@
-.PHONY: compile compile-test clean clean-build clean-test
+.PHONY: compile compile-test update update-build update-test clean clean-build clean-test
 
 compile:
 	xbuild Client/TempoClient.csproj
 
 compile-test: compile
 	xbuild Client.Tests/Client.Tests.csproj
+
+update-build:
+	xbuild Client/TempoClient.csproj /t:RestorePackages
+
+update-test:
+	xbuild Client.Tests/TempoClient.csproj /t:RestorePackages
+
+update: update-build update-test
 
 test: compile-test
 	mono packages/NUnit.Runners.2.6.1/tools/nunit-console.exe Client.Tests/bin/Debug/Client.Tests.dll
