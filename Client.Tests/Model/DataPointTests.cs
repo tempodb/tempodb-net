@@ -9,7 +9,7 @@ using System.Text;
 namespace Client.Tests
 {
     [TestFixture]
-    class DataPointModelTests
+    class DataPointTests
     {
         [Test]
         public void Unequality_Timestamp()

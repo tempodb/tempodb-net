@@ -9,7 +9,7 @@ using System.Text;
 namespace Client.Tests
 {
     [TestFixture]
-    class SeriesModelTests
+    class SeriesTests
     {
         [Test]
         public void Equality()
