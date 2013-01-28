@@ -46,7 +46,7 @@ namespace Client
             {
                 var request = client.BuildRequest(segment.NextUrl, Method.GET);
                 var response = client.Execute(request);
-                segment = new Segment(response);
+                segment = Segment.FromResponse(response);
                 yield return segment;
             }
         }
@@ -65,12 +65,11 @@ namespace Client
 
         /// For now, build the Segment by passing in a RestResponse.
         /// This should be handled by a deserializer in the future
-        public Segment(IRestResponse response)
+        public static Segment FromResponse(IRestResponse response)
         {
             /// Deserialize the data
             JsonDeserializer deserializer = new JsonDeserializer();
             List<DataPoint> data = deserializer.Deserialize<List<DataPoint>>(response);
-            Data = data;
 
             /// Get the next link from the Link header
             Parameter header = null;
@@ -100,7 +99,8 @@ namespace Client
             {
                 next.TryGetValue("url", out nextUrl);
             }
-            NextUrl = nextUrl;
+
+            return new Segment(data, nextUrl);
         }
 
         public IEnumerator<DataPoint> GetEnumerator()
@@ -111,7 +111,7 @@ namespace Client
             }
         }
 
-        private List<Dictionary<string, string>> ParseHeaderLinks(string header)
+        private static List<Dictionary<string, string>> ParseHeaderLinks(string header)
         {
             char[] replaceChars = {' ', '\'', '"'};
             char[] replaceUrlChars = {'<', '>', ' ', '\'', '"'};

@@ -39,7 +39,7 @@ namespace Client.Tests
                 };
                 response.Headers.Add(link);
 
-                Segment segment = new Segment(response);
+                Segment segment = Segment.FromResponse(response);
                 Segment expected = new Segment(new List<DataPoint>{new DataPoint(new DateTime(2012, 3, 27), 12.34)}, "/v1/series/key/key1/data/segment/?start=2012-01-01&end=2012-01-02");
                 Assert.AreEqual(expected.Data, segment.Data);
                 Assert.AreEqual(expected.NextUrl, segment.NextUrl);
@@ -55,7 +55,7 @@ namespace Client.Tests
                     Content = content
                 };
 
-                Segment segment = new Segment(response);
+                Segment segment = Segment.FromResponse(response);
                 List<DataPoint> expected = new List<DataPoint> {
                     new DataPoint(new DateTime(2012, 3, 27, 0, 0, 0), 12.34),
                     new DataPoint(new DateTime(2012, 3, 27, 1, 0, 0), 23.45)

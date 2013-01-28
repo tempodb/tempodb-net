@@ -400,7 +400,7 @@ namespace Client
             AddReadParameters(request, start, end, interval, function);
             IRestResponse response = Execute(request);
 
-            Segment segment = new Segment(response);
+            Segment segment = Segment.FromResponse(response);
             SegmentEnumerator segments = new SegmentEnumerator(this, segment);
             return new Cursor(segments);
         }
