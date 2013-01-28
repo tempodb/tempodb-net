@@ -30,6 +30,13 @@ namespace Client.Tests
             return restClient;
         }
 
+        public static Mock<RestClient> GetMockRestClient(RestSharp.RestResponse res)
+        {
+            var restClient = new Mock<RestClient>();
+            restClient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(res);
+            return restClient;
+        }
+
         public static Mock<RestClient> GetMockRestClient()
         {
             var res = new RestSharp.RestResponse

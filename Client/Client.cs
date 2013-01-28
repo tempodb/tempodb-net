@@ -398,7 +398,7 @@ namespace Client
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
             AddReadParameters(request, start, end, interval, function);
-            var response = Execute(request);
+            IRestResponse response = Execute(request);
 
             Segment segment = new Segment(response);
             SegmentEnumerator segments = new SegmentEnumerator(this, segment);
