@@ -10,7 +10,7 @@ update-build:
 	xbuild Client/TempoClient.csproj /t:RestorePackages
 
 update-test:
-	xbuild Client.Tests/TempoClient.csproj /t:RestorePackages
+	xbuild Client.Tests/Client.Tests.csproj /t:RestorePackages
 
 update: update-build update-test
 
