@@ -28,7 +28,7 @@ namespace Client.Tests
             [Test]
             public void Deserialize()
             {
-                string content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34}]";
+                string content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34}],\"rollup\":null}";
                 RestSharp.RestResponse response = new RestSharp.RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
                     Content = content
@@ -48,7 +48,7 @@ namespace Client.Tests
             [Test]
             public void Iterator()
             {
-                string content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]";
+                string content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}";
                 RestSharp.RestResponse response = new RestSharp.RestResponse
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
@@ -78,7 +78,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = new Mock<RestClient>();
                 mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(response);
@@ -102,7 +102,7 @@ namespace Client.Tests
             {
                 var response1 = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 response1.Headers.Add(new Parameter {
                     Name = "Link",
@@ -110,7 +110,7 @@ namespace Client.Tests
                 });
                 var response2 = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T02:00:00.000-05:00\",\"v\":34.56}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T02:00:00.000-05:00\",\"v\":34.56}],\"rollup\":null}"
                 };
                 var calls = 0;
                 RestResponse[] responses = { response1, response2 };
@@ -138,7 +138,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
@@ -153,7 +153,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
@@ -171,7 +171,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
@@ -189,7 +189,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
@@ -206,7 +206,7 @@ namespace Client.Tests
             {
                 var response = new RestResponse {
                     StatusCode = System.Net.HttpStatusCode.OK,
-                    Content = "[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}]"
+                    Content = "{\"data\":[{\"t\":\"2012-03-27T00:00:00.000-05:00\",\"v\":12.34},{\"t\":\"2012-03-27T01:00:00.000-05:00\",\"v\":23.45}],\"rollup\":null}"
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);

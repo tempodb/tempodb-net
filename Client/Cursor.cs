@@ -54,6 +54,12 @@ namespace Client
 
     public class Segment
     {
+        private class SegmentJson
+        {
+            public List<DataPoint> Data { get; set; }
+            public Dictionary<string, string> Rollup { get; set; }
+        }
+
         public IList<DataPoint> Data { get; set; }
         public string NextUrl { get; set; }
 
@@ -69,7 +75,8 @@ namespace Client
         {
             /// Deserialize the data
             JsonDeserializer deserializer = new JsonDeserializer();
-            List<DataPoint> data = deserializer.Deserialize<List<DataPoint>>(response);
+            var result = deserializer.Deserialize<SegmentJson>(response);
+            List<DataPoint> data = result.Data;
 
             /// Get the next link from the Link header
             Parameter header = null;
