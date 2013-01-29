@@ -1,4 +1,5 @@
-﻿using Client.Model;
+﻿using Client.Json;
+using Client.Model;
 using Moq;
 using NUnit.Framework;
 using RestSharp;

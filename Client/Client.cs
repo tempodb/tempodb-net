@@ -1,7 +1,6 @@
+using Client.Json;
 using Client.Model;
-using Newtonsoft.Json;
 using RestSharp;
-using RestSharp.Deserializers;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -329,8 +328,8 @@ namespace Client
             request.AddUrlSegment("version", _version);
             request.AddUrlSegment("property", seriesProperty);
             request.AddUrlSegment("value", propertyValue);
-            request.AddParameter(QueryStringParameter.Start, TempoDateTimeConvertor.ConvertDateTimeToString(start));
-            request.AddParameter(QueryStringParameter.End, TempoDateTimeConvertor.ConvertDateTimeToString(end));
+            request.AddParameter(QueryStringParameter.Start, DateTimeConvertor.ConvertDateTimeToString(start));
+            request.AddParameter(QueryStringParameter.End, DateTimeConvertor.ConvertDateTimeToString(end));
             Execute(request);
         }
 
@@ -432,8 +431,8 @@ namespace Client
         private static void AddReadParameters(IRestRequest request, DateTime start, DateTime end, string interval = null,
                                               string function = null)
         {
-            request.AddParameter(QueryStringParameter.Start,  TempoDateTimeConvertor.ConvertDateTimeToString(start));
-            request.AddParameter(QueryStringParameter.End, TempoDateTimeConvertor.ConvertDateTimeToString(end));
+            request.AddParameter(QueryStringParameter.Start, DateTimeConvertor.ConvertDateTimeToString(start));
+            request.AddParameter(QueryStringParameter.End, DateTimeConvertor.ConvertDateTimeToString(end));
 
             if (!string.IsNullOrEmpty(interval))
             {

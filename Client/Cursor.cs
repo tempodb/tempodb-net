@@ -1,6 +1,6 @@
+using Client.Json;
 using Client.Model;
 using RestSharp;
-using RestSharp.Deserializers;
 using System;
 using System.Collections.Generic;
 

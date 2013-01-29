@@ -55,8 +55,8 @@
     <Compile Include="CursorTests.cs" />
     <Compile Include="DeleteTests.cs" />
     <Compile Include="IncrementTests.cs" />
-    <Compile Include="JsonDeserializationTests.cs" />
-    <Compile Include="JsonSerializationTests.cs" />
+    <Compile Include="Json\JsonDeserializationTests.cs" />
+    <Compile Include="Json\JsonSerializationTests.cs" />
     <Compile Include="Model\DataPointTests.cs" />
     <Compile Include="Model\SeriesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

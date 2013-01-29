@@ -50,7 +50,9 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Cursor.cs" />
-    <Compile Include="JsonSerializer.cs" />
+    <Compile Include="Json\DateTimeConverter.cs" />
+    <Compile Include="Json\JsonDeserializer.cs" />
+    <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="Model\BulkDataSet.cs" />
     <Compile Include="Model\BulkIdPoint.cs" />
     <Compile Include="Model\BulkKeyPoint.cs" />
