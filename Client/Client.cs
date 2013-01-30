@@ -424,6 +424,26 @@ namespace Client
             return new Cursor(segments);
         }
 
+        public virtual Summary ReadSummaryById(string seriesId, DateTime start, DateTime end)
+        {
+            return ReadSummary(SeriesProperty.Id, seriesId, start, end);
+        }
+
+        public virtual Summary ReadSummaryByKey(string seriesKey, DateTime start, DateTime end)
+        {
+            return ReadSummary(SeriesProperty.Key, seriesKey, start, end);
+        }
+
+        private Summary ReadSummary(string seriesProperty, string propertyValue, DateTime start, DateTime end)
+        {
+            RestRequest request = BuildRequest("/{version}/series/{property}/{value}/data/summary/", Method.GET);
+            request.AddUrlSegment("version", _version);
+            request.AddUrlSegment("property", seriesProperty);
+            request.AddUrlSegment("value", propertyValue);
+            AddReadParameters(request, start, end);
+            return Execute<Summary>(request);
+        }
+
         /// <summary>
         ///  Reads a list of DataSet by the provided filter and rolluped by the interval
         /// </summary>

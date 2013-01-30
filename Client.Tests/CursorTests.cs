@@ -142,7 +142,7 @@ namespace Client.Tests
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
-                var cursor = client.ReadCursorByKey("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
+                client.ReadCursorByKey("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
 
                 Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.GET;
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
