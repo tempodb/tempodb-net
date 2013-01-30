@@ -1,57 +1,10 @@
 using Client.Json;
-using Client.Model;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 
 
-namespace Client
+namespace Client.Model
 {
-    public class Cursor
-    {
-        private SegmentEnumerator segments;
-
-        public Cursor(SegmentEnumerator segments)
-        {
-            this.segments = segments;
-        }
-
-        public IEnumerator<DataPoint> GetEnumerator()
-        {
-            foreach(Segment segment in segments)
-            {
-                foreach(DataPoint dp in segment)
-                {
-                    yield return dp;
-                }
-            }
-        }
-    }
-
-    public class SegmentEnumerator
-    {
-        private Segment segment;
-        private Client client;
-
-        public SegmentEnumerator(Client client, Segment segment)
-        {
-            this.client = client;
-            this.segment = segment;
-        }
-
-        public IEnumerator<Segment> GetEnumerator()
-        {
-            yield return segment;
-            while(segment.NextUrl != null)
-            {
-                var request = client.BuildRequest(segment.NextUrl, Method.GET);
-                var response = client.Execute(request);
-                segment = Segment.FromResponse(response);
-                yield return segment;
-            }
-        }
-    }
-
     public class Segment
     {
         private class SegmentJson

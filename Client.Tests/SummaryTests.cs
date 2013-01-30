@@ -13,7 +13,6 @@ namespace Client.Tests
     [TestFixture]
     public class SummaryTests
     {
-
         [Test]
         public void SmokeTest()
         {

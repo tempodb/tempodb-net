@@ -49,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
-    <Compile Include="Cursor.cs" />
     <Compile Include="Json\DateTimeConverter.cs" />
     <Compile Include="Json\JsonDeserializer.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
@@ -58,9 +57,12 @@
     <Compile Include="Model\BulkKeyPoint.cs" />
     <Compile Include="Model\BulkPoint.cs" />
     <Compile Include="Model\Common.cs" />
+    <Compile Include="Model\Cursor.cs" />
     <Compile Include="Model\DataPoint.cs" />
     <Compile Include="Model\DataSet.cs" />
     <Compile Include="Model\Filter.cs" />
+    <Compile Include="Model\Segment.cs" />
+    <Compile Include="Model\SegmentEnumerator.cs" />
     <Compile Include="Model\Series.cs" />
     <Compile Include="Model\Summary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
