@@ -377,12 +377,32 @@ namespace Client
             return result;
         }
 
+        /// <summary>
+        ///  Queries a range of time series data for a series referenced by id. Returns a cursor (enumerator) over this data
+        ///  which allows forward, one-time iteration over the data.
+        /// </summary>
+        ///  <param name="seriesId"> The id of the series </param>
+        ///  <param name="start"> The start time of the range </param>
+        ///  <param name="end"> The end time of the range </param>
+        ///  <param name="interval"> An interval for the rollup. (e.g. 1min, 15min, 1hour, 1day, 1month) </param>
+        ///  <param name="function"> A function for the rollup. (e.g. min, max, sum, avg, stddev, count) </param>
+        ///  <returns> A Cursor </returns>
         public virtual Cursor ReadCursorById(string seriesId, DateTime start, DateTime end, string interval=null,
                                          string function=null)
         {
             return ReadCursor(SeriesProperty.Id, seriesId, start, end, interval, function);
         }
 
+        /// <summary>
+        ///  Queries a range of time series data for a series referenced by key. Returns a cursor (enumerator) over this data
+        ///  which allows forward, one-time iteration over the data.
+        /// </summary>
+        ///  <param name="seriesId"> The id of the series </param>
+        ///  <param name="start"> The start time of the range </param>
+        ///  <param name="end"> The end time of the range </param>
+        ///  <param name="interval"> An interval for the rollup. (e.g. 1min, 15min, 1hour, 1day, 1month) </param>
+        ///  <param name="function"> A function for the rollup. (e.g. min, max, sum, avg, stddev, count) </param>
+        ///  <returns> A Cursor </returns>
         public virtual Cursor ReadCursorByKey(string seriesKey, DateTime start, DateTime end, string interval=null,
                                          string function=null)
         {
