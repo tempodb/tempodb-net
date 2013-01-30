@@ -58,6 +58,7 @@
     <Compile Include="Json\JsonDeserializationTests.cs" />
     <Compile Include="Json\JsonSerializationTests.cs" />
     <Compile Include="Model\DataPointTests.cs" />
+    <Compile Include="Model\SegmentTests.cs" />
     <Compile Include="Model\SeriesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadTests.cs" />
