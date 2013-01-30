@@ -83,7 +83,7 @@ namespace Client.Tests
                 var mockclient = new Mock<RestClient>();
                 mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(response);
                 var client = TestCommon.GetClient(mockclient.Object);
-                var cursor = client.ReadByKey2("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
+                var cursor = client.ReadCursorByKey("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
 
                 var expected = new List<DataPoint> {
                     new DataPoint(new DateTime(2012, 3, 27, 0, 0, 0), 12.34),
@@ -118,7 +118,7 @@ namespace Client.Tests
                 mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
                 var client = TestCommon.GetClient(mockclient.Object);
-                var cursor = client.ReadByKey2("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
+                var cursor = client.ReadCursorByKey("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
 
                 var expected = new List<DataPoint> {
                     new DataPoint(new DateTime(2012, 3, 27, 0, 0, 0), 12.34),
@@ -142,7 +142,7 @@ namespace Client.Tests
                 };
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
-                var cursor = client.ReadByKey2("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
+                var cursor = client.ReadCursorByKey("key1", new DateTime(2012, 3, 27), new DateTime(2012, 3, 28));
 
                 Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.GET;
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
@@ -160,7 +160,7 @@ namespace Client.Tests
                 var start = new DateTime(2012, 6, 23);
                 var end = new DateTime(2012, 6, 24);
 
-                client.ReadByKey2("testkey", start, end, IntervalParameter.Raw());
+                client.ReadCursorByKey("testkey", start, end, IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-06-23T00:00:00.000-05:00");
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
@@ -178,7 +178,7 @@ namespace Client.Tests
                 var start = new DateTime(2012, 6, 23);
                 var end = new DateTime(2012, 6, 24);
 
-                client.ReadByKey2("testkey", start, end, IntervalParameter.Raw());
+                client.ReadCursorByKey("testkey", start, end, IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-06-24T00:00:00.000-05:00");
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
@@ -194,7 +194,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.ReadByKey2("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadCursorByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/{property}/{value}/data/segment/")));
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "property", "key"))));
@@ -211,7 +211,7 @@ namespace Client.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.ReadByKey2("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
+                client.ReadCursorByKey("testkey", new DateTime(2012, 06, 23), new DateTime(2012, 06, 24), IntervalParameter.Raw());
 
                 Expression<Func<RestRequest, bool>> assertion = req => TestCommon.ContainsParameter(req.Parameters, "interval", "raw");
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));

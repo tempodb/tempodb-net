@@ -377,13 +377,13 @@ namespace Client
             return result;
         }
 
-        public virtual Cursor ReadById2(string seriesId, DateTime start, DateTime end, string interval=null,
+        public virtual Cursor ReadCursorById(string seriesId, DateTime start, DateTime end, string interval=null,
                                          string function=null)
         {
             return ReadCursor(SeriesProperty.Id, seriesId, start, end, interval, function);
         }
 
-        public virtual Cursor ReadByKey2(string seriesKey, DateTime start, DateTime end, string interval=null,
+        public virtual Cursor ReadCursorByKey(string seriesKey, DateTime start, DateTime end, string interval=null,
                                          string function=null)
         {
             return ReadCursor(SeriesProperty.Key, seriesKey, start, end, interval, function);
