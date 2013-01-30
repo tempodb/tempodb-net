@@ -173,5 +173,46 @@ namespace Client.Tests
                 Assert.AreEqual(0, result.Summary.Count);
             }
         }
+
+        [TestFixture]
+        class SummaryTests
+        {
+            static string jsonSummary = @"{
+                ""mean"": 3.00,
+                ""sum"": 12.00,
+                ""min"": 2.00,
+                ""max"": 4.00,
+                ""stddev"": 0.8165,
+                ""ss"": 2.00,
+                ""count"": 4
+              }";
+
+            [Test]
+            public void SmokeTest()
+            {
+                var jsonResponse = new RestResponse {
+                    Content = SummaryTests.jsonSummary
+                };
+
+                var result = JsonDeserializationTests.deserializer.Deserialize<Summary>(jsonResponse);
+                Assert.AreEqual(3.0, result["mean"]);
+                Assert.AreEqual(12.0, result["sum"]);
+                Assert.AreEqual(2.0, result["min"]);
+                Assert.AreEqual(4.0, result["max"]);
+                Assert.AreEqual(0.8165, result["stddev"]);
+                Assert.AreEqual(2.0, result["ss"]);
+                Assert.AreEqual(4, result["count"]);
+            }
+
+            [Test]
+            public void Empty()
+            {
+                var jsonResponse = new RestResponse {
+                    Content = "{}"
+                };
+                var result = JsonDeserializationTests.deserializer.Deserialize<Summary>(jsonResponse);
+                Assert.AreEqual(0, result.Count);
+            }
+        }
     }
 }
