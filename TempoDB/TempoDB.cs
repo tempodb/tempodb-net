@@ -1,0 +1,6 @@
+namespace TempoDB
+{
+    class TempoDB
+    {
+    }
+}
