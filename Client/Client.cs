@@ -379,7 +379,7 @@ namespace Client
 
         /// <summary>
         ///  Queries a range of time series data for a series referenced by id. Returns a cursor (enumerator) over this data
-        ///  which allows forward, one-time iteration over the data.
+        ///  which allows forward, one-time iteration.
         /// </summary>
         ///  <param name="seriesId"> The id of the series </param>
         ///  <param name="start"> The start time of the range </param>
@@ -395,7 +395,7 @@ namespace Client
 
         /// <summary>
         ///  Queries a range of time series data for a series referenced by key. Returns a cursor (enumerator) over this data
-        ///  which allows forward, one-time iteration over the data.
+        ///  which allows forward, one-time iteration.
         /// </summary>
         ///  <param name="seriesId"> The id of the series </param>
         ///  <param name="start"> The start time of the range </param>
@@ -424,11 +424,23 @@ namespace Client
             return new Cursor(segments);
         }
 
+        /// <summary>
+        /// Reads a statistical summary for a range of data for a series referenced by id.
+        /// </summary>
+        ///  <param name="seriesId"> The id of the series </param>
+        ///  <param name="start"> The start time of the range </param>
+        ///  <param name="end"> The end time of the range </param>
         public virtual Summary ReadSummaryById(string seriesId, DateTime start, DateTime end)
         {
             return ReadSummary(SeriesProperty.Id, seriesId, start, end);
         }
 
+        /// <summary>
+        /// Reads a statistical summary for a range of data for a series referenced by key.
+        /// </summary>
+        ///  <param name="seriesId"> The id of the series </param>
+        ///  <param name="start"> The start time of the range </param>
+        ///  <param name="end"> The end time of the range </param>
         public virtual Summary ReadSummaryByKey(string seriesKey, DateTime start, DateTime end)
         {
             return ReadSummary(SeriesProperty.Key, seriesKey, start, end);
