@@ -1,6 +1,6 @@
 namespace TempoDB
 {
-    class TempoDB
+    public class TempoDB
     {
     }
 }

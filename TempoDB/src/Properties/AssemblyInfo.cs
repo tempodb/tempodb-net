@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
+[assembly:InternalsVisibleTo("TempoDB.Tests")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
