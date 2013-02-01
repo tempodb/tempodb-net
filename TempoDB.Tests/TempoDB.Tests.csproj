@@ -40,6 +40,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
     </Reference>
+    <Reference Include="NodaTime">
+      <HintPath>..\packages\NodaTime.1.0.1\lib\net35-Client\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="NUnit.Framework">
       <HintPath>..\packages\NUnit.2.6.1\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -52,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataPointTests.cs" />
     <Compile Include="TestCommon.cs" />
   </ItemGroup>
   <ItemGroup>
