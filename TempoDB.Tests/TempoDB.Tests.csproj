@@ -36,6 +36,9 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RestSharp, Version=104.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
@@ -58,6 +61,7 @@
     <Compile Include="src\DataPointTests.cs" />
     <Compile Include="src\SeriesTests.cs" />
     <Compile Include="src\TestCommon.cs" />
+    <Compile Include="src\Json\DataPointTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using NodaTime;
 using System;
 using TempoDB.Utility;
@@ -10,11 +11,14 @@ namespace TempoDB
         private ZonedDateTime timestamp;
         private double value;
 
+        [JsonProperty(PropertyName="t")]
         public ZonedDateTime Timestamp
         {
             get { return timestamp; }
             private set { timestamp = value; }
         }
+
+        [JsonProperty(PropertyName="v")]
         public double Value
         {
             get { return this.value; }
