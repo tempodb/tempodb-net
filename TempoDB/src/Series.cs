@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using TempoDB.Utility;
@@ -13,30 +14,35 @@ namespace TempoDB
         private HashSet<string> tags;
         private Dictionary<string, string> attributes;
 
+        [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public string Id
         {
             get { return this.id; }
             private set { this.id = value; }
         }
 
+        [JsonProperty(PropertyName = "key", Required = Required.Always)]
         public string Key
         {
             get { return this.key; }
             private set { this.key = value; }
         }
 
+        [JsonProperty(PropertyName = "name", Required = Required.Always)]
         public string Name
         {
             get { return this.name; }
             private set { this.name = value; }
         }
 
+        [JsonProperty(PropertyName = "tags", Required = Required.Always)]
         public HashSet<string> Tags
         {
             get { return this.tags; }
             private set { this.tags = value; }
         }
 
+        [JsonProperty(PropertyName = "attributes", Required = Required.Always)]
         public Dictionary<string, string> Attributes
         {
             get { return this.attributes; }

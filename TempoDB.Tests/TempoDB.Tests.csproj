@@ -62,6 +62,7 @@
     <Compile Include="src\SeriesTests.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\Json\DataPointTests.cs" />
+    <Compile Include="src\Json\SeriesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
