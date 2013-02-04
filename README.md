@@ -17,9 +17,10 @@ Stores the session information for authenticating and accessing TempoDB. Your ap
 also allows you to specify the hostname, port, and protocol (http or https). This is used if you are on a private cluster.
 
 #### Constructor
-``
+```
 Client(key, secret, host, port, version, secure, restClient)
-``
+```
+
 * key - api key (string)
 * secret - api secret (string)
 * host - [Optional] hostname for cluster (string)
@@ -27,7 +28,7 @@ Client(key, secret, host, port, version, secure, restClient)
 * secure - [Optional] protocol to use (true=https, false=http)
 * restClient - [Optional] rest client to use. Mainly used for testing.
 
-```csharp
+``` csharp
 var client = new Client("my-key", "my-secret");
 ```
 
@@ -83,6 +84,14 @@ and a statistics summary table. The Summary table contains statistics for the ti
 * Data - datapoints ( List<DataPoint> )
 * Summary - a summary table of statistics for the queried range ( Dictionary<string, double> )
 
+## Cursor
+Represents an enumerable of DataPoints. This allows you to iterate over a very large number of datapoints for a single series without loading the entire result into memory. This class is a result of the ReadCursorBy* client functions.
+### Members
+* None, the object is enumerable
+
+## Summary
+Represents a table of statistics for a rangle of data. This is dictionary of string->double. Values in the dictionary include mean, sum, minimum, maximum, standard deviation, and count.
+
 ## Bulk Writes
 The Bulk classes exist to facilitate using the bulk write endpoint, which provides the ability to write to multiple series per timestamp.
 
@@ -125,6 +134,10 @@ public void DeleteById(string seriesId, DateTime start, DateTime end)
 public void DeleteByKey(string seriesKey, DateTime start, DateTime end)
 public virtual DataSet ReadById(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
 public virtual DataSet ReadByKey(string seriesKey, DateTime start, DateTime end, string interval = null, string function = null)
+public virtual Cursor ReadCursorById(string seriesId, DateTime start, DateTime end, string interval=null, string function=null)
+public virtual Cursor ReadCursorByKey(string seriesKey, DateTime start, DateTime end, string interval=null, string function=null)
+public virtual Summary ReadSummaryById(string seriesId, DateTime start, DateTime end)
+public virtual Summary ReadSummaryByKey(string seriesKey, DateTime start, DateTime end)
 ```
 
 ## CreateSeries(string key="")
@@ -208,7 +221,6 @@ filter.AddAttribute("key", "val");
 var series = client.ListSeries(filter);
 ```
 
-
 ## UpdateSeries(Series series)
 Updates a series. The series id is taken from the passed-in series object. Currently, only tags and attributes can be
 modified. The easiest way to use this method is through a read-modify-write cycle.
@@ -221,6 +233,7 @@ The updated Series
 ### Example
 
 The following example reads the list of series with key *test1* and replaces the tags with *tag3*.
+
 ```csharp
 var client = new Client("api-key", "api-secret");
 
@@ -282,7 +295,7 @@ var resultsRolledUp = client.ReadById("38268c3b231f1266a392931e15e99231", new Da
 var resultsRaw = client.ReadById("38268c3b231f1266a392931e15e99231", new DateTime(2012, 1, 1), new DateTime(2012, 1, 2));
 ```
 
-## ReadByKey(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
+## ReadByKey(string seriesKey, DateTime start, DateTime end, string interval = null, string function = null)
 
 
 Gets a DataSet by series key. The key, start, and end times are required. The same rollup rules apply as for the ReadByKey
@@ -307,8 +320,98 @@ var client = new Client("api-key", "api-secret");
 var data = client.ReadByKey("my-key", new DateTime(2012, 1, 1), new DateTime(2012, 2, 1), IntervalParameters.Days(1), FoldingFunction.Min);
 ```
 
-## WriteById(string seriesId, IList<DataPoint> data)
+##ReadCursorById(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
+Gets a Cursor for the specified start/end times for a series referenced by id. The interval parameter allows you to specify a rollup period. For example,
+"1hour" will roll the data up on the hour using the provided function. The function parameter specifies the folding function
+to use while rolling the data up. The available folding functions and intervals are listed under the ReadById section above.
 
+### Parameters
+* seriesId - the seriesId to include (string)
+* start - start time for the query (DateTime)
+* end - end time for the query (DateTime)
+* interval - the rollup interval (string)
+* function - the rollup folding function (string)
+
+### Returns
+A Cursor over DataPoints. This is a one-time, forward enumerable over a range of datapoints.
+
+### Example
+
+The following example returns a Cursor from 2012-01-01 to 2012-01-02 for the series with id "38268c3b231f1266a392931e15e99231",
+with the maximum value for each hour as well as the raw data.
+
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var cursor = client.ReadCursorById("38268c3b231f1266a392931e15e99231", new DateTime(2012, 1, 1), new DateTime(2012, 1, 2), IntervalParameter.Hour(1), FoldingFunction.Max);
+var cursorRaw = client.ReadCursorById("38268c3b231f1266a392931e15e99231", new DateTime(2012, 1, 1), new DateTime(2012, 1, 2));
+```
+
+## ReadCursorByKey(string seriesKey, DateTime start, DateTime end, string interval = null, string function = null)
+
+
+Gets a Cursor for the specified start/end times for a series referenced by key. The key, start, and end times are required. The interval parameter allows you to specify a rollup period. For example,
+"1hour" will roll the data up on the hour using the provided function. The function parameter specifies the folding function
+to use while rolling the data up. The available folding functions and intervals are listed under the ReadById section above.
+
+### Parameters
+* seriesKey - key for the series to read from (string)
+* start - start time for the query (DateTime)
+* end - end time for the query (DateTime)
+* interval - the rollup interval (string)
+* function - the rollup folding function (string)
+
+### Returns
+A Cursor over DataPoints. This is a one-time, forward enumerable over a range of datapoints.
+
+### Example
+
+The following example reads data for the series with id "my-key" from 2012-01-01 to 2012-02-01 and
+returns a minimum datapoint per day.
+```csharp
+var client = new Client("api-key", "api-secret");
+var cursor = client.ReadCursorByKey("my-key", new DateTime(2012, 1, 1), new DateTime(2012, 2, 1), IntervalParameters.Days(1), FoldingFunction.Min);
+```
+
+## ReadSummaryById(string seriesId, DateTime start, DateTime end)
+Gets a Summary for for a range of data for a series referenced by id. The key, start, and end times are required.
+
+### Parameters
+* seriesId - id for the series to read from (string)
+* start - start time for the query (DateTime)
+* end - end time for the query (DateTime)
+
+### Returns
+A Summary object.
+
+### Example
+
+The following example reads a summary object for the series with id "38268c3b231f1266a392931e15e99231" from 2012-01-01 to 2012-02-01.
+```csharp
+var client = new Client("api-key", "api-secret");
+var summary = client.ReadSummaryById("38268c3b231f1266a392931e15e99231", new DateTime(2012, 1, 1), new DateTime(2012, 2, 1));
+```
+
+## ReadSummaryByKey(string seriesKey, DateTime start, DateTime end)
+Gets a Summary for for a range of data for a series referenced by key. The key, start, and end times are required.
+
+### Parameters
+* seriesKey - key for the series to read from (string)
+* start - start time for the query (DateTime)
+* end - end time for the query (DateTime)
+
+### Returns
+A Summary object.
+
+### Example
+
+The following example reads a summary object for the series with key "my-key" from 2012-01-01 to 2012-02-01.
+```csharp
+var client = new Client("api-key", "api-secret");
+var summary = client.ReadSummaryByKey("my-key", new DateTime(2012, 1, 1), new DateTime(2012, 2, 1));
+```
+
+## WriteById(string seriesId, IList<DataPoint> data)
 Writes datapoints to the specified series. The series id and a list of DataPoints are required.
 
 ### Parameters
