@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\DataPoint.cs" />
+    <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
