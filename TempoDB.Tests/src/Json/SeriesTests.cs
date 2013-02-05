@@ -75,21 +75,7 @@ namespace TempoDB.Json
                 var expected = new Series("id1", "key1", "name1", tags, attributes);
                 Assert.AreEqual(expected, series);
             }
-
-            [Test]
-            public void NoId()
-            {
-                var json = @"{
-                    ""key"":""key1"",
-                    ""name"":""name1"",
-                    ""tags"":[],
-                    ""attributes"":{}
-                }";
-                var series = JsonConvert.DeserializeObject<Series>(json);
-                var expected = new Series("id1", "key1", "name1");
-                Assert.AreEqual(expected, series);
-            }
-       }
+        }
 
         class Serialize
         {
