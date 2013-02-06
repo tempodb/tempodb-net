@@ -12,7 +12,7 @@ namespace TempoDB
         private string key;
         private string name;
         private HashSet<string> tags;
-        private Dictionary<string, string> attributes;
+        private IDictionary<string, string> attributes;
 
         [JsonProperty(PropertyName = "id", Required = Required.Always)]
         public string Id
@@ -43,7 +43,7 @@ namespace TempoDB
         }
 
         [JsonProperty(PropertyName = "attributes", Required = Required.Always)]
-        public Dictionary<string, string> Attributes
+        public IDictionary<string, string> Attributes
         {
             get { return this.attributes; }
             private set { this.attributes = value; }
@@ -102,14 +102,14 @@ namespace TempoDB
             return hash;
         }
 
-        private bool AttributesEquals(Dictionary<string, string> attributes, Dictionary<string, string> other)
+        private bool AttributesEquals(IDictionary<string, string> attributes, IDictionary<string, string> other)
         {
             return attributes != null && other != null &&
                 attributes.Count == other.Count &&
                 !attributes.Except(other).Any();
         }
 
-        private int GetAttributesHashCode(int hash, Dictionary<string, string> attributes)
+        private int GetAttributesHashCode(int hash, IDictionary<string, string> attributes)
         {
             if(attributes != null)
             {
