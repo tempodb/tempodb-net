@@ -1,9 +1,10 @@
 using RestSharp;
+using System;
 
 
 namespace TempoDB
 {
-    public class Result<T> where T : class
+    public class Result<T> where T : Model
     {
         private T value;
         private bool success;
@@ -57,7 +58,12 @@ namespace TempoDB
 
         private T newValueFromResponse(IRestResponse response)
         {
-            return null;
+            if(typeof(T) == typeof(Series))
+            {
+                return Series.FromResponse(response) as T;
+            }
+
+            throw new Exception("Unknown T: " + typeof(T).ToString());
         }
     }
 }

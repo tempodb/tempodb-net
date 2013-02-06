@@ -24,11 +24,10 @@ namespace TempoDB
             Client = client;
         }
 
-        public Result<T> Execute<T>(RestRequest request) where T : class
+        public Result<T> Execute<T>(RestRequest request) where T : Model
         {
             IRestResponse response = client.Execute(request);
-            int code = (int)response.StatusCode;
-            var result = new Result<T>(null, false);
+            var result = new Result<T>(response);
             return result;
         }
 

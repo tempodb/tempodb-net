@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using RestSharp;
+using System.Net;
 
 
 namespace TempoDB.Tests
@@ -53,6 +55,18 @@ namespace TempoDB.Tests
             series2.Attributes.Add("key", "value2");
 
             Assert.AreNotEqual(series1, series2);
+        }
+
+        [Test]
+        public void FromResponse()
+        {
+            var response = new RestResponse {
+                StatusCode = HttpStatusCode.OK,
+                Content = @"{""id"":""id1"",""key"":""key1"",""name"":""Name1"",""tags"":[],""attributes"":{}}"
+            };
+            var series = Series.FromResponse(response);
+            var expected = new Series("id1", "key1", "Name1");
+            Assert.AreEqual(expected, series);
         }
     }
 }

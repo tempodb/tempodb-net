@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
 using TempoDB.Utility;
@@ -6,7 +7,7 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class Series
+    public class Series : Model
     {
         private string id;
         private string key;
@@ -56,6 +57,12 @@ namespace TempoDB
             Name = name;
             Tags = tags == null ? new HashSet<string>() : tags;
             Attributes = attributes == null ? new Dictionary<string, string>() : attributes;
+        }
+
+        protected internal static Series FromResponse(IRestResponse response)
+        {
+            var series = JsonConvert.DeserializeObject<Series>(response.Content);
+            return series;
         }
 
         public override string ToString()
