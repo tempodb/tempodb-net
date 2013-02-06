@@ -59,9 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\DataPointTests.cs" />
+    <Compile Include="src\ResultTests.cs" />
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesTests.cs" />
     <Compile Include="src\SummaryTests.cs" />
+    <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\Json\DataPointTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />

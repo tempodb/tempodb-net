@@ -54,6 +54,7 @@
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\Filter.cs" />
+    <Compile Include="src\Result.cs" />
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
     <Compile Include="src\Summary.cs" />
