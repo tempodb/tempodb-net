@@ -24,6 +24,14 @@ namespace TempoDB
             Client = client;
         }
 
+        public Result<T> Execute<T>(RestRequest request) where T : class
+        {
+            IRestResponse response = client.Execute(request);
+            int code = (int)response.StatusCode;
+            var result = new Result<T>(null, false);
+            return result;
+        }
+
         public string Key
         {
             get { return this.key; }
