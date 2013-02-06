@@ -37,7 +37,7 @@ namespace TempoDB.Json
             writer.WriteValue(pattern.Format(period));
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
             {

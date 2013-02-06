@@ -61,6 +61,7 @@
     <Compile Include="src\Summary.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\Json\DateTimeZoneConverter.cs" />
+    <Compile Include="src\Json\JsonSerializer.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
     <Compile Include="src\Utility\HashCodeHelper.cs" />
