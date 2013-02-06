@@ -55,6 +55,7 @@
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
+    <Compile Include="src\Summary.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\Json\DateTimeZoneConverter.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
