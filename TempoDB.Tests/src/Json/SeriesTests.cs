@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using TempoDB.Json;
 
 
-namespace TempoDB.Json
+namespace TempoDB.Tests.Json
 {
     [TestFixture]
     public class SeriesTests

@@ -56,6 +56,8 @@
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
     <Compile Include="src\TempoDB.cs" />
+    <Compile Include="src\Json\DateTimeZoneConverter.cs" />
+    <Compile Include="src\Json\PeriodConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
     <Compile Include="src\Utility\HashCodeHelper.cs" />
     <Compile Include="src\Properties\AssemblyInfo.cs" />

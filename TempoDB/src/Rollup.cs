@@ -11,21 +11,21 @@ namespace TempoDB
         private NodaTime.Period period;
         private NodaTime.DateTimeZone zone;
 
-        [JsonProperty(PropertyName="function")]
+        [JsonProperty(PropertyName="function", Required=Required.Always)]
         public string Fold
         {
             get { return fold; }
             private set { this.fold = value; }
         }
 
-        [JsonProperty(PropertyName="interval")]
+        [JsonProperty(PropertyName="interval", Required=Required.Always)]
         public NodaTime.Period Period
         {
             get { return period; }
             private set { this.period = value; }
         }
 
-        [JsonProperty(PropertyName="tz")]
+        [JsonProperty(PropertyName="tz", Required=Required.Always)]
         public NodaTime.DateTimeZone Zone
         {
             get { return zone; }

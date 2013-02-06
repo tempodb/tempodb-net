@@ -62,7 +62,8 @@ namespace TempoDB.Json
                 return null;
 
             var offsetDateTime = OffsetDateTime.FromDateTimeOffset(DateTimeOffset.Parse(offsetDateTimeText));
-            return new ZonedDateTime(offsetDateTime.ToInstant(), zone);
+            var datetime = new ZonedDateTime(offsetDateTime.ToInstant(), zone);
+            return datetime;
         }
     }
 }
