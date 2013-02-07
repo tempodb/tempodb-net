@@ -38,6 +38,26 @@ namespace TempoDB
             return result;
         }
 
+        public Result<Series> GetSeriesById(string id)
+        {
+            var url = "/{version}/series/id/{id}/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", id);
+            var result = Execute<Series>(request);
+            return result;
+        }
+
+        public Result<Series> GetSeriesByKey(string key)
+        {
+            var url = "/{version}/series/key/{key}/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
+            var result = Execute<Series>(request);
+            return result;
+        }
+
         public Result<T> Execute<T>(RestRequest request) where T : Model
         {
             IRestResponse response = client.Execute(request);
