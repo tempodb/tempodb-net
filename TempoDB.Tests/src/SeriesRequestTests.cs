@@ -212,4 +212,79 @@ namespace TempoDB.Tests
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
         }
     }
+
+    [TestFixture]
+    class UpdateSeries
+    {
+        private Series series = new Series("id1", "key1");
+        private string json = @"{
+            ""id"":""id1"",
+            ""key"":""key1"",
+            ""name"":"""",
+            ""tags"":[],
+            ""attributes"":{}
+        }";
+
+        [Test]
+        public void SmokeTest()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var result = client.UpdateSeries(series);
+            var expected = new Result<Series>(series, true);
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void RequestMethod()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.UpdateSeries(series);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.PUT)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.UpdateSeries(series);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/id/{id}/")));
+        }
+
+        [Test]
+        public void RequestParameters()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.UpdateSeries(series);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "id1"))));
+        }
+
+    }
 }

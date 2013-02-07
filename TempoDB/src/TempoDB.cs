@@ -58,6 +58,16 @@ namespace TempoDB
             return result;
         }
 
+        public Result<Series> UpdateSeries(Series series)
+        {
+            var url = "/{version}/series/id/{id}/";
+            var request = BuildRequest(url, Method.PUT, series);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", series.Id);
+            var result = Execute<Series>(request);
+            return result;
+        }
+
         public Result<T> Execute<T>(RestRequest request) where T : Model
         {
             IRestResponse response = client.Execute(request);
