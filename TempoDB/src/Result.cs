@@ -1,5 +1,6 @@
 using RestSharp;
 using System;
+using TempoDB.Utility;
 
 
 namespace TempoDB
@@ -42,6 +43,7 @@ namespace TempoDB
             if(Success == true)
             {
                 Value = newValueFromResponse(response);
+                Message = "";
             }
             else
             {
@@ -64,6 +66,24 @@ namespace TempoDB
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Result<T>;
+            return other != null &&
+                Value.Equals(other.Value) &&
+                Success.Equals(other.Success) &&
+                Message.Equals(other.Message);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = HashCodeHelper.Initialize();
+            hash = HashCodeHelper.Hash(hash, Value);
+            hash = HashCodeHelper.Hash(hash, Success);
+            hash = HashCodeHelper.Hash(hash, Message);
+            return hash;
         }
     }
 }

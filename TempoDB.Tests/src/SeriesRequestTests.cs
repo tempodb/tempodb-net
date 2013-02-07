@@ -12,6 +12,29 @@ namespace TempoDB.Tests
         private Series series = new Series("id1", "key1");
 
         [Test]
+        public void SmokeTest()
+        {
+            var json = @"{
+                ""id"":""id1"",
+                ""key"":""key1"",
+                ""name"":"""",
+                ""tags"":[],
+                ""attributes"":{}
+            }";
+
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var result = client.CreateSeries(series);
+            var expected = new Result<Series>(series, true);
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
         public void RequestMethod()
         {
             var response = new RestResponse {
