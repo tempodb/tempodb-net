@@ -66,6 +66,7 @@
     <Compile Include="src\SummaryTests.cs" />
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
+    <Compile Include="src\WriteRequestTests.cs" />
     <Compile Include="src\Json\DataPointTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />
     <Compile Include="src\Json\SeriesTests.cs" />

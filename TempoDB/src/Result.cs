@@ -64,6 +64,10 @@ namespace TempoDB
             {
                 return Series.FromResponse(response) as T;
             }
+            else if(typeof(T) == typeof(None))
+            {
+                return None.FromResponse(response) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

@@ -1,4 +1,5 @@
 using RestSharp;
+using System.Collections.Generic;
 using TempoDB.Json;
 
 
@@ -65,6 +66,16 @@ namespace TempoDB
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", series.Id);
             var result = Execute<Series>(request);
+            return result;
+        }
+
+        public Result<None> WriteDataPointsById(string id, IList<DataPoint> data)
+        {
+            var url = "/{version}/series/id/{id}/data/";
+            var request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", id);
+            var result = Execute<None>(request);
             return result;
         }
 
