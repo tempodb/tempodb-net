@@ -79,6 +79,16 @@ namespace TempoDB
             return result;
         }
 
+        public Result<None> WriteDataPointsByKey(string key, IList<DataPoint> data)
+        {
+            var url = "/{version}/series/key/{key}/data/";
+            var request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
+            var result = Execute<None>(request);
+            return result;
+        }
+
         public Result<T> Execute<T>(RestRequest request) where T : Model
         {
             IRestResponse response = client.Execute(request);
