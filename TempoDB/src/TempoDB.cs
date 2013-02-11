@@ -1,3 +1,4 @@
+using NodaTime;
 using RestSharp;
 using System.Collections.Generic;
 using TempoDB.Json;
@@ -105,6 +106,30 @@ namespace TempoDB
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
+            var result = Execute<None>(request);
+            return result;
+        }
+
+        public Result<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        {
+            var url = "/{version}/series/id/{id}/data/";
+            var request = BuildRequest(url, Method.DELETE);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", id);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            var result = Execute<None>(request);
+            return result;
+        }
+
+        public Result<None> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        {
+            var url = "/{version}/series/key/{key}/data/";
+            var request = BuildRequest(url, Method.DELETE);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
             var result = Execute<None>(request);
             return result;
         }

@@ -10,19 +10,24 @@ namespace TempoDB.Json
     public class ZonedDateTimeConverter : JsonConverter
     {
         private DateTimeZone zone;
-        private LocalDateTimePattern datetimePattern;
-        private OffsetPattern offsetPattern;
+        private static LocalDateTimePattern datetimePattern = LocalDateTimePattern.CreateWithInvariantCulture("yyyy-MM-ddTHH:mm:ss.FFF");
+        private static OffsetPattern offsetPattern = OffsetPattern.CreateWithInvariantCulture("+HH:mm");
 
         public ZonedDateTimeConverter()
         {
             this.zone = DateTimeZone.Utc;
-            this.datetimePattern = LocalDateTimePattern.CreateWithInvariantCulture("yyyy-MM-ddTHH:mm:ss.FFF");
-            this.offsetPattern = OffsetPattern.CreateWithInvariantCulture("+HH:mm");
         }
 
         public ZonedDateTimeConverter(DateTimeZone zone)
         {
             this.zone = zone;
+        }
+
+        public static string ToString(ZonedDateTime datetime)
+        {
+            var localdatetime = datetime.LocalDateTime;
+            var offset = datetime.Offset;
+            return String.Format("{0}{1}", datetimePattern.Format(localdatetime), offsetPattern.Format(offset));
         }
 
         public override bool CanConvert(Type objectType)
@@ -42,9 +47,7 @@ namespace TempoDB.Json
                 throw new ArgumentException(string.Format("Unexpected value when converting. Expected {0}, got {1}.", typeof(ZonedDateTime).FullName, value.GetType().FullName));
             }
             var datetime = (ZonedDateTime)value;
-            var localdatetime = datetime.LocalDateTime;
-            var offset = datetime.Offset;
-            writer.WriteValue(String.Format("{0}{1}", datetimePattern.Format(localdatetime), offsetPattern.Format(offset)));
+            writer.WriteValue(ZonedDateTimeConverter.ToString(datetime));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
