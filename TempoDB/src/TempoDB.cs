@@ -89,6 +89,26 @@ namespace TempoDB
             return result;
         }
 
+        public Result<None> IncrementDataPointsById(string id, IList<DataPoint> data)
+        {
+            var url = "/{version}/series/id/{id}/increment/";
+            var request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", id);
+            var result = Execute<None>(request);
+            return result;
+        }
+
+        public Result<None> IncrementDataPointsByKey(string key, IList<DataPoint> data)
+        {
+            var url = "/{version}/series/key/{key}/increment/";
+            var request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
+            var result = Execute<None>(request);
+            return result;
+        }
+
         public Result<T> Execute<T>(RestRequest request) where T : Model
         {
             IRestResponse response = client.Execute(request);

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\DataPointTests.cs" />
+    <Compile Include="src\IncrementRequestTests.cs" />
     <Compile Include="src\ResultTests.cs" />
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesRequestTests.cs" />
