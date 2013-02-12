@@ -1,6 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using RestSharp;
+using System.Collections.Generic;
 using System.Net;
 
 
@@ -285,6 +286,100 @@ namespace TempoDB.Tests
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "id1"))));
         }
+    }
 
+    [TestFixture]
+    class FilterSeries
+    {
+        private List<Series> series = new List<Series> { new Series("id1", "key1"), new Series("id2", "key2") };
+        private string json = @"[{
+            ""id"":""id1"",
+            ""key"":""key1"",
+            ""name"":"""",
+            ""tags"":[],
+            ""attributes"":{}
+        },{
+            ""id"":""id2"",
+            ""key"":""key2"",
+            ""name"":"""",
+            ""tags"":[],
+            ""attributes"":{}
+        }]";
+
+        [Test]
+        public void SmokeTest()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var result = client.FilterSeries(new Filter());
+
+            var cursor = new Cursor<Series>(new SegmentEnumerator<Series>(null, new Segment<Series>(series, null)));
+            var expected = new Result<Cursor<Series>>(cursor, true);
+
+            var resultList = new List<Series>();
+            foreach(Series s in result.Value)
+            {
+                resultList.Add(s);
+            }
+
+            Assert.IsTrue(result.Success);
+            Assert.AreEqual(series, resultList);
+        }
+
+        [Test]
+        public void RequestMethod()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.FilterSeries(new Filter());
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.GET)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.FilterSeries(new Filter());
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/")));
+        }
+
+        [Test]
+        public void RequestParameters()
+        {
+            var response = new RestResponse {
+                Content = json,
+                StatusCode = HttpStatusCode.OK
+            };
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var filter = new Filter();
+            filter.Ids.Add("id1");
+            filter.Tags.Add("tag1");
+            filter.Attributes.Add("key1", "value1");
+            client.FilterSeries(filter);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "id", "id1"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tag", "tag1"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key1]", "value1"))));
+        }
     }
 }

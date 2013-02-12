@@ -70,6 +70,22 @@ namespace TempoDB
             return result;
         }
 
+        public Result<Cursor<Series>> FilterSeries(Filter filter)
+        {
+            var url = "/{version}/series/";
+            var request = BuildRequest(url, Method.GET);
+            ApplyFilterToRequest(request, filter);
+            var result = Execute<Segment<Series>>(request);
+
+            Cursor<Series> cursor = null;
+            if(result.Success)
+            {
+                var segments = new SegmentEnumerator<Series>(this, result.Value);
+                cursor = new Cursor<Series>(segments);
+            }
+            return new Result<Cursor<Series>>(cursor, result.Success, result.Message);
+        }
+
         public Result<None> WriteDataPointsById(string id, IList<DataPoint> data)
         {
             var url = "/{version}/series/id/{id}/data/";
@@ -177,7 +193,7 @@ namespace TempoDB
             return result;
         }
 
-        private RestRequest BuildRequest(string url, Method method, object body=null)
+        public RestRequest BuildRequest(string url, Method method, object body=null)
         {
             var request = new RestRequest {
                 Method = method,
@@ -194,6 +210,29 @@ namespace TempoDB
                 request.AddBody(body);
             }
             return request;
+        }
+
+        private static void ApplyFilterToRequest(IRestRequest request, Filter filter)
+        {
+            if(filter != null)
+            {
+                foreach(string id in filter.Ids)
+                {
+                    request.AddParameter("id", id);
+                }
+                foreach(string key in filter.Keys)
+                {
+                    request.AddParameter("key", key);
+                }
+                foreach(string tag in filter.Tags)
+                {
+                    request.AddParameter("tag", tag);
+                }
+                foreach(var attribute in filter.Attributes)
+                {
+                    request.AddParameter(string.Format("attr[{0}]", attribute.Key), attribute.Value);
+                }
+            }
         }
 
         public string Key

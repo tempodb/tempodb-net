@@ -1,5 +1,7 @@
+using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using TempoDB.Utility;
 
 
@@ -38,8 +40,7 @@ namespace TempoDB
 
         public Result(IRestResponse response)
         {
-            int code = (int)response.StatusCode;
-            Success = (code / 100) == 2;
+            Success = IsSuccessful(response);
             if(Success == true)
             {
                 Value = newValueFromResponse(response);
@@ -58,6 +59,12 @@ namespace TempoDB
             Message = message;
         }
 
+        public static bool IsSuccessful(IRestResponse response)
+        {
+            int code = (int)response.StatusCode;
+            return (code / 100) == 2;
+        }
+
         private T newValueFromResponse(IRestResponse response)
         {
             if(typeof(T) == typeof(Series))
@@ -67,6 +74,13 @@ namespace TempoDB
             else if(typeof(T) == typeof(None))
             {
                 return None.FromResponse(response) as T;
+            }
+            else if(typeof(T) == typeof(Segment<Series>))
+            {
+                var series = JsonConvert.DeserializeObject<List<Series>>(response.Content);
+                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
+                var segment = new Segment<Series>(series, nextUrl);
+                return segment as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

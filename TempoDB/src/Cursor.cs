@@ -1,9 +1,13 @@
+using Newtonsoft.Json;
+using RestSharp;
+using System;
 using System.Collections.Generic;
+using TempoDB.Utility;
 
 
 namespace TempoDB
 {
-    public class Cursor<T>
+    public class Cursor<T> : Model where T: Model
     {
         private SegmentEnumerator<T> segments;
 
@@ -24,7 +28,7 @@ namespace TempoDB
         }
     }
 
-    public class SegmentEnumerator<T>
+    public class SegmentEnumerator<T> where T: Model
     {
         private Segment<T> segment;
         private TempoDB client;
@@ -41,12 +45,22 @@ namespace TempoDB
             while(segment.NextUrl != null)
             {
                 // Add rest call here
-                yield return segment;
+                var request = client.BuildRequest(segment.NextUrl, Method.GET);
+                var result = client.Execute<Segment<T>>(request);
+                if(result.Success)
+                {
+                    segment = result.Value;
+                    yield return segment;
+                }
+                else
+                {
+                    throw new Exception("API Error");
+                }
             }
         }
     }
 
-    public class Segment<T>
+    public class Segment<T> : Model where T: Model
     {
         private IList<T> data;
         private string next;
