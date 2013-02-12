@@ -128,6 +128,24 @@ namespace TempoDB
             return result;
         }
 
+        public Result<None> IncrementBulkData(IList<BulkDataSet> data)
+        {
+            var url = "/{version}/increment/";
+            Result<None> result = null;
+            foreach(BulkDataSet dataset in data)
+            {
+                var request = BuildRequest(url, Method.POST, dataset);
+                request.AddUrlSegment("version", Version);
+                result = Execute<None>(request);
+                if(result.Success != true)
+                {
+                    /// An error occurred, stop writing and alert the user.
+                    return result;
+                }
+            }
+            return result;
+        }
+
         public Result<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/";
