@@ -1,4 +1,5 @@
 using NodaTime;
+using NodaTime.Text;
 using RestSharp;
 using System.Collections.Generic;
 using TempoDB.Json;
@@ -163,7 +164,8 @@ namespace TempoDB
             return response;
         }
 
-        public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end,
+                DateTimeZone zone=null, Rollup rollup=null)
         {
             var url = "/{version}/series/id/{id}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -171,21 +173,23 @@ namespace TempoDB
             request.AddUrlSegment("id", id);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            ApplyTimeZoneToRequest(request, zone);
+            ApplyRollupToRequest(request, rollup);
 
             var response = Execute<DataPointSegment>(request);
 
             QueryResult query = null;
             if(response.Success)
             {
-                var rollup = response.Value.Rollup;
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult(this, cursor, rollup);
+                query = new QueryResult(this, cursor, response.Value.Rollup);
             }
             return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
-        public Response<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        public Response<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end,
+                DateTimeZone zone=null, Rollup rollup=null)
         {
             var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -193,16 +197,17 @@ namespace TempoDB
             request.AddUrlSegment("key", key);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            ApplyTimeZoneToRequest(request, zone);
+            ApplyRollupToRequest(request, rollup);
 
             var response = Execute<DataPointSegment>(request);
 
             QueryResult query = null;
             if(response.Success)
             {
-                var rollup = response.Value.Rollup;
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult(this, cursor, rollup);
+                query = new QueryResult(this, cursor, response.Value.Rollup);
             }
             return new Response<QueryResult>(query, response.Code, response.Message);
         }
@@ -275,6 +280,28 @@ namespace TempoDB
                 foreach(var attribute in filter.Attributes)
                 {
                     request.AddParameter(string.Format("attr[{0}]", attribute.Key), attribute.Value);
+                }
+            }
+        }
+
+        private static void ApplyTimeZoneToRequest(IRestRequest request, DateTimeZone zone)
+        {
+            var tz = zone == null ? DateTimeZone.Utc : zone;
+            request.AddParameter("tz", tz.Id);
+        }
+
+        private static void ApplyRollupToRequest(IRestRequest request, Rollup rollup)
+        {
+            if(rollup != null)
+            {
+                if(rollup.Period != null)
+                {
+                    request.AddParameter("interval", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
+                }
+
+                if(rollup.Fold != null)
+                {
+                    request.AddParameter("function", rollup.Fold);
                 }
             }
         }
