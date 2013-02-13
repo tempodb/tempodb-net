@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using NodaTime;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,12 @@ namespace TempoDB
         [JsonProperty(PropertyName="rollup")]
         public Rollup Rollup { get; private set; }
 
-        public DataPointSegment(IList<DataPoint> datapoints, string next, Rollup rollup) : base(datapoints, next)
+        [JsonProperty(PropertyName="tz")]
+        public DateTimeZone TimeZone { get; private set; }
+
+        public DataPointSegment(IList<DataPoint> datapoints, string next, DateTimeZone tz, Rollup rollup) : base(datapoints, next)
         {
+            TimeZone = tz;
             Rollup = rollup;
         }
 
@@ -35,6 +40,7 @@ namespace TempoDB
             return other != null &
                 Data.Equals(other.Data) &&
                 NextUrl.Equals(other.NextUrl) &&
+                TimeZone.Equals(other.TimeZone) &&
                 Rollup.Equals(other.Rollup);
         }
 
@@ -43,6 +49,7 @@ namespace TempoDB
             int hash = HashCodeHelper.Initialize();
             hash = HashCodeHelper.Hash(hash, Data);
             hash = HashCodeHelper.Hash(hash, NextUrl);
+            hash = HashCodeHelper.Hash(hash, TimeZone);
             hash = HashCodeHelper.Hash(hash, Rollup);
             return hash;
         }

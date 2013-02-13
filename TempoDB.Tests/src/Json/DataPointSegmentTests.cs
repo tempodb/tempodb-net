@@ -19,9 +19,9 @@ namespace TempoDB.Tests
                 var json = @"{
                     ""rollup"":{
                         ""function"":""sum"",
-                        ""interval"":""PT1H"",
-                        ""tz"":""UTC""
+                        ""interval"":""PT1H""
                     },
+                    ""tz"":""UTC"",
                     ""data"":[
                         {""t"":""2012-01-01T00:00:01.000+00:00"",""v"":12.34}
                     ]
@@ -39,6 +39,7 @@ namespace TempoDB.Tests
                 };
                 Assert.AreEqual(expectedRollup, segment.Rollup);
                 Assert.AreEqual(expectedDataPoints, segment.Data);
+                Assert.AreEqual(zone, segment.TimeZone);
             }
 
             [Test]
@@ -47,9 +48,9 @@ namespace TempoDB.Tests
                 var json = @"{
                     ""rollup"":{
                         ""function"":""sum"",
-                        ""interval"":""PT1H"",
-                        ""tz"":""America/Chicago""
+                        ""interval"":""PT1H""
                     },
+                    ""tz"":""America/Chicago"",
                     ""data"":[
                         {""t"":""2012-01-01T00:00:01.000+00:00"",""v"":12.34}
                     ]
@@ -62,12 +63,13 @@ namespace TempoDB.Tests
 
                 var segment = JsonConvert.DeserializeObject<DataPointSegment>(json, converter, periodConverter, zoneConverter);
 
-                var expectedRollup = new Rollup("sum", Period.FromHours(1), zone);
+                var expectedRollup = new Rollup("sum", Period.FromHours(1));
                 var expectedDataPoints = new List<DataPoint> {
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2011, 12, 31, 18, 0, 1)), 12.34)
                 };
                 Assert.AreEqual(expectedRollup, segment.Rollup);
                 Assert.AreEqual(expectedDataPoints, segment.Data);
+                Assert.AreEqual(zone, segment.TimeZone);
             }
         }
     }

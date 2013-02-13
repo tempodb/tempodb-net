@@ -9,7 +9,6 @@ namespace TempoDB
     {
         private string fold;
         private NodaTime.Period period;
-        private NodaTime.DateTimeZone zone;
 
         [JsonProperty(PropertyName="function", Required=Required.Always)]
         public string Fold
@@ -24,24 +23,15 @@ namespace TempoDB
             get { return period; }
             private set { this.period = value; }
         }
-
-        [JsonProperty(PropertyName="tz", Required=Required.Always)]
-        public NodaTime.DateTimeZone Zone
-        {
-            get { return zone; }
-            private set { this.zone = value; }
-        }
-
-        public Rollup(string fold, NodaTime.Period period, NodaTime.DateTimeZone zone=null)
+        public Rollup(string fold, NodaTime.Period period)
         {
             this.fold = fold;
             this.period = period;
-            this.zone = zone == null ? NodaTime.DateTimeZone.Utc : zone;
         }
 
         public override string ToString()
         {
-            return string.Format("Rollup({0}, {1}, {2})", Fold, Period, Zone);
+            return string.Format("Rollup({0}, {1})", Fold, Period);
         }
 
         public override bool Equals(Object obj)
@@ -49,8 +39,7 @@ namespace TempoDB
             Rollup other = obj as Rollup;
             return other != null &&
                 Fold.Equals(other.Fold) &&
-                Period.Equals(other.Period) &&
-                Zone.Equals(other.Zone);
+                Period.Equals(other.Period);
         }
 
         public override int GetHashCode()
@@ -58,7 +47,6 @@ namespace TempoDB
             int hash = HashCodeHelper.Initialize();
             hash = HashCodeHelper.Hash(hash, Fold);
             hash = HashCodeHelper.Hash(hash, Period);
-            hash = HashCodeHelper.Hash(hash, Zone);
             return hash;
         }
     }
