@@ -6,7 +6,7 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class DataPoint
+    public class DataPoint : Model
     {
         private ZonedDateTime timestamp;
         private double value;

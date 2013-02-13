@@ -5,7 +5,7 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    class Rollup
+    public class Rollup
     {
         private string fold;
         private NodaTime.Period period;

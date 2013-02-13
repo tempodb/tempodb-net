@@ -57,6 +57,7 @@
     <Compile Include="src\BulkPoint.cs" />
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\DataPoint.cs" />
+    <Compile Include="src\DataPointSegment.cs" />
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\None.cs" />

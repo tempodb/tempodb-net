@@ -2,6 +2,7 @@ using NodaTime;
 using RestSharp;
 using System.Collections.Generic;
 using TempoDB.Json;
+using TempoDB.Utility;
 
 
 namespace TempoDB
@@ -162,6 +163,52 @@ namespace TempoDB
             return result;
         }
 
+        public Result<Cursor<DataPoint>> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        {
+            var url = "/{version}/series/id/{id}/data/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("id", id);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+
+            IRestResponse response = Client.Execute(request);
+            var result = new Result<DataPointSegment>(response);
+
+            Cursor<DataPoint> cursor = null;
+            if(result.Success)
+            {
+                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
+                var segment = new Segment<DataPoint>(result.Value.DataPoints, nextUrl);
+                var segments = new SegmentEnumerator<DataPoint>(this, segment);
+                cursor = new Cursor<DataPoint>(segments);
+            }
+            return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);
+        }
+
+        public Result<Cursor<DataPoint>> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        {
+            var url = "/{version}/series/key/{key}/data/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+
+            IRestResponse response = Client.Execute(request);
+            var result = new Result<DataPointSegment>(response);
+
+            Cursor<DataPoint> cursor = null;
+            if(result.Success)
+            {
+                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
+                var segment = new Segment<DataPoint>(result.Value.DataPoints, nextUrl);
+                var segments = new SegmentEnumerator<DataPoint>(this, segment);
+                cursor = new Cursor<DataPoint>(segments);
+            }
+            return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);
+        }
+
         public Result<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/";
@@ -188,7 +235,7 @@ namespace TempoDB
 
         public Result<T> Execute<T>(RestRequest request) where T : Model
         {
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = Client.Execute(request);
             var result = new Result<T>(response);
             return result;
         }
