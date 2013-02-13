@@ -42,7 +42,7 @@ namespace TempoDB
         public IEnumerator<Segment<T>> GetEnumerator()
         {
             yield return segment;
-            while(segment.NextUrl != null)
+            while(String.IsNullOrEmpty(segment.NextUrl) == false)
             {
                 // Add rest call here
                 var request = client.BuildRequest(segment.NextUrl, Method.GET);
@@ -65,10 +65,18 @@ namespace TempoDB
         private IList<T> data;
         private string next;
 
+        [JsonIgnore]
         public string NextUrl
         {
             get { return next; }
-            private set { this.next = value; }
+            set { this.next = value; }
+        }
+
+        [JsonProperty(PropertyName="data")]
+        public IList<T> Data
+        {
+            get { return data; }
+            protected set { this.data = value; }
         }
 
         public Segment(IList<T> data, string next)

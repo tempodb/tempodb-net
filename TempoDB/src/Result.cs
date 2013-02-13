@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using TempoDB.Json;
 using TempoDB.Utility;
 
 
@@ -14,10 +13,6 @@ namespace TempoDB
         private bool success;
         private int code;
         private string message;
-
-        private static ZonedDateTimeConverter datetimeConverter = new ZonedDateTimeConverter();
-        private static PeriodConverter periodConverter = new PeriodConverter();
-        private static DateTimeZoneConverter zoneConverter = new DateTimeZoneConverter();
 
         public T Value
         {
@@ -87,17 +82,9 @@ namespace TempoDB
                 var segment = new Segment<Series>(series, nextUrl);
                 return segment as T;
             }
-            else if(typeof(T) == typeof(Segment<DataPoint>))
+            else if((typeof(T) == typeof(Segment<DataPoint>)) || (typeof(T) == typeof(DataPointSegment)))
             {
-                var datapoints = JsonConvert.DeserializeObject<DataPointSegment>(response.Content, datetimeConverter, periodConverter, zoneConverter);
-                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
-                var segment = new Segment<DataPoint>(datapoints.DataPoints, nextUrl);
-                return segment as T;
-            }
-            else if(typeof(T) == typeof(DataPointSegment))
-            {
-                var segment = JsonConvert.DeserializeObject<DataPointSegment>(response.Content, datetimeConverter, periodConverter, zoneConverter);
-                return segment as T;
+               return DataPointSegment.FromResponse(response) as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

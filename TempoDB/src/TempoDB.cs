@@ -165,22 +165,19 @@ namespace TempoDB
 
         public Result<Cursor<DataPoint>> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
-            var url = "/{version}/series/id/{id}/data/";
+            var url = "/{version}/series/id/{id}/data/segment/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
 
-            IRestResponse response = Client.Execute(request);
-            var result = new Result<DataPointSegment>(response);
+            var result = Execute<DataPointSegment>(request);
 
             Cursor<DataPoint> cursor = null;
             if(result.Success)
             {
-                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
-                var segment = new Segment<DataPoint>(result.Value.DataPoints, nextUrl);
-                var segments = new SegmentEnumerator<DataPoint>(this, segment);
+                var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
                 cursor = new Cursor<DataPoint>(segments);
             }
             return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);
@@ -188,22 +185,19 @@ namespace TempoDB
 
         public Result<Cursor<DataPoint>> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
         {
-            var url = "/{version}/series/key/{key}/data/";
+            var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
 
-            IRestResponse response = Client.Execute(request);
-            var result = new Result<DataPointSegment>(response);
+            var result = Execute<DataPointSegment>(request);
 
             Cursor<DataPoint> cursor = null;
             if(result.Success)
             {
-                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
-                var segment = new Segment<DataPoint>(result.Value.DataPoints, nextUrl);
-                var segments = new SegmentEnumerator<DataPoint>(this, segment);
+                var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
                 cursor = new Cursor<DataPoint>(segments);
             }
             return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);

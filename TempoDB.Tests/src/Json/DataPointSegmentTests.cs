@@ -38,7 +38,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 1)), 12.34)
                 };
                 Assert.AreEqual(expectedRollup, segment.Rollup);
-                Assert.AreEqual(expectedDataPoints, segment.DataPoints);
+                Assert.AreEqual(expectedDataPoints, segment.Data);
             }
 
             [Test]
@@ -67,7 +67,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2011, 12, 31, 18, 0, 1)), 12.34)
                 };
                 Assert.AreEqual(expectedRollup, segment.Rollup);
-                Assert.AreEqual(expectedDataPoints, segment.DataPoints);
+                Assert.AreEqual(expectedDataPoints, segment.Data);
             }
         }
     }

@@ -2,6 +2,7 @@ using Moq;
 using NodaTime;
 using NUnit.Framework;
 using RestSharp;
+using System.Collections.Generic;
 using System.Net;
 
 
@@ -25,22 +26,87 @@ namespace TempoDB.Tests
                 ]
             }";
 
-            /// [Test]
-            /// public void SmokeTest()
-            /// {
-            ///     var response = new RestResponse {
-            ///         Content = json,
-            ///         StatusCode = HttpStatusCode.OK
-            ///     };
-            ///     var mockclient = TestCommon.GetMockRestClient(response);
-            ///     var client = TestCommon.GetClient(mockclient.Object);
-            ///     var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
-            ///     var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
+            private static string json1 = @"{
+                ""data"":[
+                    {""t"":""2012-03-27T00:00:00.000-05:00"",""v"":12.34},
+                    {""t"":""2012-03-27T00:01:00.000-05:00"",""v"":23.45}
+                ],
+                ""rollup"":null
+            }";
 
-            ///     var result = client.ReadDataPointsById("id1", start, end);
-            ///     var expected = new Result<None>(new None(), true);
-            ///     Assert.AreEqual(expected, result);
-            /// }
+            private static string json2 = @"{
+                ""data"":[
+                    {""t"":""2012-03-27T00:02:00.000-05:00"",""v"":34.56}
+                ],
+                ""rollup"":null
+            }";
+
+            [Test]
+            public void SmokeTest()
+            {
+                var response = new RestResponse {
+                    Content = json1,
+                    StatusCode = HttpStatusCode.OK
+                };
+                var mockclient = TestCommon.GetMockRestClient(response);
+                var client = TestCommon.GetClient(mockclient.Object);
+                var start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
+                var end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
+
+                var result = client.ReadDataPointsById("id1", start, end);
+
+                var expected = new List<DataPoint> {
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
+                };
+                var output = new List<DataPoint>();
+                foreach(DataPoint dp in result.Value)
+                {
+                    output.Add(dp);
+                }
+
+                Assert.AreEqual(expected, output);
+            }
+
+            [Test]
+            public void MultipleSegmentSmokeTest()
+            {
+                var response1 = new RestResponse {
+                    Content = json1,
+                    StatusCode = HttpStatusCode.OK
+                };
+                response1.Headers.Add(new Parameter {
+                    Name = "Link",
+                    Value = "</v1/series/id/id1/data/segment/?start=2012-03-27T00:02:00.000-05:00&end=2012-03-28>; rel=\"next\""
+                });
+                var response2 = new RestResponse {
+                    Content = json2,
+                    StatusCode = HttpStatusCode.OK
+                };
+
+                var calls = 0;
+                RestResponse[] responses = { response1, response2 };
+                var mockclient = new Mock<RestClient>();
+                mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
+
+                var client = TestCommon.GetClient(mockclient.Object);
+                var start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
+                var end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
+                var result = client.ReadDataPointsById("id1", start, end);
+
+                var expected = new List<DataPoint> {
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 2, 0)), 34.56)
+                };
+                var output = new List<DataPoint>();
+                foreach(DataPoint dp in result.Value)
+                {
+                    output.Add(dp);
+                }
+
+                Assert.AreEqual(expected, output);
+            }
 
             [Test]
             public void RequestMethod()
@@ -73,7 +139,7 @@ namespace TempoDB.Tests
 
                 client.ReadDataPointsById("id1", start, end);
 
-                mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/id/{id}/data/")));
+                mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/id/{id}/data/segment/")));
             }
 
             [Test]
@@ -111,22 +177,87 @@ namespace TempoDB.Tests
                 ]
             }";
 
-            /// [Test]
-            /// public void SmokeTest()
-            /// {
-            ///     var response = new RestResponse {
-            ///         Content = json,
-            ///         StatusCode = HttpStatusCode.OK
-            ///     };
-            ///     var mockclient = TestCommon.GetMockRestClient(response);
-            ///     var client = TestCommon.GetClient(mockclient.Object);
-            ///     var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
-            ///     var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
+            private static string json1 = @"{
+                ""data"":[
+                    {""t"":""2012-03-27T00:00:00.000-05:00"",""v"":12.34},
+                    {""t"":""2012-03-27T00:01:00.000-05:00"",""v"":23.45}
+                ],
+                ""rollup"":null
+            }";
 
-            ///     var result = client.ReadDataPointsByKey("key1", start, end);
-            ///     var expected = new Result<None>(new None(), true);
-            ///     Assert.AreEqual(expected, result);
-            /// }
+            private static string json2 = @"{
+                ""data"":[
+                    {""t"":""2012-03-27T00:02:00.000-05:00"",""v"":34.56}
+                ],
+                ""rollup"":null
+            }";
+
+            [Test]
+            public void SmokeTest()
+            {
+                var response = new RestResponse {
+                    Content = json1,
+                    StatusCode = HttpStatusCode.OK
+                };
+                var mockclient = TestCommon.GetMockRestClient(response);
+                var client = TestCommon.GetClient(mockclient.Object);
+                var start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
+                var end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
+
+                var result = client.ReadDataPointsByKey("key1", start, end);
+
+                var expected = new List<DataPoint> {
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
+                };
+                var output = new List<DataPoint>();
+                foreach(DataPoint dp in result.Value)
+                {
+                    output.Add(dp);
+                }
+
+                Assert.AreEqual(expected, output);
+            }
+
+            [Test]
+            public void MultipleSegmentSmokeTest()
+            {
+                var response1 = new RestResponse {
+                    Content = json1,
+                    StatusCode = HttpStatusCode.OK
+                };
+                response1.Headers.Add(new Parameter {
+                    Name = "Link",
+                    Value = "</v1/series/key/key1/data/segment/?start=2012-03-27T00:02:00.000-05:00&end=2012-03-28>; rel=\"next\""
+                });
+                var response2 = new RestResponse {
+                    Content = json2,
+                    StatusCode = HttpStatusCode.OK
+                };
+
+                var calls = 0;
+                RestResponse[] responses = { response1, response2 };
+                var mockclient = new Mock<RestClient>();
+                mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
+
+                var client = TestCommon.GetClient(mockclient.Object);
+                var start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
+                var end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
+                var result = client.ReadDataPointsByKey("key1", start, end);
+
+                var expected = new List<DataPoint> {
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45),
+                    new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 2, 0)), 34.56)
+                };
+                var output = new List<DataPoint>();
+                foreach(DataPoint dp in result.Value)
+                {
+                    output.Add(dp);
+                }
+
+                Assert.AreEqual(expected, output);
+            }
 
             [Test]
             public void RequestMethod()
@@ -159,7 +290,7 @@ namespace TempoDB.Tests
 
                 client.ReadDataPointsByKey("key1", start, end);
 
-                mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/key/{key}/data/")));
+                mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/key/{key}/data/segment/")));
             }
 
             [Test]
