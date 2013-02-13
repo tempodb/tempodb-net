@@ -32,138 +32,138 @@ namespace TempoDB
             Client = client;
         }
 
-        public Result<Series> CreateSeries(Series series)
+        public Response<Series> CreateSeries(Series series)
         {
             var url = "/{version}/series/";
             var request = BuildRequest(url, Method.POST, series);
             request.AddUrlSegment("version", Version);
-            var result = Execute<Series>(request);
-            return result;
+            var response = Execute<Series>(request);
+            return response;
         }
 
-        public Result<Series> GetSeriesById(string id)
+        public Response<Series> GetSeriesById(string id)
         {
             var url = "/{version}/series/id/{id}/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
-            var result = Execute<Series>(request);
-            return result;
+            var response = Execute<Series>(request);
+            return response;
         }
 
-        public Result<Series> GetSeriesByKey(string key)
+        public Response<Series> GetSeriesByKey(string key)
         {
             var url = "/{version}/series/key/{key}/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
-            var result = Execute<Series>(request);
-            return result;
+            var response = Execute<Series>(request);
+            return response;
         }
 
-        public Result<Series> UpdateSeries(Series series)
+        public Response<Series> UpdateSeries(Series series)
         {
             var url = "/{version}/series/id/{id}/";
             var request = BuildRequest(url, Method.PUT, series);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", series.Id);
-            var result = Execute<Series>(request);
-            return result;
+            var response = Execute<Series>(request);
+            return response;
         }
 
-        public Result<Cursor<Series>> FilterSeries(Filter filter)
+        public Response<Cursor<Series>> FilterSeries(Filter filter)
         {
             var url = "/{version}/series/";
             var request = BuildRequest(url, Method.GET);
             ApplyFilterToRequest(request, filter);
-            var result = Execute<Segment<Series>>(request);
+            var response = Execute<Segment<Series>>(request);
 
             Cursor<Series> cursor = null;
-            if(result.Success)
+            if(response.Success)
             {
-                var segments = new SegmentEnumerator<Series>(this, result.Value);
+                var segments = new SegmentEnumerator<Series>(this, response.Value);
                 cursor = new Cursor<Series>(segments);
             }
-            return new Result<Cursor<Series>>(cursor, result.Success, result.Message);
+            return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Result<None> WriteDataPointsById(string id, IList<DataPoint> data)
+        public Response<None> WriteDataPointsById(string id, IList<DataPoint> data)
         {
             var url = "/{version}/series/id/{id}/data/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<None> WriteDataPointsByKey(string key, IList<DataPoint> data)
+        public Response<None> WriteDataPointsByKey(string key, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<None> WriteBulkData(IList<BulkDataSet> data)
+        public Response<None> WriteBulkData(IList<BulkDataSet> data)
         {
             var url = "/{version}/data/";
-            Result<None> result = null;
+            Response<None> response = null;
             foreach(BulkDataSet dataset in data)
             {
                 var request = BuildRequest(url, Method.POST, dataset);
                 request.AddUrlSegment("version", Version);
-                result = Execute<None>(request);
-                if(result.Success != true)
+                response = Execute<None>(request);
+                if(response.Success != true)
                 {
                     /// An error occurred, stop writing and alert the user.
-                    return result;
+                    return response;
                 }
             }
-            return result;
+            return response;
         }
 
-        public Result<None> IncrementDataPointsById(string id, IList<DataPoint> data)
+        public Response<None> IncrementDataPointsById(string id, IList<DataPoint> data)
         {
             var url = "/{version}/series/id/{id}/increment/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<None> IncrementDataPointsByKey(string key, IList<DataPoint> data)
+        public Response<None> IncrementDataPointsByKey(string key, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/increment/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<None> IncrementBulkData(IList<BulkDataSet> data)
+        public Response<None> IncrementBulkData(IList<BulkDataSet> data)
         {
             var url = "/{version}/increment/";
-            Result<None> result = null;
+            Response<None> response = null;
             foreach(BulkDataSet dataset in data)
             {
                 var request = BuildRequest(url, Method.POST, dataset);
                 request.AddUrlSegment("version", Version);
-                result = Execute<None>(request);
-                if(result.Success != true)
+                response = Execute<None>(request);
+                if(response.Success != true)
                 {
                     /// An error occurred, stop writing and alert the user.
-                    return result;
+                    return response;
                 }
             }
-            return result;
+            return response;
         }
 
-        public Result<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -172,20 +172,20 @@ namespace TempoDB
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
 
-            var result = Execute<DataPointSegment>(request);
+            var response = Execute<DataPointSegment>(request);
 
             QueryResult query = null;
-            if(result.Success)
+            if(response.Success)
             {
-                var rollup = result.Value.Rollup;
-                var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
+                var rollup = response.Value.Rollup;
+                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult(this, cursor, rollup);
             }
-            return new Result<QueryResult>(query, result.Success, result.Message);
+            return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
-        public Result<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        public Response<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -194,20 +194,20 @@ namespace TempoDB
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
 
-            var result = Execute<DataPointSegment>(request);
+            var response = Execute<DataPointSegment>(request);
 
             QueryResult query = null;
-            if(result.Success)
+            if(response.Success)
             {
-                var rollup = result.Value.Rollup;
-                var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
+                var rollup = response.Value.Rollup;
+                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult(this, cursor, rollup);
             }
-            return new Result<QueryResult>(query, result.Success, result.Message);
+            return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
-        public Result<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        public Response<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/";
             var request = BuildRequest(url, Method.DELETE);
@@ -215,11 +215,11 @@ namespace TempoDB
             request.AddUrlSegment("id", id);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<None> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        public Response<None> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.DELETE);
@@ -227,15 +227,14 @@ namespace TempoDB
             request.AddUrlSegment("key", key);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            var result = Execute<None>(request);
-            return result;
+            var response = Execute<None>(request);
+            return response;
         }
 
-        public Result<T> Execute<T>(RestRequest request) where T : Model
+        public Response<T> Execute<T>(RestRequest request) where T : Model
         {
-            IRestResponse response = Client.Execute(request);
-            var result = new Result<T>(response);
-            return result;
+            var response = new Response<T>(Client.Execute(request));
+            return response;
         }
 
         public RestRequest BuildRequest(string url, Method method, object body=null)

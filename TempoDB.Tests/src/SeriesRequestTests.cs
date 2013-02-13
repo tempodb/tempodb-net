@@ -31,7 +31,7 @@ namespace TempoDB.Tests
             var client = TestCommon.GetClient(mockclient.Object);
 
             var result = client.CreateSeries(series);
-            var expected = new Result<Series>(series, true);
+            var expected = new Response<Series>(series, 200);
             Assert.AreEqual(expected, result);
         }
 
@@ -104,7 +104,7 @@ namespace TempoDB.Tests
             var client = TestCommon.GetClient(mockclient.Object);
 
             var result = client.GetSeriesById("id1");
-            var expected = new Result<Series>(series, true);
+            var expected = new Response<Series>(series, 200);
             Assert.AreEqual(expected, result);
         }
 
@@ -164,7 +164,7 @@ namespace TempoDB.Tests
             var client = TestCommon.GetClient(mockclient.Object);
 
             var result = client.GetSeriesByKey("key1");
-            var expected = new Result<Series>(series, true);
+            var expected = new Response<Series>(series, 200);
             Assert.AreEqual(expected, result);
         }
 
@@ -237,7 +237,7 @@ namespace TempoDB.Tests
             var client = TestCommon.GetClient(mockclient.Object);
 
             var result = client.UpdateSeries(series);
-            var expected = new Result<Series>(series, true);
+            var expected = new Response<Series>(series, 200);
 
             Assert.AreEqual(expected, result);
         }
@@ -319,7 +319,7 @@ namespace TempoDB.Tests
             var result = client.FilterSeries(new Filter());
 
             var cursor = new Cursor<Series>(new SegmentEnumerator<Series>(null, new Segment<Series>(series, null)));
-            var expected = new Result<Cursor<Series>>(cursor, true);
+            var expected = new Response<Cursor<Series>>(cursor, 200);
 
             var resultList = new List<Series>();
             foreach(Series s in result.Value)

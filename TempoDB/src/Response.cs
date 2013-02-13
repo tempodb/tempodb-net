@@ -7,40 +7,20 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class Result<T> where T : Model
+    public class Response<T> where T : Model
     {
-        private T value;
-        private bool success;
-        private int code;
-        private string message;
+        public T Value { get; private set; }
 
-        public T Value
-        {
-            get { return value; }
-            private set { this.value = value; }
-        }
+        public bool Success { get; private set; }
 
-        public bool Success
-        {
-            get { return success; }
-            private set { this.success = value; }
-        }
+        public int Code { get; private set; }
 
-        public int Code
-        {
-            get { return code; }
-            private set { this.code = value; }
-        }
+        public string Message { get; private set; }
 
-        public string Message
+        public Response(IRestResponse response)
         {
-            get { return message; }
-            private set { this.message = value; }
-        }
-
-        public Result(IRestResponse response)
-        {
-            Success = IsSuccessful(response);
+            Code = (int)response.StatusCode;
+            Success = IsSuccessful(Code);
             if(Success == true)
             {
                 Value = newValueFromResponse(response);
@@ -52,16 +32,16 @@ namespace TempoDB
             }
         }
 
-        public Result(T value, bool success, string message="")
+        public Response(T value, int code, string message="")
         {
             Value = value;
-            Success = success;
+            Code = code;
+            Success = IsSuccessful(code);
             Message = message;
         }
 
-        public static bool IsSuccessful(IRestResponse response)
+        public static bool IsSuccessful(int code)
         {
-            int code = (int)response.StatusCode;
             return (code / 100) == 2;
         }
 
@@ -92,9 +72,10 @@ namespace TempoDB
 
         public override bool Equals(object obj)
         {
-            var other = obj as Result<T>;
+            var other = obj as Response<T>;
             return other != null &&
                 Value.Equals(other.Value) &&
+                Code.Equals(other.Code) &&
                 Success.Equals(other.Success) &&
                 Message.Equals(other.Message);
         }
@@ -103,6 +84,7 @@ namespace TempoDB
         {
             int hash = HashCodeHelper.Initialize();
             hash = HashCodeHelper.Hash(hash, Value);
+            hash = HashCodeHelper.Hash(hash, Code);
             hash = HashCodeHelper.Hash(hash, Success);
             hash = HashCodeHelper.Hash(hash, Message);
             return hash;

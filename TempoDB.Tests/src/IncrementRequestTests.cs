@@ -33,7 +33,7 @@ namespace TempoDB.Tests
                 var client = TestCommon.GetClient(mockclient.Object);
 
                 var result = client.IncrementDataPointsById("id1", datapoints);
-                var expected = new Result<None>(new None(), true);
+                var expected = new Response<None>(new None(), 200);
                 Assert.AreEqual(expected, result);
             }
 
@@ -119,7 +119,7 @@ namespace TempoDB.Tests
                 var client = TestCommon.GetClient(mockclient.Object);
 
                 var result = client.IncrementDataPointsByKey("key1", datapoints);
-                var expected = new Result<None>(new None(), true);
+                var expected = new Response<None>(new None(), 200);
                 Assert.AreEqual(expected, result);
             }
 
@@ -228,7 +228,7 @@ namespace TempoDB.Tests
                 var client = TestCommon.GetClient(mockclient.Object);
 
                 var result = client.IncrementBulkData(datapoints1);
-                var expected = new Result<None>(new None(), true);
+                var expected = new Response<None>(new None(), 200);
                 Assert.AreEqual(expected, result);
             }
 
@@ -243,7 +243,7 @@ namespace TempoDB.Tests
                 var client = TestCommon.GetClient(mockclient.Object);
 
                 var result = client.IncrementBulkData(datapoints2);
-                var expected = new Result<None>(new None(), true);
+                var expected = new Response<None>(new None(), 200);
                 Assert.AreEqual(expected, result);
             }
 
@@ -296,7 +296,7 @@ namespace TempoDB.Tests
                 var client = TestCommon.GetClient(mockclient.Object);
 
                 var result = client.IncrementBulkData(datapoints2);
-                var expected = new Result<None>(new None(), false);
+                var expected = new Response<None>(new None(), 403);
                 Assert.IsFalse(result.Success);
             }
 

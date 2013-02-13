@@ -62,7 +62,7 @@
     <Compile Include="src\DeleteRequestTests.cs" />
     <Compile Include="src\IncrementRequestTests.cs" />
     <Compile Include="src\ReadRequestTests.cs" />
-    <Compile Include="src\ResultTests.cs" />
+    <Compile Include="src\ResponseTests.cs" />
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesRequestTests.cs" />
     <Compile Include="src\SeriesTests.cs" />

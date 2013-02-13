@@ -44,7 +44,7 @@ namespace TempoDB
                 Value.Equals(other.Value);
         }
 
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
         {
             int hash = HashCodeHelper.Initialize();
             hash = HashCodeHelper.Hash(hash, Timestamp);
