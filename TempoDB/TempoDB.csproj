@@ -61,6 +61,7 @@
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\None.cs" />
+    <Compile Include="src\QueryResult.cs" />
     <Compile Include="src\Result.cs" />
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />

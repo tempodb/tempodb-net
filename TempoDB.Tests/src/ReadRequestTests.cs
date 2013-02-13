@@ -60,7 +60,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
                 };
                 var output = new List<DataPoint>();
-                foreach(DataPoint dp in result.Value)
+                foreach(DataPoint dp in result.Value.DataPoints)
                 {
                     output.Add(dp);
                 }
@@ -100,7 +100,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 2, 0)), 34.56)
                 };
                 var output = new List<DataPoint>();
-                foreach(DataPoint dp in result.Value)
+                foreach(DataPoint dp in result.Value.DataPoints)
                 {
                     output.Add(dp);
                 }
@@ -211,7 +211,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
                 };
                 var output = new List<DataPoint>();
-                foreach(DataPoint dp in result.Value)
+                foreach(DataPoint dp in result.Value.DataPoints)
                 {
                     output.Add(dp);
                 }
@@ -251,7 +251,7 @@ namespace TempoDB.Tests
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 2, 0)), 34.56)
                 };
                 var output = new List<DataPoint>();
-                foreach(DataPoint dp in result.Value)
+                foreach(DataPoint dp in result.Value.DataPoints)
                 {
                     output.Add(dp);
                 }

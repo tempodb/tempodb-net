@@ -163,7 +163,7 @@ namespace TempoDB
             return result;
         }
 
-        public Result<Cursor<DataPoint>> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        public Result<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -174,16 +174,18 @@ namespace TempoDB
 
             var result = Execute<DataPointSegment>(request);
 
-            Cursor<DataPoint> cursor = null;
+            QueryResult query = null;
             if(result.Success)
             {
+                var rollup = result.Value.Rollup;
                 var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
-                cursor = new Cursor<DataPoint>(segments);
+                var cursor = new Cursor<DataPoint>(segments);
+                query = new QueryResult(this, cursor, rollup);
             }
-            return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);
+            return new Result<QueryResult>(query, result.Success, result.Message);
         }
 
-        public Result<Cursor<DataPoint>> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        public Result<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
@@ -194,13 +196,15 @@ namespace TempoDB
 
             var result = Execute<DataPointSegment>(request);
 
-            Cursor<DataPoint> cursor = null;
+            QueryResult query = null;
             if(result.Success)
             {
+                var rollup = result.Value.Rollup;
                 var segments = new SegmentEnumerator<DataPoint>(this, result.Value);
-                cursor = new Cursor<DataPoint>(segments);
+                var cursor = new Cursor<DataPoint>(segments);
+                query = new QueryResult(this, cursor, rollup);
             }
-            return new Result<Cursor<DataPoint>>(cursor, result.Success, result.Message);
+            return new Result<QueryResult>(query, result.Success, result.Message);
         }
 
         public Result<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
