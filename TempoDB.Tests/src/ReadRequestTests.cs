@@ -18,9 +18,9 @@ namespace TempoDB.Tests
             private static string json = @"{
                 ""rollup"":{
                     ""function"":""sum"",
-                    ""interval"":""PT1H"",
-                    ""tz"":""UTC""
+                    ""interval"":""PT1H""
                 },
+                ""tz"":""UTC"",
                 ""data"":[
                     {""t"":""2012-01-01T00:00:01.000+00:00"",""v"":12.34}
                 ]
@@ -31,6 +31,7 @@ namespace TempoDB.Tests
                     {""t"":""2012-03-27T00:00:00.000-05:00"",""v"":12.34},
                     {""t"":""2012-03-27T00:01:00.000-05:00"",""v"":23.45}
                 ],
+                ""tz"":""UTC"",
                 ""rollup"":null
             }";
 
@@ -38,6 +39,7 @@ namespace TempoDB.Tests
                 ""data"":[
                     {""t"":""2012-03-27T00:02:00.000-05:00"",""v"":34.56}
                 ],
+                ""tz"":""UTC"",
                 ""rollup"":null
             }";
 
@@ -173,9 +175,9 @@ namespace TempoDB.Tests
             private static string json = @"{
                 ""rollup"":{
                     ""function"":""sum"",
-                    ""interval"":""PT1H"",
-                    ""tz"":""UTC""
+                    ""interval"":""PT1H""
                 },
+                ""tz"":""UTC"",
                 ""data"":[
                     {""t"":""2012-01-01T00:00:01.000+00:00"",""v"":12.34}
                 ]
@@ -186,6 +188,7 @@ namespace TempoDB.Tests
                     {""t"":""2012-03-27T00:00:00.000-05:00"",""v"":12.34},
                     {""t"":""2012-03-27T00:01:00.000-05:00"",""v"":23.45}
                 ],
+                ""tz"":""UTC"",
                 ""rollup"":null
             }";
 
@@ -193,6 +196,7 @@ namespace TempoDB.Tests
                 ""data"":[
                     {""t"":""2012-03-27T00:02:00.000-05:00"",""v"":34.56}
                 ],
+                ""tz"":""UTC"",
                 ""rollup"":null
             }";
 

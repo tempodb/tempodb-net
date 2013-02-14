@@ -11,9 +11,7 @@ namespace TempoDB
 {
     public class DataPointSegment : Segment<DataPoint>
     {
-        private static ZonedDateTimeConverter datetimeConverter = new ZonedDateTimeConverter();
-        private static PeriodConverter periodConverter = new PeriodConverter();
-        private static DateTimeZoneConverter zoneConverter = new DateTimeZoneConverter();
+        private static DataPointSegmentConverter converter = new DataPointSegmentConverter();
 
         [JsonProperty(PropertyName="rollup")]
         public Rollup Rollup { get; private set; }
@@ -29,7 +27,7 @@ namespace TempoDB
 
         protected internal static DataPointSegment FromResponse(IRestResponse response)
         {
-            var segment = JsonConvert.DeserializeObject<DataPointSegment>(response.Content, datetimeConverter, periodConverter, zoneConverter);
+            var segment = JsonConvert.DeserializeObject<DataPointSegment>(response.Content, converter);
             segment.NextUrl = HttpHelper.GetLinkFromHeaders("next", response);
             return segment;
         }
