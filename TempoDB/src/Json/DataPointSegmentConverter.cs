@@ -36,7 +36,7 @@ namespace TempoDB.Json
                 DateTimeZone zone = DateTimeZone.Utc;
                 if(FieldExists("tz", obj))
                 {
-                    string zoneId = obj["tz"].ToString();
+                    string zoneId = (string)obj["tz"];
                     zone = string.IsNullOrEmpty(zoneId) ? DateTimeZone.Utc : DateTimeZoneProviders.Tzdb[zoneId];
                 }
 
@@ -44,22 +44,15 @@ namespace TempoDB.Json
                 List<DataPoint> datapoints = new List<DataPoint>();
                 if(FieldExists("data", obj))
                 {
-                    /// Figure out how to do this without converting to a string
-                    var datapointsString = obj["data"].ToString();
-                    if(string.IsNullOrEmpty(datapointsString) == false)
-                    {
-                        datapoints = JsonConvert.DeserializeObject<List<DataPoint>>(datapointsString, datetimeConverter);
-                    }
+                    serializer.Converters.Add(datetimeConverter);
+                    datapoints = obj["data"].ToObject<List<DataPoint>>(serializer);
                 }
 
                 Rollup rollup = null;
                 if(FieldExists("rollup", obj))
                 {
-                    var rollupString = obj["rollup"].ToString();
-                    if(string.IsNullOrEmpty(rollupString) == false)
-                    {
-                        rollup = JsonConvert.DeserializeObject<Rollup>(rollupString, periodConverter);
-                    }
+                    serializer.Converters.Add(periodConverter);
+                    rollup = obj["rollup"].ToObject<Rollup>(serializer);
                 }
 
                 target = new DataPointSegment(datapoints, null, zone, rollup);
