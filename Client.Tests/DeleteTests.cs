@@ -46,4 +46,34 @@ namespace Client.Tests
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "value", "series-key"))));
         }
     }
+
+    [TestFixture]
+    class DeleteSeriesTests
+    {
+        [Test]
+        public void SmokeTest()
+        {
+            var mockclient = TestCommon.GetMockRestClient<DeleteSummary>(new DeleteSummary());
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var filter = new Filter();
+            filter.AddTag("tag1");
+
+            client.DeleteSeries(filter);
+            mockclient.Verify(cl => cl.Execute<DeleteSummary>(It.Is<RestRequest>(req => req.Method == Method.DELETE)));
+            mockclient.Verify(cl => cl.Execute<DeleteSummary>(It.Is<RestRequest>(req => req.Resource == "/series/")));
+            mockclient.Verify(cl => cl.Execute<DeleteSummary>(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tag", "tag1"))));
+        }
+
+        [Test]
+        public void TruncateTable()
+        {
+            var mockclient = TestCommon.GetMockRestClient<DeleteSummary>(new DeleteSummary());
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            client.DeleteAllSeries();
+            mockclient.Verify(cl => cl.Execute<DeleteSummary>(It.Is<RestRequest>(req => req.Method == Method.DELETE)));
+            mockclient.Verify(cl => cl.Execute<DeleteSummary>(It.Is<RestRequest>(req => req.Resource == "/series/?allow_truncation=true")));
+        }
+    }
 }

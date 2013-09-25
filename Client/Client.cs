@@ -330,6 +330,30 @@ namespace Client
             Execute(request);
         }
 
+        /// <summary>
+        ///  Deletes a list of series matching provided Filter
+        /// </summary>
+        ///  <param name="filter">Filter instance to filter the list of series in your database</param>
+        ///  <returns> A DeleteSummary</returns>
+        public DeleteSummary DeleteSeries(Filter filter)
+        {
+            const string url = "/series/";
+            RestRequest request = BuildRequest(url, Method.DELETE);
+            ApplyFilterToRequest(request, filter);
+            return Execute<DeleteSummary>(request);
+        }
+
+        /// <summary>
+        ///  Deletes all series in a database
+        /// </summary>
+        /// <returns> A DeleteSummary</returns>
+        public DeleteSummary DeleteAllSeries()
+        {
+            const string url = "/series/?allow_truncation=true";
+            RestRequest request = BuildRequest(url, Method.DELETE);
+            return Execute<DeleteSummary>(request);
+        }
+
         private RestRequest BuildRequest(string url, Method method, object body = null)
         {
             var request = new RestRequest

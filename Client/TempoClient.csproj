@@ -54,6 +54,7 @@
     <Compile Include="Model\BulkIdPoint.cs" />
     <Compile Include="Model\BulkKeyPoint.cs" />
     <Compile Include="Model\BulkPoint.cs" />
+    <Compile Include="Model\DeleteSummary.cs" />
     <Compile Include="Model\MultiIdPoint.cs" />
     <Compile Include="Model\MultiKeyPoint.cs" />
     <Compile Include="Model\MultiPoint.cs" />
