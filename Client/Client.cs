@@ -236,6 +236,17 @@ namespace Client
         }
 
         /// <summary>
+        ///  Writes a set of datapoints for different series for different timestamp
+        /// </summary>
+        ///  <param name="data"> A List<MultiPoint> to write </param>
+        public virtual void WriteMultiData(List<MultiPoint> data)
+        {
+            const string url = "/multi/";
+            RestRequest request = BuildRequest(url, Method.POST, data);
+            Execute(request);
+        }
+
+        /// <summary>
         ///  Increments a DataSet by id
         /// </summary>
         ///  <param name="seriesId"> The id of the series into which the data points will be incremented</param>
@@ -272,6 +283,17 @@ namespace Client
         {
             const string url = "/increment/";
             RestRequest request = BuildRequest(url, Method.POST, dataSet);
+            Execute(request);
+        }
+
+        /// <summary>
+        ///  Increments a set of datapoints for different series for different timestamp
+        /// </summary>
+        ///  <param name="data"> A List<MultiPoint> to increment </param>
+        public virtual void IncrementMultiData(List<MultiPoint> data)
+        {
+            const string url = "/multi/increment/";
+            RestRequest request = BuildRequest(url, Method.POST, data);
             Execute(request);
         }
 

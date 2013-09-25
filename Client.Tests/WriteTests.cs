@@ -67,4 +67,52 @@ namespace Client.Tests
             mockClient.Verify(cl => cl.Execute(It.IsAny<RestRequest>()), Times.Exactly(100));
         }
     }
+
+    [TestFixture]
+    public class MultiTests
+    {
+        [Test]
+        public void RequestMethod()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 12.24);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.WriteMultiData(list);
+
+            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST;
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 12.24);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.WriteMultiData(list);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/multi/")));
+        }
+
+        [Test]
+        public void IncludesPoints()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 12.24);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.WriteMultiData(list);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "12.24"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "1000"))));
+        }
+    }
 }
