@@ -120,11 +120,16 @@ public Series GetSeriesById(string id)
 public List<Series> ListSeries(Filter filter = null)
 public void WriteById(string seriesId, IList<DataPoint> data)
 public void WriteByKey(string seriesKey, IList<DataPoint> data)
-public virtual void WriteBulkData(BulkDataSet dataSet)
+public void WriteBulkData(BulkDataSet dataSet)
+public void WriteMultiData(List<MultiPoint> data)
+public void IncrementById(string seriesId, IList<DataPoint> data)
+public void IncrementByKey(string seriesKey, IList<DataPoint> data)
+private void IncrementDataPoints(string seriesProperty, string propertyValue, IList<DataPoint> data)
+public void IncrementMultiData(List<MultiPoint> data)
 public void DeleteById(string seriesId, DateTime start, DateTime end)
 public void DeleteByKey(string seriesKey, DateTime start, DateTime end)
-public virtual DataSet ReadById(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
-public virtual DataSet ReadByKey(string seriesKey, DateTime start, DateTime end, string interval = null, string function = null)
+public DataSet ReadById(string seriesId, DateTime start, DateTime end, string interval = null, string function = null)
+public DataSet ReadByKey(string seriesKey, DateTime start, DateTime end, string interval = null, string function = null)
 ```
 
 ## CreateSeries(string key="")
@@ -387,6 +392,33 @@ var bulkSet = new BulkDataSet(new DateTime(2012, 1, 1), data);
 client.WriteBulkData(bulkSet);
 ```
 
+## WriteMultiData(List<MultiPoint> data)
+Writes values to multiple series for multiple timestamps. This function takes a List of MultiPoints each of which contain a timetstamp, a value, and a key or id.
+
+### Parameters
+* data - The List of MultiPoints
+
+### Returns
+Nothing
+
+### Example
+
+The following example writes datapoints to four separate series (2 by id, 2 by key) at the different timestamps.
+
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var data = new List<MultiPoint>
+{
+  new MultiIdPoint(new DateTime(2013, 1, 1), "38268c3b231f1266a392931e15e99231", 20.31),
+  new MultiIdPoint(new DateTime(2013, 1, 2), "c3b23826836a391f12629392311e15e9", 13.351),
+  new MultiKeyPoint(new DateTime(2013, 1, 3), "my-key-1", 0.631),
+  new MultiKeyPoint(new DateTime(2013, 1, 4), "my-key-2", 612.23)
+};
+
+client.WriteMutliData(data);
+```
+
 ## IncrementById(string seriesId, IList<DataPoint> data)
 Increments the value of the specified series at the given timestamp. The value of the datapoint is the amount to increment. This is similar to a write. However the value is incremented by the datapoint value
 instead of overwritten. Values are incremented atomically, so this is useful for counting events. The series id and a list of DataPoints are required.
@@ -466,6 +498,33 @@ var data = new List<BulkPoint>
 var bulkSet = new BulkDataSet(new DateTime(2012, 1, 1), data);
 
 client.IncrementBulkData(bulkSet);
+```
+
+## IncrementMultiData(List<MultiPoint> data)
+Increments values to multiple series for multiple timestamps. This function takes a List of MultiPoints each of which contain a timetstamp, a value, and a key or id.
+
+### Parameters
+* data - The List of MultiPoints
+
+### Returns
+Nothing
+
+### Example
+
+The following example increments datapoints to four separate series (2 by id, 2 by key) at the different timestamps.
+
+```csharp
+var client = new Client("api-key", "api-secret");
+
+var data = new List<MultiPoint>
+{
+  new MultiIdPoint(new DateTime(2013, 1, 1), "38268c3b231f1266a392931e15e99231", 20),
+  new MultiIdPoint(new DateTime(2013, 1, 2), "c3b23826836a391f12629392311e15e9", 13),
+  new MultiKeyPoint(new DateTime(2013, 1, 3), "my-key-1", 6),
+  new MultiKeyPoint(new DateTime(2013, 1, 4), "my-key-2", 63)
+};
+
+client.IncrementMultiData(data);
 ```
 
 ## DeleteById(string seriesId, DateTime start, DateTime end)

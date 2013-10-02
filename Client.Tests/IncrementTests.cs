@@ -67,4 +67,52 @@ namespace Client.Tests
             mockClient.Verify(cl => cl.Execute(It.IsAny<RestRequest>()), Times.Exactly(100));
         }
     }
+
+    [TestFixture]
+    public class MultiIncrementTests
+    {
+        [Test]
+        public void RequestMethod()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 1224L);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.IncrementMultiData(list);
+
+            Expression<Func<RestRequest, bool>> assertion = req => req.Method == Method.POST;
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(assertion)));
+        }
+
+        [Test]
+        public void RequestUrl()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 1224);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.IncrementMultiData(list);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/multi/increment/")));
+        }
+
+        [Test]
+        public void IncludesPoints()
+        {
+            var mockclient = TestCommon.GetMockRestClient();
+            var client = TestCommon.GetClient(mockclient.Object);
+
+            var dp1 = new MultiIdPoint("id1", new DateTime(2013, 9, 25, 0, 0, 1), 1224);
+            var dp2 = new MultiKeyPoint("key1", new DateTime(2013, 9, 25, 0, 0, 1), 1000L);
+            var list = new List<MultiPoint>{ dp1, dp2 };
+            client.IncrementMultiData(list);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "1224"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "application/json", "1000"))));
+        }
+    }
 }

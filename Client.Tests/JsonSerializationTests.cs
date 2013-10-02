@@ -139,5 +139,38 @@ namespace Client.Tests
                 Assert.AreEqual("{\"t\":\"2012-01-01T00:00:00.000-06:00\",\"data\":[{\"id\":\"id1\",\"v\":12.34},{\"key\":\"mykey\",\"v\":56.78},{\"id\":\"id2\",\"v\":90.12}]}", result);
             }
         }
+
+        [TestFixture]
+        public class MultiPointTests
+        {
+            [Test]
+            public void MultiIdPoint()
+            {
+              var dp1 = new MultiIdPoint("id1", new DateTime(2012, 1, 1), 12.34);
+              var result = JsonSerializationTests.serializer.Serialize(dp1);
+
+              Assert.AreEqual("{\"id\":\"id1\",\"t\":\"2012-01-01T00:00:00.000-06:00\",\"v\":12.34}", result);
+            }
+
+            [Test]
+            public void MultiKeyPoint()
+            {
+              var dp1 = new MultiKeyPoint("key1", new DateTime(2012, 1, 1), 1200L);
+              var result = JsonSerializationTests.serializer.Serialize(dp1);
+
+              Assert.AreEqual("{\"key\":\"key1\",\"t\":\"2012-01-01T00:00:00.000-06:00\",\"v\":1200}", result);
+            }
+
+            [Test]
+            public void MultiDataSet()
+            {
+              var dp1 = new MultiKeyPoint("key1", new DateTime(2012, 1, 1), 1200L);
+              var dp2 = new MultiIdPoint("id1", new DateTime(2012, 1, 2), 12.34);
+              var data = new List<MultiPoint> { dp1, dp2 };
+              var result = JsonSerializationTests.serializer.Serialize(data);
+
+              Assert.AreEqual("[{\"key\":\"key1\",\"t\":\"2012-01-01T00:00:00.000-06:00\",\"v\":1200},{\"id\":\"id1\",\"t\":\"2012-01-02T00:00:00.000-06:00\",\"v\":12.34}]", result);
+            }
+        }
     }
 }

@@ -236,6 +236,17 @@ namespace Client
         }
 
         /// <summary>
+        ///  Writes a set of datapoints for different series for different timestamp
+        /// </summary>
+        ///  <param name="data"> A List<MultiPoint> to write </param>
+        public virtual void WriteMultiData(List<MultiPoint> data)
+        {
+            const string url = "/multi/";
+            RestRequest request = BuildRequest(url, Method.POST, data);
+            Execute(request);
+        }
+
+        /// <summary>
         ///  Increments a DataSet by id
         /// </summary>
         ///  <param name="seriesId"> The id of the series into which the data points will be incremented</param>
@@ -276,6 +287,17 @@ namespace Client
         }
 
         /// <summary>
+        ///  Increments a set of datapoints for different series for different timestamp
+        /// </summary>
+        ///  <param name="data"> A List<MultiPoint> to increment </param>
+        public virtual void IncrementMultiData(List<MultiPoint> data)
+        {
+            const string url = "/multi/increment/";
+            RestRequest request = BuildRequest(url, Method.POST, data);
+            Execute(request);
+        }
+
+        /// <summary>
         ///  Deletes a range of data by id
         /// </summary>
         ///  <param name="seriesId"> The id of the series into which the data points will be deleted</param>
@@ -306,6 +328,30 @@ namespace Client
             request.AddParameter(QueryStringParameter.Start, TempoDateTimeConvertor.ConvertDateTimeToString(start));
             request.AddParameter(QueryStringParameter.End, TempoDateTimeConvertor.ConvertDateTimeToString(end));
             Execute(request);
+        }
+
+        /// <summary>
+        ///  Deletes a list of series matching provided Filter
+        /// </summary>
+        ///  <param name="filter">Filter instance to filter the list of series in your database</param>
+        ///  <returns> A DeleteSummary</returns>
+        public DeleteSummary DeleteSeries(Filter filter)
+        {
+            const string url = "/series/";
+            RestRequest request = BuildRequest(url, Method.DELETE);
+            ApplyFilterToRequest(request, filter);
+            return Execute<DeleteSummary>(request);
+        }
+
+        /// <summary>
+        ///  Deletes all series in a database
+        /// </summary>
+        /// <returns> A DeleteSummary</returns>
+        public DeleteSummary DeleteAllSeries()
+        {
+            const string url = "/series/?allow_truncation=true";
+            RestRequest request = BuildRequest(url, Method.DELETE);
+            return Execute<DeleteSummary>(request);
         }
 
         private RestRequest BuildRequest(string url, Method method, object body = null)
