@@ -445,7 +445,7 @@ var data = new List<DataPoint>
 client.IncrementById("38268c3b231f1266a392931e15e99231", data);
 ```
 
-##  IncrementsByKey(string seriesKey, IList<DataPoint> data)
+##  IncrementByKey(string seriesKey, IList<DataPoint> data)
 Increments the value of the specified series at the given timestamp. The value of the datapoint is the amount to increment. This is similar to a write. However, the value is incremented by the datapoint value
 instead of overwritten. Values are incremented atomically, so this is useful for counting events. The series key and an array of DataPoints are required. Note: a series will be created
 if the provided key does not exist.
@@ -472,7 +472,7 @@ var data = new List<DataPoint>
 client.IncrementByKey("my-custom-key", data);
 ```
 
-## IncrementsBulkData(BulkDataSet dataSet)
+## IncrementBulkData(BulkDataSet dataSet)
 Increments values to multiple series for a particular timestamp. This function takes a BulkDataSet which contains a timestamp and list of BulkPoints.
 
 ### Parameters
@@ -569,4 +569,50 @@ The following example deletes data for the series with key "my-key" from 2012-01
 ```csharp
 var client = new Client("api-key", "api-secret");
 client.DeleteByKey("my-key", new DateTime(2012, 1, 1), new DateTime(2012, 2, 1);
+```
+
+## DeleteSeries(Filter filter)
+
+Delete series objects by the given filter object. Series can be deleted by id, key, tag and attribute. You must specify at least one filter query param for deletion.
+If you want to truncate your database (remove all series), you can use the DeleteAllSeries method.
+
+### Parameters
+
+* Filter object (Filter)
+
+### Returns
+
+A DeleteSummary object that represents the delete operation, the value deleted is the number of series deleted.
+
+### Example
+
+The following example deletes two series with the key's "key1" and "key2"
+```csharp
+var client = new Client("api-key", "api-secret");
+var filter = new Filter();
+filter.AddKey("key1");
+filter.AddKey("key2");
+var summary = client.DeleteSeries(filter);
+Console.WriteLine("Number of series deleted: " + summary.deleted); //
+```
+
+## DeleteAllSeries()
+
+Delete all series in your database
+
+### Parameters
+
+* None
+
+### Returns
+
+A DeleteSummary object that represents the delete operation, the value deleted is the number of series deleted. This should be the total count of all your series
+
+### Example
+
+The following example deletes all series
+```csharp
+var client = new Client("api-key", "api-secret");
+var summary = client.DeleteAllSeries()filter;
+Console.WriteLine("Number of series deleted: " + summary.deleted); //Should be all series
 ```
