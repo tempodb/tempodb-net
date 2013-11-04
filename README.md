@@ -593,7 +593,7 @@ var filter = new Filter();
 filter.AddKey("key1");
 filter.AddKey("key2");
 var summary = client.DeleteSeries(filter);
-Console.WriteLine("Number of series deleted: " + summary.deleted); //
+Console.WriteLine("Number of series deleted: " + summary.deleted);
 ```
 
 ## DeleteAllSeries()
@@ -614,5 +614,5 @@ The following example deletes all series
 ```csharp
 var client = new Client("api-key", "api-secret");
 var summary = client.DeleteAllSeries()filter;
-Console.WriteLine("Number of series deleted: " + summary.deleted); //Should be all series
+Console.WriteLine("Number of series deleted: " + summary.deleted);
 ```
