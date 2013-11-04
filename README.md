@@ -613,6 +613,6 @@ A DeleteSummary object that represents the delete operation, the value deleted i
 The following example deletes all series
 ```csharp
 var client = new Client("api-key", "api-secret");
-var summary = client.DeleteAllSeries()filter;
+var summary = client.DeleteAllSeries();
 Console.WriteLine("Number of series deleted: " + summary.deleted);
 ```
