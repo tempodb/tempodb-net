@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using TempoDB.Exceptions;
 using TempoDB.Utility;
 
 
@@ -54,7 +55,7 @@ namespace TempoDB
                 }
                 else
                 {
-                    throw new Exception("API Error");
+                    throw new TempoDBException(string.Format("API Error: {0} - {1}", result.Code, result.Message));
                 }
             }
         }
