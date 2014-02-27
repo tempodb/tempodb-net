@@ -5,10 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempoDB", "TempoDB\TempoDB.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempoDB.Tests", "TempoDB.Tests\TempoDB.Tests.csproj", "{ACA5E0C1-AB48-451F-AC06-97E9178DDA35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempoClient", "Client\TempoClient.csproj", "{22687CEC-553D-4672-93D3-F61AF7FA17F6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Tests", "Client.Tests\Client.Tests.csproj", "{326502F9-C15C-48E7-8AB6-A640F0A809CD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2A150216-3B1B-4A93-95E9-42A464B7F4AB}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
