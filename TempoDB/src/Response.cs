@@ -51,9 +51,9 @@ namespace TempoDB
             {
                 return Series.FromResponse(response) as T;
             }
-            else if(typeof(T) == typeof(None))
+            else if(typeof(T) == typeof(Nothing))
             {
-                return None.FromResponse(response) as T;
+                return Nothing.FromResponse(response) as T;
             }
             else if(typeof(T) == typeof(Segment<Series>))
             {

@@ -4,16 +4,16 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class None : Model
+    public class Nothing : Model
     {
-        protected internal static None FromResponse(IRestResponse response)
+        protected internal static Nothing FromResponse(IRestResponse response)
         {
-            return new None();
+            return new Nothing();
         }
 
         public override bool Equals(object obj)
         {
-            var other = obj as None;
+            var other = obj as Nothing;
             return other != null;
         }
 

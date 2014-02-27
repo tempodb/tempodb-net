@@ -60,7 +60,7 @@
     <Compile Include="src\DataPointSegment.cs" />
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Model.cs" />
-    <Compile Include="src\None.cs" />
+    <Compile Include="src\Nothing.cs" />
     <Compile Include="src\QueryResult.cs" />
     <Compile Include="src\Response.cs" />
     <Compile Include="src\Rollup.cs" />
@@ -83,7 +83,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir).nuget\nuget.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

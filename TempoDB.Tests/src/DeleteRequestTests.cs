@@ -28,7 +28,7 @@ namespace TempoDB.Tests
                 var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
 
                 var result = client.DeleteDataPointsById("id1", start, end);
-                var expected = new Response<None>(new None(), 200);
+                var expected = new Response<Nothing>(new Nothing(), 200);
                 Assert.AreEqual(expected, result);
             }
 
@@ -104,7 +104,7 @@ namespace TempoDB.Tests
                 var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
 
                 var result = client.DeleteDataPointsByKey("key1", start, end);
-                var expected = new Response<None>(new None(), 200);
+                var expected = new Response<Nothing>(new Nothing(), 200);
                 Assert.AreEqual(expected, result);
             }
 

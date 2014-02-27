@@ -88,35 +88,35 @@ namespace TempoDB
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Response<None> WriteDataPointsById(string id, IList<DataPoint> data)
+        public Response<Nothing> WriteDataPointsById(string id, IList<DataPoint> data)
         {
             var url = "/{version}/series/id/{id}/data/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
-        public Response<None> WriteDataPointsByKey(string key, IList<DataPoint> data)
+        public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
-        public Response<None> WriteBulkData(IList<BulkDataSet> data)
+        public Response<Nothing> WriteBulkData(IList<BulkDataSet> data)
         {
             var url = "/{version}/data/";
-            Response<None> response = null;
+            Response<Nothing> response = null;
             foreach(BulkDataSet dataset in data)
             {
                 var request = BuildRequest(url, Method.POST, dataset);
                 request.AddUrlSegment("version", Version);
-                response = Execute<None>(request);
+                response = Execute<Nothing>(request);
                 if(response.Success != true)
                 {
                     /// An error occurred, stop writing and alert the user.
@@ -126,35 +126,35 @@ namespace TempoDB
             return response;
         }
 
-        public Response<None> IncrementDataPointsById(string id, IList<DataPoint> data)
+        public Response<Nothing> IncrementDataPointsById(string id, IList<DataPoint> data)
         {
             var url = "/{version}/series/id/{id}/increment/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("id", id);
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
-        public Response<None> IncrementDataPointsByKey(string key, IList<DataPoint> data)
+        public Response<Nothing> IncrementDataPointsByKey(string key, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/increment/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", key);
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
-        public Response<None> IncrementBulkData(IList<BulkDataSet> data)
+        public Response<Nothing> IncrementBulkData(IList<BulkDataSet> data)
         {
             var url = "/{version}/increment/";
-            Response<None> response = null;
+            Response<Nothing> response = null;
             foreach(BulkDataSet dataset in data)
             {
                 var request = BuildRequest(url, Method.POST, dataset);
                 request.AddUrlSegment("version", Version);
-                response = Execute<None>(request);
+                response = Execute<Nothing>(request);
                 if(response.Success != true)
                 {
                     /// An error occurred, stop writing and alert the user.
@@ -212,7 +212,7 @@ namespace TempoDB
             return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
-        public Response<None> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
+        public Response<Nothing> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/id/{id}/data/";
             var request = BuildRequest(url, Method.DELETE);
@@ -220,11 +220,11 @@ namespace TempoDB
             request.AddUrlSegment("id", id);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
-        public Response<None> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
+        public Response<Nothing> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.DELETE);
@@ -232,7 +232,7 @@ namespace TempoDB
             request.AddUrlSegment("key", key);
             request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            var response = Execute<None>(request);
+            var response = Execute<Nothing>(request);
             return response;
         }
 
