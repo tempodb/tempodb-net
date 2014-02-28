@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\AggregationTest.cs" />
     <Compile Include="src\DataPointTests.cs" />
     <Compile Include="src\DeleteRequestTests.cs" />
     <Compile Include="src\ReadRequestTests.cs" />

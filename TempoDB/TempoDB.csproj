@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Aggregation.cs" />
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\DataPointSegment.cs" />
