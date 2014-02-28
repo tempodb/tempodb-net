@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    class DataPointTests
+    class DataPointTest
     {
         DateTimeZone zone = DateTimeZone.Utc;
 

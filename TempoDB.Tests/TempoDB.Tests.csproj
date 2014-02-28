@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\AggregationTest.cs" />
-    <Compile Include="src\DataPointTests.cs" />
+    <Compile Include="src\DataPointTest.cs" />
     <Compile Include="src\DeleteRequestTests.cs" />
     <Compile Include="src\ReadRequestTests.cs" />
     <Compile Include="src\ResponseTests.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\WriteRequestTests.cs" />
-    <Compile Include="src\Json\DataPointTests.cs" />
+    <Compile Include="src\Json\DataPointTest.cs" />
     <Compile Include="src\Json\DataPointSegmentTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />
