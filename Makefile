@@ -17,6 +17,8 @@ update: update-build update-test
 test: compile-test
 	mono packages/NUnit.Runners.2.6.1/tools/nunit-console.exe TempoDB.Tests/bin/Debug/TempoDB.Tests.dll
 
+check: test
+
 clean-build:
 	rm -rf TempoDB/bin
 	rm -rf TempoDB/obj
