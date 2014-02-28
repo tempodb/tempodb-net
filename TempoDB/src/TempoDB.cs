@@ -42,16 +42,6 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Series> GetSeriesById(string id)
-        {
-            var url = "/{version}/series/id/{id}/";
-            var request = BuildRequest(url, Method.GET);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", id);
-            var response = Execute<Series>(request);
-            return response;
-        }
-
         public Response<Series> GetSeriesByKey(string key)
         {
             var url = "/{version}/series/key/{key}/";
@@ -64,10 +54,10 @@ namespace TempoDB
 
         public Response<Series> UpdateSeries(Series series)
         {
-            var url = "/{version}/series/id/{id}/";
+            var url = "/{version}/series/key/{key}/";
             var request = BuildRequest(url, Method.PUT, series);
             request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", series.Id);
+            request.AddUrlSegment("key", series.Key);
             var response = Execute<Series>(request);
             return response;
         }
@@ -88,16 +78,6 @@ namespace TempoDB
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Response<Nothing> WriteDataPointsById(string id, IList<DataPoint> data)
-        {
-            var url = "/{version}/series/id/{id}/data/";
-            var request = BuildRequest(url, Method.POST, data);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", id);
-            var response = Execute<Nothing>(request);
-            return response;
-        }
-
         public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/data/";
@@ -106,30 +86,6 @@ namespace TempoDB
             request.AddUrlSegment("key", key);
             var response = Execute<Nothing>(request);
             return response;
-        }
-
-        public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end,
-                DateTimeZone zone=null, Rollup rollup=null)
-        {
-            var url = "/{version}/series/id/{id}/data/segment/";
-            var request = BuildRequest(url, Method.GET);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", id);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            ApplyTimeZoneToRequest(request, zone);
-            ApplyRollupToRequest(request, rollup);
-
-            var response = Execute<DataPointSegment>(request);
-
-            QueryResult query = null;
-            if(response.Success)
-            {
-                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
-                var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult(this, cursor, response.Value.Rollup);
-            }
-            return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
         public Response<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end,
@@ -154,18 +110,6 @@ namespace TempoDB
                 query = new QueryResult(this, cursor, response.Value.Rollup);
             }
             return new Response<QueryResult>(query, response.Code, response.Message);
-        }
-
-        public Response<Nothing> DeleteDataPointsById(string id, ZonedDateTime start, ZonedDateTime end)
-        {
-            var url = "/{version}/series/id/{id}/data/";
-            var request = BuildRequest(url, Method.DELETE);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", id);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
-            var response = Execute<Nothing>(request);
-            return response;
         }
 
         public Response<Nothing> DeleteDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end)
@@ -209,10 +153,6 @@ namespace TempoDB
         {
             if(filter != null)
             {
-                foreach(string id in filter.Ids)
-                {
-                    request.AddParameter("id", id);
-                }
                 foreach(string key in filter.Keys)
                 {
                     request.AddParameter("key", key);
