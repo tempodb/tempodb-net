@@ -108,24 +108,6 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Nothing> WriteBulkData(IList<BulkDataSet> data)
-        {
-            var url = "/{version}/data/";
-            Response<Nothing> response = null;
-            foreach(BulkDataSet dataset in data)
-            {
-                var request = BuildRequest(url, Method.POST, dataset);
-                request.AddUrlSegment("version", Version);
-                response = Execute<Nothing>(request);
-                if(response.Success != true)
-                {
-                    /// An error occurred, stop writing and alert the user.
-                    return response;
-                }
-            }
-            return response;
-        }
-
         public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end,
                 DateTimeZone zone=null, Rollup rollup=null)
         {

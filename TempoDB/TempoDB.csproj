@@ -51,10 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\BulkDataSet.cs" />
-    <Compile Include="src\BulkIdPoint.cs" />
-    <Compile Include="src\BulkKeyPoint.cs" />
-    <Compile Include="src\BulkPoint.cs" />
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\DataPointSegment.cs" />
