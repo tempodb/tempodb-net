@@ -31,7 +31,7 @@ namespace TempoDB.Tests
                 var converter = new DataPointSegmentConverter();
 
                 var segment = JsonConvert.DeserializeObject<DataPointSegment>(json, converter);
-                var expectedRollup = new Rollup("sum", Period.FromHours(1));
+                var expectedRollup = new Rollup(Fold.Sum, Period.FromHours(1));
                 var expectedDataPoints = new List<DataPoint> {
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 1)), 12.34)
                 };
@@ -59,7 +59,7 @@ namespace TempoDB.Tests
 
                 var segment = JsonConvert.DeserializeObject<DataPointSegment>(json, converter);
 
-                var expectedRollup = new Rollup("sum", Period.FromHours(1));
+                var expectedRollup = new Rollup(Fold.Sum, Period.FromHours(1));
                 var expectedDataPoints = new List<DataPoint> {
                     new DataPoint(zone.AtStrictly(new LocalDateTime(2011, 12, 31, 18, 0, 1)), 12.34)
                 };

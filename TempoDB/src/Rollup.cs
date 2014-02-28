@@ -7,11 +7,11 @@ namespace TempoDB
 {
     public class Rollup
     {
-        private string fold;
+        private Fold fold;
         private NodaTime.Period period;
 
         [JsonProperty(PropertyName="function", Required=Required.Always)]
-        public string Fold
+        public Fold Fold
         {
             get { return fold; }
             private set { this.fold = value; }
@@ -23,7 +23,7 @@ namespace TempoDB
             get { return period; }
             private set { this.period = value; }
         }
-        public Rollup(string fold, NodaTime.Period period)
+        public Rollup(Fold fold, NodaTime.Period period)
         {
             this.fold = fold;
             this.period = period;

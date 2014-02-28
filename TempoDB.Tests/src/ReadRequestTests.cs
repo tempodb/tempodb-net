@@ -156,7 +156,7 @@ namespace TempoDB.Tests
                 var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
                 var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
 
-                var rollup = new Rollup("mean", Period.FromMinutes(1));
+                var rollup = new Rollup(Fold.Mean, Period.FromMinutes(1));
                 client.ReadDataPointsByKey("key1", start, end, rollup:rollup);
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));

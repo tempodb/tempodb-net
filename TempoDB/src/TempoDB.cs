@@ -183,10 +183,7 @@ namespace TempoDB
                     request.AddParameter("interval", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
                 }
 
-                if(rollup.Fold != null)
-                {
-                    request.AddParameter("function", rollup.Fold);
-                }
+                request.AddParameter("function", rollup.Fold.ToString().ToLower());
             }
         }
 

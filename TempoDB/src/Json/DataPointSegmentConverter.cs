@@ -10,6 +10,7 @@ namespace TempoDB.Json
 {
     public class DataPointSegmentConverter : JsonConverter
     {
+        private static FoldConverter foldConverter = new FoldConverter();
         private static PeriodConverter periodConverter = new PeriodConverter();
 
         public override bool CanConvert(Type objectType)
@@ -51,6 +52,7 @@ namespace TempoDB.Json
                 Rollup rollup = null;
                 if(FieldExists("rollup", obj))
                 {
+                    serializer.Converters.Add(foldConverter);
                     serializer.Converters.Add(periodConverter);
                     rollup = obj["rollup"].ToObject<Rollup>(serializer);
                 }
