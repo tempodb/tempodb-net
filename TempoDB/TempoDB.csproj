@@ -61,7 +61,6 @@
     <Compile Include="src\Response.cs" />
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
-    <Compile Include="src\Summary.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\Exceptions\TempoDBException.cs" />
     <Compile Include="src\Json\DataPointSegmentConverter.cs" />
