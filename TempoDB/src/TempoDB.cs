@@ -126,44 +126,6 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Nothing> IncrementDataPointsById(string id, IList<DataPoint> data)
-        {
-            var url = "/{version}/series/id/{id}/increment/";
-            var request = BuildRequest(url, Method.POST, data);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("id", id);
-            var response = Execute<Nothing>(request);
-            return response;
-        }
-
-        public Response<Nothing> IncrementDataPointsByKey(string key, IList<DataPoint> data)
-        {
-            var url = "/{version}/series/key/{key}/increment/";
-            var request = BuildRequest(url, Method.POST, data);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("key", key);
-            var response = Execute<Nothing>(request);
-            return response;
-        }
-
-        public Response<Nothing> IncrementBulkData(IList<BulkDataSet> data)
-        {
-            var url = "/{version}/increment/";
-            Response<Nothing> response = null;
-            foreach(BulkDataSet dataset in data)
-            {
-                var request = BuildRequest(url, Method.POST, dataset);
-                request.AddUrlSegment("version", Version);
-                response = Execute<Nothing>(request);
-                if(response.Success != true)
-                {
-                    /// An error occurred, stop writing and alert the user.
-                    return response;
-                }
-            }
-            return response;
-        }
-
         public Response<QueryResult> ReadDataPointsById(string id, ZonedDateTime start, ZonedDateTime end,
                 DateTimeZone zone=null, Rollup rollup=null)
         {
