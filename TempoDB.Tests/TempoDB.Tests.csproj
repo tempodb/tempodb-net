@@ -65,14 +65,14 @@
     <Compile Include="src\ResponseTests.cs" />
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesRequestTests.cs" />
-    <Compile Include="src\SeriesTests.cs" />
+    <Compile Include="src\SeriesTest.cs" />
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\WriteRequestTests.cs" />
     <Compile Include="src\Json\DataPointTests.cs" />
     <Compile Include="src\Json\DataPointSegmentTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />
-    <Compile Include="src\Json\SeriesTests.cs" />
+    <Compile Include="src\Json\SeriesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

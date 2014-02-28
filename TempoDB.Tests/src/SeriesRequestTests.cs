@@ -10,13 +10,12 @@ namespace TempoDB.Tests
     [TestFixture]
     class CreateSeries
     {
-        private Series series = new Series("id1", "key1");
+        private Series series = new Series("key1");
 
         [Test]
         public void SmokeTest()
         {
             var json = @"{
-                ""id"":""id1"",
                 ""key"":""key1"",
                 ""name"":"""",
                 ""tags"":[],
@@ -84,9 +83,8 @@ namespace TempoDB.Tests
     [TestFixture]
     class UpdateSeries
     {
-        private Series series = new Series("id1", "key1");
+        private Series series = new Series("key1");
         private string json = @"{
-            ""id"":""id1"",
             ""key"":""key1"",
             ""name"":"""",
             ""tags"":[],
@@ -158,7 +156,7 @@ namespace TempoDB.Tests
     [TestFixture]
     class FilterSeries
     {
-        private List<Series> series = new List<Series> { new Series("id1", "key1"), new Series("id2", "key2") };
+        private List<Series> series = new List<Series> { new Series("key1"), new Series("key2") };
         private string json = @"[{
             ""id"":""id1"",
             ""key"":""key1"",
