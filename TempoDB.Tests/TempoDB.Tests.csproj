@@ -61,6 +61,7 @@
     <Compile Include="src\AggregationTest.cs" />
     <Compile Include="src\DataPointTest.cs" />
     <Compile Include="src\DeleteRequestTests.cs" />
+    <Compile Include="src\FilterTest.cs" />
     <Compile Include="src\ReadRequestTests.cs" />
     <Compile Include="src\ResponseTests.cs" />
     <Compile Include="src\RollupTests.cs" />
