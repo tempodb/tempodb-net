@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Aggregation.cs" />
+    <Compile Include="src\Credentials.cs" />
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\Database.cs" />
     <Compile Include="src\DataPoint.cs" />
