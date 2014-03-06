@@ -57,6 +57,7 @@
     <Compile Include="src\Database.cs" />
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\DataPointSegment.cs" />
+    <Compile Include="src\DeleteSummary.cs" />
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Fold.cs" />
     <Compile Include="src\Model.cs" />
