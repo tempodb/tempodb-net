@@ -73,12 +73,14 @@
     <Compile Include="src\SeriesTest.cs" />
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
+    <Compile Include="src\WriteRequestTest.cs" />
     <Compile Include="src\WriteRequestTests.cs" />
     <Compile Include="src\Json\DataPointTest.cs" />
     <Compile Include="src\Json\DeleteSummaryTest.cs" />
     <Compile Include="src\Json\DataPointSegmentTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />
+    <Compile Include="src\Json\WriteRequestTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

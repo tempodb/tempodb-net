@@ -68,12 +68,14 @@
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
     <Compile Include="src\TempoDB.cs" />
+    <Compile Include="src\WriteRequest.cs" />
     <Compile Include="src\Exceptions\TempoDBException.cs" />
     <Compile Include="src\Json\DataPointSegmentConverter.cs" />
     <Compile Include="src\Json\DateTimeZoneConverter.cs" />
     <Compile Include="src\Json\FoldConverter.cs" />
     <Compile Include="src\Json\JsonSerializer.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
+    <Compile Include="src\Json\WriteRequestConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
     <Compile Include="src\Utility\HashCodeHelper.cs" />
     <Compile Include="src\Utility\HttpHelper.cs" />

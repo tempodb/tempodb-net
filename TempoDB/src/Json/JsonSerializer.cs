@@ -9,6 +9,7 @@ namespace TempoDB.Json
         private DateTimeZoneConverter zoneConverter = new DateTimeZoneConverter();
         private FoldConverter foldConverter = new FoldConverter();
         private PeriodConverter periodConverter = new PeriodConverter();
+        private WriteRequestConverter writeRequestConverter = new WriteRequestConverter();
         private ZonedDateTimeConverter datetimeConverter = new ZonedDateTimeConverter();
 
         public JsonSerializer()
@@ -18,7 +19,7 @@ namespace TempoDB.Json
 
         public string Serialize(object obj)
         {
-            return JsonConvert.SerializeObject(obj, datetimeConverter, foldConverter, periodConverter, zoneConverter);
+            return JsonConvert.SerializeObject(obj, datetimeConverter, foldConverter, periodConverter, writeRequestConverter, zoneConverter);
         }
 
         public string RootElement { get; set; }
