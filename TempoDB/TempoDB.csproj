@@ -67,6 +67,7 @@
     <Compile Include="src\Response.cs" />
     <Compile Include="src\Rollup.cs" />
     <Compile Include="src\Series.cs" />
+    <Compile Include="src\Status.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\WriteRequest.cs" />
     <Compile Include="src\Exceptions\TempoDBException.cs" />

@@ -71,6 +71,7 @@
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesRequestTests.cs" />
     <Compile Include="src\SeriesTest.cs" />
+    <Compile Include="src\StatusTest.cs" />
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\WriteRequestTest.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="src\Json\DataPointSegmentTests.cs" />
     <Compile Include="src\Json\RollupTests.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />
+    <Compile Include="src\Json\StatusTest.cs" />
     <Compile Include="src\Json\WriteRequestTest.cs" />
   </ItemGroup>
   <ItemGroup>
