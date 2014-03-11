@@ -66,6 +66,7 @@
     <Compile Include="src\DeleteSummaryTest.cs" />
     <Compile Include="src\FilterTest.cs" />
     <Compile Include="src\MultiDataPointTest.cs" />
+    <Compile Include="src\MultiStatusTest.cs" />
     <Compile Include="src\ReadRequestTests.cs" />
     <Compile Include="src\ResponseTests.cs" />
     <Compile Include="src\RollupTests.cs" />
