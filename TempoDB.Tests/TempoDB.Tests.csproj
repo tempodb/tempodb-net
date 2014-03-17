@@ -64,7 +64,7 @@
     <Compile Include="src\DatabaseTest.cs" />
     <Compile Include="src\DataPointTest.cs" />
     <Compile Include="src\DeleteAllSeriesTest.cs" />
-    <Compile Include="src\DeleteRequestTests.cs" />
+    <Compile Include="src\DeleteDataPointsTest.cs" />
     <Compile Include="src\DeleteSeriesTest.cs" />
     <Compile Include="src\DeleteSeriesByFilterTest.cs" />
     <Compile Include="src\DeleteSummaryTest.cs" />
