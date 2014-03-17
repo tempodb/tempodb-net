@@ -36,10 +36,15 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             Rollup other = obj as Rollup;
-            return other != null &&
-                Fold.Equals(other.Fold) &&
-                Period.Equals(other.Period);
+            return new EqualsBuilder()
+                .Append(Fold, other.Fold)
+                .Append(Period, other.Period)
+                .IsEquals();
         }
 
         public override int GetHashCode()

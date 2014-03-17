@@ -26,9 +26,14 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             Aggregation other = obj as Aggregation;
-            return other != null &&
-                Fold.Equals(other.Fold);
+            return new EqualsBuilder()
+                .Append(Fold, other.Fold)
+                .IsEquals();
         }
 
         public override int GetHashCode()

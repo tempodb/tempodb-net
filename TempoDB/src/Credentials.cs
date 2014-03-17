@@ -34,10 +34,15 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             Credentials other = obj as Credentials;
-            return other != null &&
-                Key.Equals(other.Key) &&
-                Secret.Equals(other.Secret);
+            return new EqualsBuilder()
+                .Append(Key, other.Key)
+                .Append(Secret, other.Secret)
+                .IsEquals();
         }
 
         public override int GetHashCode()

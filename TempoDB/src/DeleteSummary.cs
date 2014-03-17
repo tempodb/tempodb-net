@@ -28,9 +28,14 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             DeleteSummary other = obj as DeleteSummary;
-            return other != null &&
-                Deleted.Equals(other.Deleted);
+            return new EqualsBuilder()
+                .Append(Deleted, other.Deleted)
+                .IsEquals();
         }
 
         public override int GetHashCode()

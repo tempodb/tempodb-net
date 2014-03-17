@@ -26,9 +26,14 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             Database other = obj as Database;
-            return other != null &&
-                Id.Equals(other.Id);
+            return new EqualsBuilder()
+                .Append(Id, other.Id)
+                .IsEquals();
         }
 
         public override int GetHashCode()

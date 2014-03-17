@@ -38,10 +38,15 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             DataPoint other = obj as DataPoint;
-            return other != null &&
-                Timestamp.Equals(other.Timestamp) &&
-                Value.Equals(other.Value);
+            return new EqualsBuilder()
+                .Append(Timestamp, other.Timestamp)
+                .Append(Value, other.Value)
+                .IsEquals();
         }
 
         public override int GetHashCode()
