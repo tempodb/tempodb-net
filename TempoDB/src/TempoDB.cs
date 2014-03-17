@@ -80,6 +80,22 @@ namespace TempoDB
             return response;
         }
 
+        public Response<Cursor<Series>> GetSeries(Filter filter)
+        {
+            var url = "/{version}/series/";
+            var request = BuildRequest(url, Method.GET);
+            ApplyFilterToRequest(request, filter);
+            var response = Execute<Segment<Series>>(request);
+
+            Cursor<Series> cursor = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<Series>(this, response.Value);
+                cursor = new Cursor<Series>(segments);
+            }
+            return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
+        }
+
         public Response<Series> UpdateSeries(Series series)
         {
             var url = "/{version}/series/key/{key}/";
@@ -88,22 +104,6 @@ namespace TempoDB
             request.AddUrlSegment("key", series.Key);
             var response = Execute<Series>(request);
             return response;
-        }
-
-        public Response<Cursor<Series>> FilterSeries(Filter filter)
-        {
-            var url = "/{version}/series/";
-            var request = BuildRequest(url, Method.GET);
-            ApplyFilterToRequest(request, filter);
-            var response = Execute<Segment<Series>>(request);
-
-            Cursor<Series> cursor = null;
-            if(response.Success)
-            {
-                var segments = new SegmentEnumerator<Series>(this, response.Value);
-                cursor = new Cursor<Series>(segments);
-            }
-            return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
         public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
