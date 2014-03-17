@@ -17,6 +17,21 @@ namespace TempoDB
 
         public string Message { get; private set; }
 
+        public MultiStatus MultiStatus { get; private set; }
+
+        public State State
+        {
+            get
+            {
+                State state = State.Failure;
+                if((Code / 100) == 2)
+                {
+                    state = Code == 207 ? State.PartialSuccess : State.Success;
+                }
+                return state;
+            }
+        }
+
         public Response(IRestResponse response)
         {
             Code = (int)response.StatusCode;
@@ -32,12 +47,13 @@ namespace TempoDB
             }
         }
 
-        public Response(T value, int code, string message="")
+        public Response(T value, int code, string message="", MultiStatus multistatus=null)
         {
             Value = value;
             Code = code;
             Success = IsSuccessful(code);
             Message = message;
+            MultiStatus = multistatus;
         }
 
         public static bool IsSuccessful(int code)
