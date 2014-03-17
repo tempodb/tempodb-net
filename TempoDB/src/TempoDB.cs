@@ -52,6 +52,15 @@ namespace TempoDB
             return response;
         }
 
+        public Response<DeleteSummary> DeleteSeries(Filter filter)
+        {
+            var url = "/{version}/series/";
+            var request = BuildRequest(url, Method.DELETE);
+            ApplyFilterToRequest(request, filter);
+            var response = Execute<DeleteSummary>(request);
+            return response;
+        }
+
         public Response<Series> GetSeriesByKey(string key)
         {
             var url = "/{version}/series/key/{key}/";

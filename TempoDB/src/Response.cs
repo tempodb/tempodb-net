@@ -80,6 +80,10 @@ namespace TempoDB
             {
                 return Series.FromResponse(response) as T;
             }
+            else if(typeof(T) == typeof(DeleteSummary))
+            {
+                return DeleteSummary.FromResponse(response) as T;
+            }
             else if(typeof(T) == typeof(Nothing))
             {
                 return Nothing.FromResponse(response) as T;

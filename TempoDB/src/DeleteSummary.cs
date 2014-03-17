@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using TempoDB.Utility;
 
@@ -19,6 +20,12 @@ namespace TempoDB
         public DeleteSummary(int deleted)
         {
             Deleted = deleted;
+        }
+
+        protected internal static DeleteSummary FromResponse(IRestResponse response)
+        {
+            var summary = JsonConvert.DeserializeObject<DeleteSummary>(response.Content);
+            return summary;
         }
 
         public override string ToString()
