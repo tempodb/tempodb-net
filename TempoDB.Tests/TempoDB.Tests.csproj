@@ -69,6 +69,7 @@
     <Compile Include="src\DeleteSeriesByFilterTest.cs" />
     <Compile Include="src\DeleteSummaryTest.cs" />
     <Compile Include="src\FilterTest.cs" />
+    <Compile Include="src\GetSeriesTest.cs" />
     <Compile Include="src\MultiDataPointTest.cs" />
     <Compile Include="src\MultiStatusTest.cs" />
     <Compile Include="src\ReadRequestTests.cs" />

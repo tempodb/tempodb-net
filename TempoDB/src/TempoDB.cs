@@ -70,7 +70,7 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Series> GetSeriesByKey(string key)
+        public Response<Series> GetSeries(string key)
         {
             var url = "/{version}/series/key/{key}/";
             var request = BuildRequest(url, Method.GET);
