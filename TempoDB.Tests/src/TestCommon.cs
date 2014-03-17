@@ -15,6 +15,13 @@ namespace TempoDB.Tests
             return new TempoDB("api-key", "api-secret", client: restClient);
         }
 
+        public static TempoDB GetClient(RestResponse response)
+        {
+            var mockClient = GetMockRestClient(response);
+            TempoDB client = GetClient(mockClient.Object);
+            return client;
+        }
+
         public static Mock<RestClient> GetMockRestClient(RestResponse response)
         {
             var client = new Mock<RestClient>();

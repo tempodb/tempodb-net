@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\AggregationTest.cs" />
+    <Compile Include="src\CreateSeriesTest.cs" />
     <Compile Include="src\CredentialsTest.cs" />
     <Compile Include="src\DatabaseTest.cs" />
     <Compile Include="src\DataPointTest.cs" />
