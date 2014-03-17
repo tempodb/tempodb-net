@@ -9,9 +9,10 @@ using System.Net;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    class UpdateSeries
+    class UpdateSeriesTest
     {
         private Series series = new Series("key1");
+        private Series series1 = new Series("key1");
         private string json = @"{
             ""key"":""key1"",
             ""name"":"""",
@@ -27,7 +28,7 @@ namespace TempoDB.Tests
             var client = TestCommon.GetClient(mockclient.Object);
 
             var result = client.UpdateSeries(series);
-            var expected = new Response<Series>(series, 200);
+            var expected = new Response<Series>(series1, 200);
 
             Assert.AreEqual(expected, result);
         }

@@ -76,11 +76,11 @@
     <Compile Include="src\ReadRequestTests.cs" />
     <Compile Include="src\ResponseTest.cs" />
     <Compile Include="src\RollupTests.cs" />
-    <Compile Include="src\SeriesRequestTests.cs" />
     <Compile Include="src\SeriesTest.cs" />
     <Compile Include="src\StatusTest.cs" />
     <Compile Include="src\TempoDBTests.cs" />
     <Compile Include="src\TestCommon.cs" />
+    <Compile Include="src\UpdateSeriesTest.cs" />
     <Compile Include="src\WriteRequestTest.cs" />
     <Compile Include="src\WriteRequestTests.cs" />
     <Compile Include="src\Json\DataPointTest.cs" />
