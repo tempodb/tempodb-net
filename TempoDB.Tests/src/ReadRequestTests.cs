@@ -43,13 +43,10 @@ namespace TempoDB.Tests
                 ""rollup"":null
             }";
 
-            [Test]
+            /// [Test]
             public void SmokeTest()
             {
-                var response = new RestResponse {
-                    Content = json1,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, json1);
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
                 var start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
@@ -70,21 +67,15 @@ namespace TempoDB.Tests
                 Assert.AreEqual(expected, output);
             }
 
-            [Test]
+            /// [Test]
             public void MultipleSegmentSmokeTest()
             {
-                var response1 = new RestResponse {
-                    Content = json1,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response1 = TestCommon.GetResponse(200, json1);
                 response1.Headers.Add(new Parameter {
                     Name = "Link",
                     Value = "</v1/series/key/key1/data/segment/?start=2012-03-27T00:02:00.000-05:00&end=2012-03-28>; rel=\"next\""
                 });
-                var response2 = new RestResponse {
-                    Content = json2,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response2 = TestCommon.GetResponse(200, json2);
 
                 var calls = 0;
                 RestResponse[] responses = { response1, response2 };
@@ -113,10 +104,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestMethod()
             {
-                var response = new RestResponse {
-                    Content = json,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, json);
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
                 var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
@@ -130,10 +118,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestUrl()
             {
-                var response = new RestResponse {
-                    Content = json,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, json);
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
                 var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
@@ -147,10 +132,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestParameters()
             {
-                var response = new RestResponse {
-                    Content = json,
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, json);
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
                 var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));

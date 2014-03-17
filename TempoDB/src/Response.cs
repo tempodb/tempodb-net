@@ -21,35 +21,38 @@ namespace TempoDB
 
         public State State
         {
-            get
-            {
-                State state = State.Failure;
-                if((Code / 100) == 2)
-                {
-                    state = Code == 207 ? State.PartialSuccess : State.Success;
-                }
-                return state;
-            }
+            get { return getState(Code); }
         }
 
         public Response(IRestResponse response)
         {
-            Code = (int)response.StatusCode;
-            Success = IsSuccessful(Code);
-            if(Success == true)
+            T value = null;
+            int code = (int)response.StatusCode;
+            string message = response.StatusDescription;
+            MultiStatus multistatus = null;
+
+            switch(getState(code))
             {
-                Value = newValueFromResponse(response);
-                Message = "";
+                case State.Success:
+                    value = newValueFromResponse(response);
+                    break;
+                case State.PartialSuccess:
+                    multistatus = JsonConvert.DeserializeObject<MultiStatus>(response.Content);
+                    break;
+                case State.Failure:
+                    message = messageFromResponse(response);
+                    break;
             }
-            else
-            {
-                Message = response.Content;
-            }
+
+            Value = value;
+            Code = code;
+            Message = message;
+            MultiStatus = multistatus;
         }
 
-        public Response(T value, int code, string message="", MultiStatus multistatus=null)
+        public Response(T v, int code, string message="", MultiStatus multistatus=null)
         {
-            Value = value;
+            Value = v;
             Code = code;
             Success = IsSuccessful(code);
             Message = message;
@@ -59,6 +62,16 @@ namespace TempoDB
         public static bool IsSuccessful(int code)
         {
             return (code / 100) == 2;
+        }
+
+        private static State getState(int code)
+        {
+            State state = State.Failure;
+            if((code / 100) == 2)
+            {
+                state = code == 207 ? State.PartialSuccess : State.Success;
+            }
+            return state;
         }
 
         private T newValueFromResponse(IRestResponse response)
@@ -86,14 +99,29 @@ namespace TempoDB
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }
 
+        private string messageFromResponse(IRestResponse response)
+        {
+            string message = response.Content;
+            if(message.Equals(null) || message.Equals(""))
+            {
+                message = response.StatusDescription;
+            }
+            return message;
+        }
+
         public override bool Equals(object obj)
         {
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+
             var other = obj as Response<T>;
-            return other != null &&
-                Value.Equals(other.Value) &&
-                Code.Equals(other.Code) &&
-                Success.Equals(other.Success) &&
-                Message.Equals(other.Message);
+            return new EqualsBuilder()
+                .Append(Value, other.Value)
+                .Append(Code, other.Code)
+                .Append(Message, other.Message)
+                .Append(MultiStatus, other.MultiStatus)
+                .IsEquals();
         }
 
         public override int GetHashCode()
@@ -101,8 +129,9 @@ namespace TempoDB
             int hash = HashCodeHelper.Initialize();
             hash = HashCodeHelper.Hash(hash, Value);
             hash = HashCodeHelper.Hash(hash, Code);
-            hash = HashCodeHelper.Hash(hash, Success);
             hash = HashCodeHelper.Hash(hash, Message);
+            hash = HashCodeHelper.Hash(hash, State);
+            hash = HashCodeHelper.Hash(hash, MultiStatus);
             return hash;
         }
     }

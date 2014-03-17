@@ -18,10 +18,7 @@ namespace TempoDB.Tests
             [Test]
             public void SmokeTest()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
                 var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));

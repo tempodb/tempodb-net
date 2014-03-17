@@ -13,8 +13,10 @@ namespace TempoDB
 
         public override bool Equals(object obj)
         {
-            var other = obj as Nothing;
-            return other != null;
+            if(obj == null) { return false; }
+            if(obj == this) { return true; }
+            if(obj.GetType() != GetType()) { return false; }
+            return true;
         }
 
         public override int GetHashCode()

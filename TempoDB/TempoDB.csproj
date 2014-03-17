@@ -80,6 +80,7 @@
     <Compile Include="src\Json\PeriodConverter.cs" />
     <Compile Include="src\Json\WriteRequestConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
+    <Compile Include="src\Utility\EqualsBuilder.cs" />
     <Compile Include="src\Utility\HashCodeHelper.cs" />
     <Compile Include="src\Utility\HttpHelper.cs" />
     <Compile Include="src\Properties\AssemblyInfo.cs" />

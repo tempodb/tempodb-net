@@ -68,7 +68,7 @@
     <Compile Include="src\MultiDataPointTest.cs" />
     <Compile Include="src\MultiStatusTest.cs" />
     <Compile Include="src\ReadRequestTests.cs" />
-    <Compile Include="src\ResponseTests.cs" />
+    <Compile Include="src\ResponseTest.cs" />
     <Compile Include="src\RollupTests.cs" />
     <Compile Include="src\SeriesRequestTests.cs" />
     <Compile Include="src\SeriesTest.cs" />

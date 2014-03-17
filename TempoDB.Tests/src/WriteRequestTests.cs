@@ -24,10 +24,7 @@ namespace TempoDB.Tests
             [Test]
             public void SmokeTest()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
@@ -39,10 +36,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestMethod()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
@@ -54,10 +48,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestUrl()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
@@ -69,10 +60,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestParameters()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
@@ -84,10 +72,7 @@ namespace TempoDB.Tests
             [Test]
             public void RequestBody()
             {
-                var response = new RestResponse {
-                    Content = "",
-                    StatusCode = HttpStatusCode.OK
-                };
+                var response = TestCommon.GetResponse(200, "");
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
