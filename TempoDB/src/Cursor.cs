@@ -48,7 +48,7 @@ namespace TempoDB
                 // Add rest call here
                 var request = client.BuildRequest(segment.NextUrl, Method.GET);
                 var result = client.Execute<Segment<T>>(request);
-                if(result.Success)
+                if(result.State == State.Success)
                 {
                     segment = result.Value;
                     yield return segment;

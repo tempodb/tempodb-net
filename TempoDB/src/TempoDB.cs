@@ -116,22 +116,22 @@ namespace TempoDB
             return response;
         }
 
-        public Response<QueryResult> ReadDataPointsByKey(string key, ZonedDateTime start, ZonedDateTime end,
-                DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
         {
+            if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("key", key);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            request.AddUrlSegment("key", series.Key);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
 
             var response = Execute<DataPointSegment>(request);
 
             QueryResult query = null;
-            if(response.Success)
+            if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
