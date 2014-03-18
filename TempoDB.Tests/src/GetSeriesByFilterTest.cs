@@ -4,6 +4,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using TempoDB.Exceptions;
 
 
 namespace TempoDB.Tests
@@ -84,6 +85,16 @@ namespace TempoDB.Tests
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tag", "tag1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "attr[key1]", "value1"))));
+        }
+
+        [Test]
+        [ExpectedException(typeof(TempoDBException))]
+        public void Error()
+        {
+            var response = TestCommon.GetResponse(403, "You are forbidden");
+            var client = TestCommon.GetClient(response);
+
+            var result = client.GetSeries(new Filter());
         }
     }
 }

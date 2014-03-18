@@ -2,6 +2,7 @@ using NodaTime;
 using NodaTime.Text;
 using RestSharp;
 using System.Collections.Generic;
+using TempoDB.Exceptions;
 using TempoDB.Json;
 using TempoDB.Utility;
 
@@ -104,6 +105,10 @@ namespace TempoDB
                 var segments = new SegmentEnumerator<Series>(this, response.Value);
                 cursor = new Cursor<Series>(segments);
             }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
+            }
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
@@ -126,6 +131,10 @@ namespace TempoDB
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult(this, cursor, response.Value.Rollup);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
             return new Response<QueryResult>(query, response.Code, response.Message);
         }
@@ -150,6 +159,10 @@ namespace TempoDB
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult(this, cursor, response.Value.Rollup);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
             return new Response<QueryResult>(query, response.Code, response.Message);
         }

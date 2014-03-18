@@ -5,6 +5,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using TempoDB.Exceptions;
 
 
 namespace TempoDB.Tests
@@ -192,6 +193,22 @@ namespace TempoDB.Tests
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tz", "UTC"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.period", "PT1M"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.fold", "mean"))));
+        }
+
+        [Test]
+        [ExpectedException(typeof(TempoDBException))]
+        public void Error()
+        {
+            var response = TestCommon.GetResponse(403, "You are forbidden");
+            var client = TestCommon.GetClient(response);
+
+            var result = client.ReadDataPoints(series, interval);
+
+            var output = new List<DataPoint>();
+            foreach(DataPoint dp in result.Value.DataPoints)
+            {
+                output.Add(dp);
+            }
         }
     }
 }
