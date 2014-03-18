@@ -42,6 +42,18 @@ namespace TempoDB
             return response;
         }
 
+        public Response<Nothing> DeleteDataPoints(Series series, ZonedDateTime start, ZonedDateTime end)
+        {
+            var url = "/{version}/series/key/{key}/data/";
+            var request = BuildRequest(url, Method.DELETE);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", series.Key);
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            var response = Execute<Nothing>(request);
+            return response;
+        }
+
         public Response<Nothing> DeleteSeries(Series series)
         {
             var url = "/{version}/series/key/{key}/";
@@ -96,26 +108,6 @@ namespace TempoDB
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Response<Series> UpdateSeries(Series series)
-        {
-            var url = "/{version}/series/key/{key}/";
-            var request = BuildRequest(url, Method.PUT, series);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("key", series.Key);
-            var response = Execute<Series>(request);
-            return response;
-        }
-
-        public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
-        {
-            var url = "/{version}/series/key/{key}/data/";
-            var request = BuildRequest(url, Method.POST, data);
-            request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("key", key);
-            var response = Execute<Nothing>(request);
-            return response;
-        }
-
         public Response<QueryResult> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
@@ -140,14 +132,22 @@ namespace TempoDB
             return new Response<QueryResult>(query, response.Code, response.Message);
         }
 
-        public Response<Nothing> DeleteDataPoints(Series series, ZonedDateTime start, ZonedDateTime end)
+        public Response<Series> UpdateSeries(Series series)
         {
-            var url = "/{version}/series/key/{key}/data/";
-            var request = BuildRequest(url, Method.DELETE);
+            var url = "/{version}/series/key/{key}/";
+            var request = BuildRequest(url, Method.PUT, series);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", series.Key);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            var response = Execute<Series>(request);
+            return response;
+        }
+
+        public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
+        {
+            var url = "/{version}/series/key/{key}/data/";
+            var request = BuildRequest(url, Method.POST, data);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", key);
             var response = Execute<Nothing>(request);
             return response;
         }
