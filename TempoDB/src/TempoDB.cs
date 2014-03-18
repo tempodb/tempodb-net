@@ -10,8 +10,8 @@ namespace TempoDB
 {
     public class TempoDB
     {
-        private string key;
-        private string secret;
+        private Database database;
+        private Credentials credentials;
         private string host;
         private int port;
         private bool secure;
@@ -22,10 +22,10 @@ namespace TempoDB
         private string clientVersion = string.Format("tempodb-net/{0}", typeof(TempoDB).Assembly.GetName().Version.ToString());
         private const int DefaultTimeoutMillis = 50000;  // 50 seconds
 
-        public TempoDB(string key, string secret, string host="api.tempo-db.com", int port=443, string version="v1", bool secure=true, RestClient client=null)
+        public TempoDB(Database database, Credentials credentials, string host="api.tempo-db.com", int port=443, string version="v1", bool secure=true, RestClient client=null)
         {
-            Key = key;
-            Secret = secret;
+            Database = database;
+            Credentials = credentials;
             Host = host;
             Port = port;
             Version = version;
@@ -248,16 +248,16 @@ namespace TempoDB
             request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
         }
 
-        public string Key
+        public Database Database
         {
-            get { return this.key; }
-            private set { this.key = value; }
+            get { return this.database; }
+            private set { this.database = value; }
         }
 
-        public string Secret
+        public Credentials Credentials
         {
-            get { return this.secret; }
-            private set { this.secret = value; }
+            get { return this.credentials; }
+            private set { this.credentials = value; }
         }
 
         public string Host
@@ -296,7 +296,7 @@ namespace TempoDB
 
                     var client = new RestClient {
                         BaseUrl = baseUrl,
-                        Authenticator = new HttpBasicAuthenticator(Key, Secret)
+                        Authenticator = new HttpBasicAuthenticator(Credentials.Key, Credentials.Secret)
                     };
                     Client = client;
                 }

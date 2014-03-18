@@ -12,7 +12,7 @@ namespace TempoDB.Tests
     {
         public static TempoDB GetClient(RestClient restClient)
         {
-            return new TempoDB("api-key", "api-secret", client: restClient);
+            return new TempoDB(new Database("id"), new Credentials("api-key", "api-secret"), client: restClient);
         }
 
         public static TempoDB GetClient(RestResponse response)

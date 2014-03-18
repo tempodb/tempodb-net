@@ -10,9 +10,8 @@ namespace TempoDB.Tests
         [Test]
         public void Defaults()
         {
-            var tempodb = new TempoDB("key", "secret");
-            Assert.AreEqual("key", tempodb.Key);
-            Assert.AreEqual("secret", tempodb.Secret);
+            var tempodb = new TempoDB(new Database("id"), new Credentials("key", "secret"));
+            Assert.AreEqual(new Credentials("key", "secret"), tempodb.Credentials);
             Assert.AreEqual("api.tempo-db.com", tempodb.Host);
             Assert.AreEqual(443, tempodb.Port);
             Assert.AreEqual(true, tempodb.Secure);
