@@ -17,8 +17,8 @@ namespace TempoDB.Tests
 
         private static string json = @"{
             ""rollup"":{
-                ""function"":""sum"",
-                ""interval"":""PT1H""
+                ""fold"":""sum"",
+                ""period"":""PT1H""
             },
             ""tz"":""UTC"",
             ""data"":[
@@ -46,7 +46,6 @@ namespace TempoDB.Tests
         private static ZonedDateTime start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
         private static ZonedDateTime end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
         private static Interval interval = new Interval(start.ToInstant(), end.ToInstant());
-        private static Rollup  rollup = new Rollup(Fold.Mean, Period.FromMinutes(1));
 
         [Test]
         public void SmokeTest()

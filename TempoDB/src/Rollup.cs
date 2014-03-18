@@ -10,14 +10,14 @@ namespace TempoDB
         private Fold fold;
         private NodaTime.Period period;
 
-        [JsonProperty(PropertyName="function", Required=Required.Always)]
+        [JsonProperty(PropertyName="fold", Required=Required.Always)]
         public Fold Fold
         {
             get { return fold; }
             private set { this.fold = value; }
         }
 
-        [JsonProperty(PropertyName="interval", Required=Required.Always)]
+        [JsonProperty(PropertyName="period", Required=Required.Always)]
         public NodaTime.Period Period
         {
             get { return period; }

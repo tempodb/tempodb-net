@@ -14,8 +14,8 @@ namespace TempoDB.Tests.Json
         public void BasicRollup()
         {
             var json = @"{
-                ""function"":""sum"",
-                ""interval"":""PT1H""
+                ""fold"":""sum"",
+                ""period"":""PT1H""
             }";
             var foldConverter = new FoldConverter();
             var periodConverter = new PeriodConverter();
@@ -28,8 +28,8 @@ namespace TempoDB.Tests.Json
         public void NonUtc()
         {
             var json = @"{
-                ""function"":""sum"",
-                ""interval"":""PT1M""
+                ""fold"":""sum"",
+                ""period"":""PT1M""
             }";
             var foldConverter = new FoldConverter();
             var periodConverter = new PeriodConverter();
@@ -48,7 +48,7 @@ namespace TempoDB.Tests.Json
             var foldConverter = new FoldConverter();
             var periodConverter = new PeriodConverter();
             var json = JsonConvert.SerializeObject(rollup, foldConverter, periodConverter);
-            var expected = @"{""function"":""mean"",""interval"":""PT1M""}";
+            var expected = @"{""fold"":""mean"",""period"":""PT1M""}";
             Assert.AreEqual(expected, json);
         }
 
@@ -59,7 +59,7 @@ namespace TempoDB.Tests.Json
             var foldConverter = new FoldConverter();
             var periodConverter = new PeriodConverter();
             var json = JsonConvert.SerializeObject(rollup, foldConverter, periodConverter);
-            var expected = @"{""function"":""mean"",""interval"":""PT1H""}";
+            var expected = @"{""fold"":""mean"",""period"":""PT1H""}";
             Assert.AreEqual(expected, json);
         }
     }

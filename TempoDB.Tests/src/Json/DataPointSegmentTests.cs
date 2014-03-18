@@ -18,8 +18,8 @@ namespace TempoDB.Tests
             {
                 var json = @"{
                     ""rollup"":{
-                        ""function"":""sum"",
-                        ""interval"":""PT1H""
+                        ""fold"":""sum"",
+                        ""period"":""PT1H""
                     },
                     ""tz"":""UTC"",
                     ""data"":[
@@ -45,8 +45,8 @@ namespace TempoDB.Tests
             {
                 var json = @"{
                     ""rollup"":{
-                        ""function"":""sum"",
-                        ""interval"":""PT1H""
+                        ""fold"":""sum"",
+                        ""period"":""PT1H""
                     },
                     ""tz"":""America/Chicago"",
                     ""data"":[
