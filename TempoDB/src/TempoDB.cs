@@ -164,12 +164,12 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Nothing> WriteDataPointsByKey(string key, IList<DataPoint> data)
+        public Response<Nothing> WriteDataPoints(Series series, IList<DataPoint> data)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.POST, data);
             request.AddUrlSegment("version", Version);
-            request.AddUrlSegment("key", key);
+            request.AddUrlSegment("key", series.Key);
             var response = Execute<Nothing>(request);
             return response;
         }

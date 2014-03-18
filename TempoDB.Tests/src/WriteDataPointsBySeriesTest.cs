@@ -9,7 +9,7 @@ using System.Net;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    class WriteRequestTests
+    class WriteDataPointsBySeriesTest
     {
         [TestFixture]
         class ByKey
@@ -20,6 +20,7 @@ namespace TempoDB.Tests
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 2, 0)), 23.45)
             };
             private string json = @"[{""t"":""2012-01-01T00:01:00+00:00"",""v"":12.34},{""t"":""2012-01-01T00:02:00+00:00"",""v"":23.45}]";
+            private Series series = new Series("key1");
 
             [Test]
             public void SmokeTest()
@@ -28,7 +29,7 @@ namespace TempoDB.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                var result = client.WriteDataPointsByKey("key1", datapoints);
+                var result = client.WriteDataPoints(series, datapoints);
                 var expected = new Response<Nothing>(new Nothing(), 200);
                 Assert.AreEqual(expected, result);
             }
@@ -40,7 +41,7 @@ namespace TempoDB.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.WriteDataPointsByKey("key1", datapoints);
+                client.WriteDataPoints(series, datapoints);
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.POST)));
             }
@@ -52,7 +53,7 @@ namespace TempoDB.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.WriteDataPointsByKey("key1", datapoints);
+                client.WriteDataPoints(series, datapoints);
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/key/{key}/data/")));
             }
@@ -64,7 +65,7 @@ namespace TempoDB.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.WriteDataPointsByKey("key1", datapoints);
+                client.WriteDataPoints(series, datapoints);
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameterByPattern(req.Parameters, "key", "key1"))));
             }
@@ -76,7 +77,7 @@ namespace TempoDB.Tests
                 var mockclient = TestCommon.GetMockRestClient(response);
                 var client = TestCommon.GetClient(mockclient.Object);
 
-                client.WriteDataPointsByKey("key1", datapoints);
+                client.WriteDataPoints(series, datapoints);
 
                 mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "application/json", json))));
             }
