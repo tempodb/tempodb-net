@@ -35,9 +35,6 @@ namespace TempoDB.Tests
 
             var result = client.GetSeries(new Filter());
 
-            var cursor = new Cursor<Series>(new SegmentEnumerator<Series>(null, new Segment<Series>(series, null)));
-            var expected = new Response<Cursor<Series>>(cursor, 200);
-
             var resultList = new List<Series>();
             foreach(Series s in result.Value)
             {

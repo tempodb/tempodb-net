@@ -18,7 +18,6 @@ namespace TempoDB.Tests
             Assert.AreEqual(true, tempodb.Secure);
             Assert.AreEqual("v1", tempodb.Version);
             Assert.IsNotNull(tempodb.Client);
-            Assert.IsInstanceOfType(typeof(RestClient), tempodb.Client);
         }
     }
 }
