@@ -42,14 +42,13 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Nothing> DeleteDataPoints(Series series, ZonedDateTime start, ZonedDateTime end)
+        public Response<Nothing> DeleteDataPoints(Series series, Interval interval)
         {
             var url = "/{version}/series/key/{key}/data/";
             var request = BuildRequest(url, Method.DELETE);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", series.Key);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(start));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(end));
+            ApplyIntervalToRequest(request, interval);
             var response = Execute<Nothing>(request);
             return response;
         }
