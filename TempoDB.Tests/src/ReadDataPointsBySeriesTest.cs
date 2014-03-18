@@ -43,6 +43,15 @@ namespace TempoDB.Tests
             ""rollup"":null
         }";
 
+        private static string jsonTz = @"{
+            ""data"":[
+                {""t"":""2012-03-27T00:00:00.000-05:00"",""v"":12.34},
+                {""t"":""2012-03-27T00:01:00.000-05:00"",""v"":23.45}
+            ],
+            ""tz"":""America/Chicago"",
+            ""rollup"":null
+        }";
+
         private static ZonedDateTime start = zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0));
         private static ZonedDateTime end = zone.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0));
         private static Interval interval = new Interval(start.ToInstant(), end.ToInstant());
@@ -58,6 +67,28 @@ namespace TempoDB.Tests
             var expected = new List<DataPoint> {
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
+            };
+            var output = new List<DataPoint>();
+            foreach(DataPoint dp in result.Value.DataPoints)
+            {
+                output.Add(dp);
+            }
+
+            Assert.AreEqual(expected, output);
+        }
+
+        [Test]
+        public void SmokeTestTz()
+        {
+            var zone = DateTimeZoneProviders.Tzdb["America/Chicago"];
+            var response = TestCommon.GetResponse(200, jsonTz);
+            var client = TestCommon.GetClient(response);
+
+            var result = client.ReadDataPoints(series, interval);
+
+            var expected = new List<DataPoint> {
+                new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), 12.34),
+                new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 1, 0)), 23.45)
             };
             var output = new List<DataPoint>();
             foreach(DataPoint dp in result.Value.DataPoints)
@@ -134,6 +165,24 @@ namespace TempoDB.Tests
             var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
             var interval = new Interval(start.ToInstant(), end.ToInstant());
 
+            client.ReadDataPoints(series, interval);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-01-01T00:00:00+00:00"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-01-02T00:00:00+00:00"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tz", "UTC"))));
+        }
+
+        [Test]
+        public void RequestParametersRollup()
+        {
+            var response = TestCommon.GetResponse(200, json);
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+            var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
+            var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
+            var interval = new Interval(start.ToInstant(), end.ToInstant());
+
             var rollup = new Rollup(Fold.Mean, Period.FromMinutes(1));
             client.ReadDataPoints(series, interval, rollup:rollup);
 
@@ -141,8 +190,8 @@ namespace TempoDB.Tests
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-01-01T00:00:00+00:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-01-02T00:00:00+00:00"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tz", "UTC"))));
-            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "interval", "PT1M"))));
-            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "function", "mean"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.period", "PT1M"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.fold", "mean"))));
         }
     }
 }

@@ -206,12 +206,8 @@ namespace TempoDB
         {
             if(rollup != null)
             {
-                if(rollup.Period != null)
-                {
-                    request.AddParameter("interval", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
-                }
-
-                request.AddParameter("function", rollup.Fold.ToString().ToLower());
+                request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
+                request.AddParameter("rollup.fold", rollup.Fold.ToString().ToLower());
             }
         }
 
