@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    public class RollupTests
+    public class RollupTest
     {
         [Test]
         public void Defaults()

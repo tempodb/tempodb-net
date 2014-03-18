@@ -9,7 +9,7 @@ using TempoDB.Json;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    public class DataPointSegmentTests
+    public class DataPointSegmentTest
     {
         class Deserialize
         {

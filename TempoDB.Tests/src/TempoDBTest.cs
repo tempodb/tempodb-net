@@ -5,7 +5,7 @@ using RestSharp;
 namespace TempoDB.Tests
 {
     [TestFixture]
-    public class TempoDBTests
+    public class TempoDBTest
     {
         [Test]
         public void Defaults()
