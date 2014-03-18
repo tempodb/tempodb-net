@@ -115,8 +115,31 @@ namespace TempoDB
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", series.Key);
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
+            ApplyIntervalToRequest(request, interval);
+            ApplyTimeZoneToRequest(request, zone);
+            ApplyRollupToRequest(request, rollup);
+
+            var response = Execute<DataPointSegment>(request);
+
+            QueryResult query = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
+                var cursor = new Cursor<DataPoint>(segments);
+                query = new QueryResult(this, cursor, response.Value.Rollup);
+            }
+            return new Response<QueryResult>(query, response.Code, response.Message);
+        }
+
+        public Response<QueryResult> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/segment/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            ApplyFilterToRequest(request, filter);
+            ApplyIntervalToRequest(request, interval);
+            ApplyAggregationToRequest(request, aggregation);
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
 
@@ -209,6 +232,21 @@ namespace TempoDB
                 request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
                 request.AddParameter("rollup.fold", rollup.Fold.ToString().ToLower());
             }
+        }
+
+        private static void ApplyAggregationToRequest(IRestRequest request, Aggregation aggregation)
+        {
+            if(aggregation != null)
+            {
+                request.AddParameter("aggregation.fold", aggregation.Fold.ToString().ToLower());
+            }
+        }
+
+        private static void ApplyIntervalToRequest(IRestRequest request, Interval interval)
+        {
+            var zone = DateTimeZone.Utc;
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
         }
 
         public string Key
