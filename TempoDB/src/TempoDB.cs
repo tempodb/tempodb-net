@@ -174,6 +174,15 @@ namespace TempoDB
             return response;
         }
 
+        public Response<Nothing> WriteDataPoints(WriteRequest writerequest)
+        {
+            var url = "/{version}/multi/";
+            var request = BuildRequest(url, Method.POST, writerequest);
+            request.AddUrlSegment("version", Version);
+            var response = Execute<Nothing>(request);
+            return response;
+        }
+
         public Response<T> Execute<T>(RestRequest request) where T : Model
         {
             var response = new Response<T>(Client.Execute(request));
