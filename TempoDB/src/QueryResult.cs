@@ -4,13 +4,13 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class QueryResult : Model
+    public class QueryResult<T> : Model where T: Model
     {
-        public Cursor<DataPoint> DataPoints { get; private set; }
+        public Cursor<T> DataPoints { get; private set; }
         public Rollup Rollup { get; private set; }
         private TempoDB Client { get; set; }
 
-        internal QueryResult(TempoDB client, Cursor<DataPoint> datapoints, Rollup rollup)
+        internal QueryResult(TempoDB client, Cursor<T> datapoints, Rollup rollup)
         {
             Client = client;
             DataPoints = datapoints;
@@ -19,7 +19,7 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
-            QueryResult other = obj as QueryResult;
+            QueryResult<T> other = obj as QueryResult<T>;
             return other != null &&
                 DataPoints.Equals(other.DataPoints) &&
                 Rollup.Equals(other.Rollup);

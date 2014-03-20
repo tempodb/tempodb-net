@@ -75,6 +75,7 @@
     <Compile Include="src\MultiStatusTest.cs" />
     <Compile Include="src\ReadDataPointsByFilterTest.cs" />
     <Compile Include="src\ReadDataPointsBySeriesTest.cs" />
+    <Compile Include="src\ReadMultiDataPointsTest.cs" />
     <Compile Include="src\ResponseTest.cs" />
     <Compile Include="src\RollupTest.cs" />
     <Compile Include="src\SeriesTest.cs" />

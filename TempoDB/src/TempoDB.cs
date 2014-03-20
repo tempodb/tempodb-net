@@ -112,7 +112,7 @@ namespace TempoDB
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Response<QueryResult> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult<DataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/segment/";
@@ -125,21 +125,21 @@ namespace TempoDB
 
             var response = Execute<DataPointSegment>(request);
 
-            QueryResult query = null;
+            QueryResult<DataPoint> query = null;
             if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult(this, cursor, response.Value.Rollup);
+                query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
             }
             else
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<QueryResult>(query, response.Code, response.Message);
+            return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
-        public Response<QueryResult> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult<DataPoint>> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/segment/";
@@ -153,18 +153,45 @@ namespace TempoDB
 
             var response = Execute<DataPointSegment>(request);
 
-            QueryResult query = null;
+            QueryResult<DataPoint> query = null;
             if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
                 var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult(this, cursor, response.Value.Rollup);
+                query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
             }
             else
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<QueryResult>(query, response.Code, response.Message);
+            return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
+        }
+
+        public Response<QueryResult<MultiDataPoint>> ReadDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/multi/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            ApplyFilterToRequest(request, filter);
+            ApplyIntervalToRequest(request, interval);
+            ApplyTimeZoneToRequest(request, zone);
+            ApplyRollupToRequest(request, rollup);
+
+            var response = Execute<MultiDataPointSegment>(request);
+
+            QueryResult<MultiDataPoint> query = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value);
+                var cursor = new Cursor<MultiDataPoint>(segments);
+                query = new QueryResult<MultiDataPoint>(this, cursor, response.Value.Rollup);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
+            }
+            return new Response<QueryResult<MultiDataPoint>>(query, response.Code, response.Message);
         }
 
         public Response<Series> UpdateSeries(Series series)
