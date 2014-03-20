@@ -11,22 +11,16 @@ namespace TempoDB
 {
     public class WriteRequest : IEnumerable
     {
-        private List<MultiDataPoint> data;
+        private List<WritableDataPoint> data;
 
         public WriteRequest()
         {
-            this.data = new List<MultiDataPoint>();
-        }
-
-        public WriteRequest Add(MultiDataPoint datapoint)
-        {
-            this.data.Add(datapoint);
-            return this;
+            this.data = new List<WritableDataPoint>();
         }
 
         public WriteRequest Add(Series series, DataPoint datapoint)
         {
-            this.data.Add(new MultiDataPoint(series, datapoint.Timestamp, datapoint.Value));
+            this.data.Add(new WritableDataPoint(series, datapoint.Timestamp, datapoint.Value));
             return this;
         }
 
@@ -34,7 +28,7 @@ namespace TempoDB
         {
             foreach(DataPoint datapoint in datapoints)
             {
-                MultiDataPoint mdp = new MultiDataPoint(series, datapoint.Timestamp, datapoint.Value);
+                WritableDataPoint mdp = new WritableDataPoint(series, datapoint.Timestamp, datapoint.Value);
                 data.Add(mdp);
             }
             return this;
@@ -42,7 +36,7 @@ namespace TempoDB
 
         public IEnumerator GetEnumerator()
         {
-            foreach(MultiDataPoint mdp in data)
+            foreach(WritableDataPoint mdp in data)
             {
                 yield return mdp;
             }

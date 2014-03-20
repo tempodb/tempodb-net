@@ -35,15 +35,15 @@ namespace TempoDB.Json
 
             var request = (WriteRequest)value;
             writer.WriteStartArray();
-            foreach(MultiDataPoint mdp in request)
+            foreach(WritableDataPoint wdp in request)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("key");
-                serializer.Serialize(writer, mdp.Series.Key);
+                serializer.Serialize(writer, wdp.Series.Key);
                 writer.WritePropertyName("t");
-                serializer.Serialize(writer, mdp.Timestamp);
+                serializer.Serialize(writer, wdp.Timestamp);
                 writer.WritePropertyName("v");
-                serializer.Serialize(writer, mdp.Value);
+                serializer.Serialize(writer, wdp.Value);
                 writer.WriteEndObject();
             }
             writer.WriteEndArray();

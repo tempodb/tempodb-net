@@ -71,7 +71,6 @@
     <Compile Include="src\FilterTest.cs" />
     <Compile Include="src\GetSeriesTest.cs" />
     <Compile Include="src\GetSeriesByFilterTest.cs" />
-    <Compile Include="src\MultiDataPointTest.cs" />
     <Compile Include="src\MultiStatusTest.cs" />
     <Compile Include="src\ReadDataPointsByFilterTest.cs" />
     <Compile Include="src\ReadDataPointsBySeriesTest.cs" />
@@ -82,6 +81,7 @@
     <Compile Include="src\TempoDBTest.cs" />
     <Compile Include="src\TestCommon.cs" />
     <Compile Include="src\UpdateSeriesTest.cs" />
+    <Compile Include="src\WritableDataPointTest.cs" />
     <Compile Include="src\WriteDataPointsBySeriesTest.cs" />
     <Compile Include="src\WriteDataPointsTest.cs" />
     <Compile Include="src\WriteRequestTest.cs" />

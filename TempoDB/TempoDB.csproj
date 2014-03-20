@@ -60,7 +60,6 @@
     <Compile Include="src\DeleteSummary.cs" />
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Fold.cs" />
-    <Compile Include="src\MultiDataPoint.cs" />
     <Compile Include="src\MultiStatus.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\Nothing.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="src\State.cs" />
     <Compile Include="src\Status.cs" />
     <Compile Include="src\TempoDB.cs" />
+    <Compile Include="src\WritableDataPoint.cs" />
     <Compile Include="src\WriteRequest.cs" />
     <Compile Include="src\Exceptions\TempoDBException.cs" />
     <Compile Include="src\Json\DataPointSegmentConverter.cs" />

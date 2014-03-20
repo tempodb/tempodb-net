@@ -5,7 +5,7 @@ using TempoDB.Utility;
 
 namespace TempoDB
 {
-    public class MultiDataPoint
+    public class WritableDataPoint
     {
         private Series series;
         private ZonedDateTime timestamp;
@@ -29,7 +29,7 @@ namespace TempoDB
             private set { this.value = value; }
         }
 
-        public MultiDataPoint(Series series, ZonedDateTime timestamp, double value)
+        public WritableDataPoint(Series series, ZonedDateTime timestamp, double value)
         {
             Series = series;
             Timestamp = timestamp;
@@ -38,7 +38,7 @@ namespace TempoDB
 
         public override string ToString()
         {
-            return string.Format("MultiDataPoint(series={0}, timestamp={1}, value={2})", Series, Timestamp, Value);
+            return string.Format("WritableDataPoint(series={0}, timestamp={1}, value={2})", Series, Timestamp, Value);
         }
 
         public override bool Equals(Object obj)
@@ -47,7 +47,7 @@ namespace TempoDB
             if(obj == this) { return true; }
             if(obj.GetType() != GetType()) { return false; }
 
-            MultiDataPoint other = obj as MultiDataPoint;
+            WritableDataPoint other = obj as WritableDataPoint;
             return new EqualsBuilder()
                 .Append(Series, other.Series)
                 .Append(Timestamp, other.Timestamp)
