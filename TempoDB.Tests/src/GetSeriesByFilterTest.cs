@@ -94,7 +94,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(403, "You are forbidden");
             var client = TestCommon.GetClient(response);
 
-            var result = client.GetSeries(new Filter());
+            client.GetSeries(new Filter());
         }
     }
 }
