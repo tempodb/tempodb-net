@@ -56,6 +56,7 @@
     <Compile Include="src\Cursor.cs" />
     <Compile Include="src\Database.cs" />
     <Compile Include="src\DataPoint.cs" />
+    <Compile Include="src\DataPointFound.cs" />
     <Compile Include="src\DataPointSegment.cs" />
     <Compile Include="src\DeleteSummary.cs" />
     <Compile Include="src\Filter.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="src\Json\DataPointSegmentConverter.cs" />
     <Compile Include="src\Json\DateTimeZoneConverter.cs" />
     <Compile Include="src\Json\FoldConverter.cs" />
+    <Compile Include="src\Json\IntervalConverter.cs" />
     <Compile Include="src\Json\JsonSerializer.cs" />
     <Compile Include="src\Json\MultiDataPointSegmentConverter.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
