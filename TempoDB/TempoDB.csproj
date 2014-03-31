@@ -57,6 +57,7 @@
     <Compile Include="src\Database.cs" />
     <Compile Include="src\DataPoint.cs" />
     <Compile Include="src\DataPointFound.cs" />
+    <Compile Include="src\DataPointFoundSegment.cs" />
     <Compile Include="src\DataPointSegment.cs" />
     <Compile Include="src\DeleteSummary.cs" />
     <Compile Include="src\Filter.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="src\WritableDataPoint.cs" />
     <Compile Include="src\WriteRequest.cs" />
     <Compile Include="src\Exceptions\TempoDBException.cs" />
+    <Compile Include="src\Json\DataPointFoundSegmentConverter.cs" />
     <Compile Include="src\Json\DataPointSegmentConverter.cs" />
     <Compile Include="src\Json\DateTimeZoneConverter.cs" />
     <Compile Include="src\Json\FoldConverter.cs" />

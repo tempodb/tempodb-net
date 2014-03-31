@@ -88,6 +88,7 @@
     <Compile Include="src\WriteDataPointsBySeriesTest.cs" />
     <Compile Include="src\WriteDataPointsTest.cs" />
     <Compile Include="src\WriteRequestTest.cs" />
+    <Compile Include="src\Json\DataPointFoundSegmentTest.cs" />
     <Compile Include="src\Json\DataPointFoundTest.cs" />
     <Compile Include="src\Json\DataPointTest.cs" />
     <Compile Include="src\Json\DeleteSummaryTest.cs" />
