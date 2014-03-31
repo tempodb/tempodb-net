@@ -67,6 +67,7 @@
     <Compile Include="src\MultiStatus.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\Nothing.cs" />
+    <Compile Include="src\Predicate.cs" />
     <Compile Include="src\QueryResult.cs" />
     <Compile Include="src\Response.cs" />
     <Compile Include="src\Rollup.cs" />

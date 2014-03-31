@@ -74,6 +74,7 @@
     <Compile Include="src\GetSeriesByFilterTest.cs" />
     <Compile Include="src\MultiDataPointTest.cs" />
     <Compile Include="src\MultiStatusTest.cs" />
+    <Compile Include="src\PredicateTest.cs" />
     <Compile Include="src\ReadDataPointsByFilterTest.cs" />
     <Compile Include="src\ReadDataPointsBySeriesTest.cs" />
     <Compile Include="src\ReadMultiDataPointsTest.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="src\Json\DataPointSegmentTest.cs" />
     <Compile Include="src\Json\MultiDataPointTest.cs" />
     <Compile Include="src\Json\MultiDataPointSegmentTest.cs" />
+    <Compile Include="src\Json\PredicateTest.cs" />
     <Compile Include="src\Json\RollupTest.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />
     <Compile Include="src\Json\StatusTest.cs" />

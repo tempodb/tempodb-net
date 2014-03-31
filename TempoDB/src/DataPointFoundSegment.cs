@@ -13,11 +13,15 @@ namespace TempoDB
     {
         private static DataPointFoundSegmentConverter converter = new DataPointFoundSegmentConverter();
 
+        [JsonProperty(PropertyName="predicate")]
+        public Predicate Predicate { get; private set; }
+
         [JsonProperty(PropertyName="tz")]
         public DateTimeZone TimeZone { get; private set; }
 
-        public DataPointFoundSegment(IList<DataPointFound> datapoints, string next, DateTimeZone tz) : base(datapoints, next)
+        public DataPointFoundSegment(IList<DataPointFound> datapoints, string next, DateTimeZone tz, Predicate predicate) : base(datapoints, next)
         {
+            Predicate = predicate;
             TimeZone = tz;
         }
 
@@ -30,11 +34,12 @@ namespace TempoDB
 
         public override bool Equals(Object obj)
         {
-            var other = obj as DataPointSegment;
+            var other = obj as DataPointFoundSegment;
             return other != null &
                 Data.Equals(other.Data) &&
                 NextUrl.Equals(other.NextUrl) &&
-                TimeZone.Equals(other.TimeZone);
+                TimeZone.Equals(other.TimeZone) &&
+                Predicate.Equals(other.Predicate);
         }
 
         public override int GetHashCode()
@@ -43,6 +48,7 @@ namespace TempoDB
             hash = HashCodeHelper.Hash(hash, Data);
             hash = HashCodeHelper.Hash(hash, NextUrl);
             hash = HashCodeHelper.Hash(hash, TimeZone);
+            hash = HashCodeHelper.Hash(hash, Predicate);
             return hash;
         }
     }

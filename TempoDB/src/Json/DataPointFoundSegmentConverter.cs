@@ -11,6 +11,7 @@ namespace TempoDB.Json
     public class DataPointFoundSegmentConverter : JsonConverter
     {
         private static IntervalConverter intervalConverter = new IntervalConverter();
+        private static PeriodConverter periodConverter = new PeriodConverter();
 
         public override bool CanConvert(Type objectType)
         {
@@ -49,7 +50,14 @@ namespace TempoDB.Json
                     datapoints = obj["data"].ToObject<List<DataPointFound>>(serializer);
                 }
 
-                target = new DataPointFoundSegment(datapoints, null, zone);
+                Predicate predicate = null;
+                if(FieldExists("predicate", obj))
+                {
+                    serializer.Converters.Add(periodConverter);
+                    predicate = obj["predicate"].ToObject<Predicate>(serializer);
+                }
+
+                target = new DataPointFoundSegment(datapoints, null, zone, predicate);
             }
             return target;
         }

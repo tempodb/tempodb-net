@@ -23,7 +23,11 @@ namespace TempoDB.Tests
                     ""tz"":""UTC"",
                     ""data"":[
                         {""interval"":{""start"":""2012-03-28T00:00:00.000Z"",""end"":""2012-03-29T00:00:00.000Z""},""found"":{""t"":""2012-03-28T23:59:00.000Z"",""v"":2879.0}}
-                    ]
+                    ],
+                    ""predicate"":{
+                        ""period"":""P1D"",
+                        ""function"":""max""
+                    }
                 }";
 
                 var zone = DateTimeZone.Utc;
@@ -31,11 +35,13 @@ namespace TempoDB.Tests
 
                 var segment = JsonConvert.DeserializeObject<DataPointFoundSegment>(json, converter);
 
+                var expectedPredicate = new Predicate(Period.FromDays(1), "max");
                 var interval = new Interval(utc.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0)).ToInstant(), utc.AtStrictly(new LocalDateTime(2012, 3, 29, 0, 0, 0)).ToInstant());
                 var datapoint = new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 28, 23, 59, 0)), 2879.0);
                 var expectedDataPoints = new List<DataPointFound> {
                     new DataPointFound(interval, datapoint)
                 };
+                Assert.AreEqual(expectedPredicate, segment.Predicate);
                 Assert.AreEqual(expectedDataPoints, segment.Data);
                 Assert.AreEqual(zone, segment.TimeZone);
             }
@@ -47,7 +53,11 @@ namespace TempoDB.Tests
                     ""tz"":""America/Chicago"",
                     ""data"":[
                         {""interval"":{""start"":""2012-03-28T00:00:00.000Z"",""end"":""2012-03-29T00:00:00.000Z""},""found"":{""t"":""2012-03-28T23:59:00.000-05:00"",""v"":2879.0}}
-                    ]
+                    ],
+                    ""predicate"":{
+                        ""period"":""P1D"",
+                        ""function"":""max""
+                    }
                 }";
 
                 var zone = DateTimeZoneProviders.Tzdb["America/Chicago"];
@@ -55,11 +65,13 @@ namespace TempoDB.Tests
 
                 var segment = JsonConvert.DeserializeObject<DataPointFoundSegment>(json, converter);
 
+                var expectedPredicate = new Predicate(Period.FromDays(1), "max");
                 var interval = new Interval(utc.AtStrictly(new LocalDateTime(2012, 3, 28, 0, 0, 0)).ToInstant(), utc.AtStrictly(new LocalDateTime(2012, 3, 29, 0, 0, 0)).ToInstant());
                 var datapoint = new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 28, 23, 59, 0)), 2879.0);
                 var expectedDataPoints = new List<DataPointFound> {
                     new DataPointFound(interval, datapoint)
                 };
+                Assert.AreEqual(expectedPredicate, segment.Predicate);
                 Assert.AreEqual(expectedDataPoints, segment.Data);
                 Assert.AreEqual(zone, segment.TimeZone);
             }
