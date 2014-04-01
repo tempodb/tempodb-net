@@ -37,8 +37,8 @@ namespace TempoDB.Json
                 throw new ArgumentException("Missing required field for interval: end");
             }
 
-            Instant start = Instant.FromDateTimeUtc(obj["start"].ToObject<DateTime>());
-            Instant end = Instant.FromDateTimeUtc(obj["end"].ToObject<DateTime>());
+            Instant start = Instant.FromDateTimeOffset(DateTimeOffset.Parse(obj["start"].ToString()));
+            Instant end = Instant.FromDateTimeOffset(DateTimeOffset.Parse(obj["end"].ToString()));
             return new Interval(start, end);
         }
 

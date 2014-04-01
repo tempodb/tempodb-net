@@ -82,6 +82,32 @@ namespace TempoDB
             return response;
         }
 
+        public Cursor<DataPointFound> FindDataPoints(Series series, Interval interval, Predicate predicate, DateTimeZone zone=null)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/series/key/{key}/find/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", series.Key);
+            ApplyIntervalToRequest(request, interval);
+            ApplyTimeZoneToRequest(request, zone);
+            ApplyPredicateToRequest(request, predicate);
+
+            var response = Execute<DataPointFoundSegment>(request);
+
+            Cursor<DataPointFound> cursor = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<DataPointFound>(this, response.Value);
+                cursor = new Cursor<DataPointFound>(segments);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
+            }
+            return cursor;
+        }
+
         public Response<Series> GetSeries(string key)
         {
             var url = "/{version}/series/key/{key}/";
@@ -279,6 +305,15 @@ namespace TempoDB
             {
                 request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
                 request.AddParameter("rollup.fold", rollup.Fold.ToString().ToLower());
+            }
+        }
+
+        private static void ApplyPredicateToRequest(IRestRequest request, Predicate predicate)
+        {
+            if(predicate != null)
+            {
+                request.AddParameter("predicate.period", PeriodPattern.NormalizingIsoPattern.Format(predicate.Period));
+                request.AddParameter("predicate.function", predicate.Function.ToLower());
             }
         }
 

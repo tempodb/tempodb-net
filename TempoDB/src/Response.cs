@@ -103,6 +103,10 @@ namespace TempoDB
             {
                return MultiDataPointSegment.FromResponse(response) as T;
             }
+            else if((typeof(T) == typeof(Segment<DataPointFound>)) || (typeof(T) == typeof(DataPointFoundSegment)))
+            {
+               return DataPointFoundSegment.FromResponse(response) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }
