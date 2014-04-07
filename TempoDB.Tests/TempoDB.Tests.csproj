@@ -101,6 +101,7 @@
     <Compile Include="src\Json\PredicateTest.cs" />
     <Compile Include="src\Json\RollupTest.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />
+    <Compile Include="src\Json\SingleValueTest.cs" />
     <Compile Include="src\Json\StatusTest.cs" />
     <Compile Include="src\Json\WriteRequestTest.cs" />
   </ItemGroup>

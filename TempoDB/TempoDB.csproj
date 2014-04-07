@@ -87,6 +87,7 @@
     <Compile Include="src\Json\JsonSerializer.cs" />
     <Compile Include="src\Json\MultiDataPointSegmentConverter.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
+    <Compile Include="src\Json\SingleValueConverter.cs" />
     <Compile Include="src\Json\WriteRequestConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
     <Compile Include="src\Utility\EqualsBuilder.cs" />

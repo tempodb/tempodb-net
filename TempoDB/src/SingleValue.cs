@@ -31,6 +31,12 @@ namespace TempoDB
             DataPoint = datapoint;
         }
 
+        protected internal static SingleValue FromResponse(IRestResponse response)
+        {
+            var value = JsonConvert.DeserializeObject<SingleValue>(response.Content);
+            return value;
+        }
+
         public override string ToString()
         {
             return string.Format("SingleValue(series={0}, datapoint={1})", Series, DataPoint);
