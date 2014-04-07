@@ -102,6 +102,7 @@
     <Compile Include="src\Json\MultiDataPointTest.cs" />
     <Compile Include="src\Json\MultiDataPointSegmentTest.cs" />
     <Compile Include="src\Json\MultiRollupTest.cs" />
+    <Compile Include="src\Json\MultiRollupDataPointSegmentTest.cs" />
     <Compile Include="src\Json\PredicateTest.cs" />
     <Compile Include="src\Json\RollupTest.cs" />
     <Compile Include="src\Json\SeriesTest.cs" />

@@ -66,6 +66,7 @@
     <Compile Include="src\MultiDataPoint.cs" />
     <Compile Include="src\MultiDataPointSegment.cs" />
     <Compile Include="src\MultiRollup.cs" />
+    <Compile Include="src\MultiRollupDataPointSegment.cs" />
     <Compile Include="src\MultiStatus.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\Nothing.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="src\Json\IntervalConverter.cs" />
     <Compile Include="src\Json\JsonSerializer.cs" />
     <Compile Include="src\Json\MultiDataPointSegmentConverter.cs" />
+    <Compile Include="src\Json\MultiRollupDataPointSegmentConverter.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
     <Compile Include="src\Json\SingleValueConverter.cs" />
     <Compile Include="src\Json\WriteRequestConverter.cs" />
