@@ -1,6 +1,8 @@
 using Newtonsoft.Json;
 using NodaTime;
+using RestSharp;
 using System;
+using TempoDB.Json;
 using TempoDB.Utility;
 
 
@@ -8,6 +10,8 @@ namespace TempoDB
 {
     public class SingleValue : Model
     {
+        private static SingleValueConverter converter = new SingleValueConverter();
+
         private Series series;
         private DataPoint datapoint;
 
@@ -33,7 +37,7 @@ namespace TempoDB
 
         protected internal static SingleValue FromResponse(IRestResponse response)
         {
-            var value = JsonConvert.DeserializeObject<SingleValue>(response.Content);
+            var value = JsonConvert.DeserializeObject<SingleValue>(response.Content, converter);
             return value;
         }
 

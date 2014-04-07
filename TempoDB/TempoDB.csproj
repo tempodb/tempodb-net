@@ -60,6 +60,7 @@
     <Compile Include="src\DataPointFoundSegment.cs" />
     <Compile Include="src\DataPointSegment.cs" />
     <Compile Include="src\DeleteSummary.cs" />
+    <Compile Include="src\Direction.cs" />
     <Compile Include="src\Filter.cs" />
     <Compile Include="src\Fold.cs" />
     <Compile Include="src\MultiDataPoint.cs" />

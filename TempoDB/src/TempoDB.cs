@@ -220,6 +220,20 @@ namespace TempoDB
             return new Response<QueryResult<MultiDataPoint>>(query, response.Code, response.Message);
         }
 
+        public Response<SingleValue> ReadSingleValue(Series series, ZonedDateTime timestamp, DateTimeZone zone=null, Direction direction=Direction.Exact)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/series/key/{key}/single/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", series.Key);
+            ApplyDirectionToRequest(request, direction);
+            ApplyTimestampToRequest(request, timestamp);
+            ApplyTimeZoneToRequest(request, zone);
+            var response = Execute<SingleValue>(request);
+            return response;
+        }
+
         public Response<Series> UpdateSeries(Series series)
         {
             var url = "/{version}/series/key/{key}/";
@@ -274,6 +288,19 @@ namespace TempoDB
             return request;
         }
 
+        private static void ApplyAggregationToRequest(IRestRequest request, Aggregation aggregation)
+        {
+            if(aggregation != null)
+            {
+                request.AddParameter("aggregation.fold", aggregation.Fold.ToString().ToLower());
+            }
+        }
+
+        private static void ApplyDirectionToRequest(IRestRequest request, Direction direction)
+        {
+            request.AddParameter("direction", direction.ToString().ToLower());
+        }
+
         private static void ApplyFilterToRequest(IRestRequest request, Filter filter)
         {
             if(filter != null)
@@ -293,19 +320,11 @@ namespace TempoDB
             }
         }
 
-        private static void ApplyTimeZoneToRequest(IRestRequest request, DateTimeZone zone)
+        private static void ApplyIntervalToRequest(IRestRequest request, Interval interval)
         {
-            var tz = zone == null ? DateTimeZone.Utc : zone;
-            request.AddParameter("tz", tz.Id);
-        }
-
-        private static void ApplyRollupToRequest(IRestRequest request, Rollup rollup)
-        {
-            if(rollup != null)
-            {
-                request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
-                request.AddParameter("rollup.fold", rollup.Fold.ToString().ToLower());
-            }
+            var zone = DateTimeZone.Utc;
+            request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
+            request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
         }
 
         private static void ApplyPredicateToRequest(IRestRequest request, Predicate predicate)
@@ -317,19 +336,24 @@ namespace TempoDB
             }
         }
 
-        private static void ApplyAggregationToRequest(IRestRequest request, Aggregation aggregation)
+        private static void ApplyRollupToRequest(IRestRequest request, Rollup rollup)
         {
-            if(aggregation != null)
+            if(rollup != null)
             {
-                request.AddParameter("aggregation.fold", aggregation.Fold.ToString().ToLower());
+                request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
+                request.AddParameter("rollup.fold", rollup.Fold.ToString().ToLower());
             }
         }
 
-        private static void ApplyIntervalToRequest(IRestRequest request, Interval interval)
+        private static void ApplyTimestampToRequest(IRestRequest request, ZonedDateTime timestamp)
         {
-            var zone = DateTimeZone.Utc;
-            request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
-            request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
+            request.AddParameter("ts", ZonedDateTimeConverter.ToString(timestamp));
+        }
+
+        private static void ApplyTimeZoneToRequest(IRestRequest request, DateTimeZone zone)
+        {
+            var tz = zone == null ? DateTimeZone.Utc : zone;
+            request.AddParameter("tz", tz.Id);
         }
 
         public Database Database
