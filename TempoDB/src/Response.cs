@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using TempoDB.Json;
 using TempoDB.Utility;
 
 
@@ -9,6 +10,8 @@ namespace TempoDB
 {
     public class Response<T> where T : Model
     {
+        private static SingleValueConverter singlevalueConverter = new SingleValueConverter();
+
         public T Value { get; private set; }
 
         public bool Success { get; private set; }
@@ -97,6 +100,13 @@ namespace TempoDB
                 var series = JsonConvert.DeserializeObject<List<Series>>(response.Content);
                 var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
                 var segment = new Segment<Series>(series, nextUrl);
+                return segment as T;
+            }
+            else if(typeof(T) == typeof(Segment<SingleValue>))
+            {
+                var value = JsonConvert.DeserializeObject<List<SingleValue>>(response.Content, singlevalueConverter);
+                var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
+                var segment = new Segment<SingleValue>(value, nextUrl);
                 return segment as T;
             }
             else if((typeof(T) == typeof(Segment<DataPoint>)) || (typeof(T) == typeof(DataPointSegment)))

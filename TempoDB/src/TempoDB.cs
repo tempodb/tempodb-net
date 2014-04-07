@@ -234,6 +234,30 @@ namespace TempoDB
             return response;
         }
 
+        public Response<Cursor<SingleValue>> ReadSingleValue(Filter filter, ZonedDateTime timestamp, DateTimeZone zone=null, Direction direction=Direction.Exact)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/single/";
+            var request = BuildRequest(url, Method.GET);
+            ApplyFilterToRequest(request, filter);
+            ApplyDirectionToRequest(request, direction);
+            ApplyTimestampToRequest(request, timestamp);
+            ApplyTimeZoneToRequest(request, zone);
+            var response = Execute<Segment<SingleValue>>(request);
+
+            Cursor<SingleValue> cursor = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<SingleValue>(this, response.Value);
+                cursor = new Cursor<SingleValue>(segments);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
+            }
+            return new Response<Cursor<SingleValue>>(cursor, response.Code, response.Message);
+        }
+
         public Response<Series> UpdateSeries(Series series)
         {
             var url = "/{version}/series/key/{key}/";

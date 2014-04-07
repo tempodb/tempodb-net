@@ -43,7 +43,7 @@ namespace TempoDB
 
         public override string ToString()
         {
-            return string.Format("SingleValue(series={0}, datapoint={1})", Series, DataPoint);
+            return string.Format("SingleValue(series={0}, datapoint={1})", Series.ToString(), DataPoint.ToString());
         }
 
         public override bool Equals(Object obj)
