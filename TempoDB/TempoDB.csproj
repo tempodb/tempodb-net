@@ -65,6 +65,7 @@
     <Compile Include="src\Fold.cs" />
     <Compile Include="src\MultiDataPoint.cs" />
     <Compile Include="src\MultiDataPointSegment.cs" />
+    <Compile Include="src\MultiRollup.cs" />
     <Compile Include="src\MultiStatus.cs" />
     <Compile Include="src\Model.cs" />
     <Compile Include="src\Nothing.cs" />
