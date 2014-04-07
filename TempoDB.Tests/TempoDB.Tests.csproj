@@ -82,6 +82,7 @@
     <Compile Include="src\ResponseTest.cs" />
     <Compile Include="src\RollupTest.cs" />
     <Compile Include="src\SeriesTest.cs" />
+    <Compile Include="src\SingleValueTest.cs" />
     <Compile Include="src\StatusTest.cs" />
     <Compile Include="src\TempoDBTest.cs" />
     <Compile Include="src\TestCommon.cs" />
