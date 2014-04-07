@@ -37,7 +37,7 @@ namespace TempoDB.Tests
                 var converter = new MultiDataPointSegmentConverter();
 
                 var segment = JsonConvert.DeserializeObject<MultiDataPointSegment>(json, converter);
-                var expectedRollup = new Rollup(Fold.Sum, Period.FromHours(1));
+                var expectedRollup = new Rollup(Period.FromHours(1), Fold.Sum);
                 var expectedDataPoints = new List<MultiDataPoint> {
                     new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
                     new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 1, 0, 0)), new Dictionary<string, double> {{"key1", 23.45}, {"key2", 34.56}}),
@@ -73,7 +73,7 @@ namespace TempoDB.Tests
 
                 var segment = JsonConvert.DeserializeObject<MultiDataPointSegment>(json, converter);
 
-                var expectedRollup = new Rollup(Fold.Sum, Period.FromHours(1));
+                var expectedRollup = new Rollup(Period.FromHours(1), Fold.Sum);
                 var expectedDataPoints = new List<MultiDataPoint> {
                     new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2011, 12, 31, 18, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
                     new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2011, 12, 31, 19, 0, 0)), new Dictionary<string, double> {{"key1", 23.45}, {"key2", 34.56}}),

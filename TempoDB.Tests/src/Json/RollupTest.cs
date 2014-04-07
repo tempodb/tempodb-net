@@ -23,7 +23,7 @@ namespace TempoDB.Tests.Json
                 var foldConverter = new FoldConverter();
                 var periodConverter = new PeriodConverter();
                 var rollup = JsonConvert.DeserializeObject<Rollup>(json, foldConverter, periodConverter);
-                var expected = new Rollup(Fold.Sum, Period.FromHours(1));
+                var expected = new Rollup(Period.FromHours(1), Fold.Sum);
                 Assert.AreEqual(expected, rollup);
             }
 
@@ -37,7 +37,7 @@ namespace TempoDB.Tests.Json
                 var foldConverter = new FoldConverter();
                 var periodConverter = new PeriodConverter();
                 var rollup = JsonConvert.DeserializeObject<Rollup>(json, foldConverter, periodConverter);
-                var expected = new Rollup(Fold.Sum, Period.FromMinutes(1));
+                var expected = new Rollup(Period.FromMinutes(1), Fold.Sum);
                 Assert.AreEqual(expected, rollup);
             }
         }
@@ -47,7 +47,7 @@ namespace TempoDB.Tests.Json
             [Test]
             public void DefaultTz()
             {
-                var rollup = new Rollup(Fold.Mean, Period.FromMinutes(1));
+                var rollup = new Rollup(Period.FromMinutes(1), Fold.Mean);
                 var foldConverter = new FoldConverter();
                 var periodConverter = new PeriodConverter();
                 var json = JsonConvert.SerializeObject(rollup, foldConverter, periodConverter);
@@ -58,7 +58,7 @@ namespace TempoDB.Tests.Json
             [Test]
             public void NonUtc()
             {
-                var rollup = new Rollup(Fold.Mean, Period.FromHours(1));
+                var rollup = new Rollup(Period.FromHours(1), Fold.Mean);
                 var foldConverter = new FoldConverter();
                 var periodConverter = new PeriodConverter();
                 var json = JsonConvert.SerializeObject(rollup, foldConverter, periodConverter);

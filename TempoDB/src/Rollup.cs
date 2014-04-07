@@ -23,10 +23,10 @@ namespace TempoDB
             get { return period; }
             private set { this.period = value; }
         }
-        public Rollup(Fold fold, NodaTime.Period period)
+        public Rollup(NodaTime.Period period, Fold fold)
         {
-            this.fold = fold;
             this.period = period;
+            this.fold = fold;
         }
 
         public override string ToString()
