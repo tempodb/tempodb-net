@@ -80,6 +80,7 @@
     <Compile Include="src\ReadDataPointsByFilterTest.cs" />
     <Compile Include="src\ReadDataPointsBySeriesTest.cs" />
     <Compile Include="src\ReadMultiDataPointsTest.cs" />
+    <Compile Include="src\ReadMultiRollupTest.cs" />
     <Compile Include="src\ReadSingleValueByFilterTest.cs" />
     <Compile Include="src\ReadSingleValueBySeriesTest.cs" />
     <Compile Include="src\ResponseTest.cs" />

@@ -121,6 +121,10 @@ namespace TempoDB
             {
                return DataPointFoundSegment.FromResponse(response) as T;
             }
+            else if((typeof(T) == typeof(Segment<MultiDataPoint>)) || (typeof(T) == typeof(MultiRollupDataPointSegment)))
+            {
+               return MultiRollupDataPointSegment.FromResponse(response) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

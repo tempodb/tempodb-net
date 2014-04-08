@@ -165,6 +165,32 @@ namespace TempoDB
             return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
+        public Response<Cursor<MultiDataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/series/key/{key}/data/rollups/segment/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", series.Key);
+            ApplyIntervalToRequest(request, interval);
+            ApplyMultiRollupToRequest(request, rollup);
+            ApplyTimeZoneToRequest(request, zone);
+
+            var response = Execute<MultiRollupDataPointSegment>(request);
+
+            Cursor<MultiDataPoint> cursor = null;
+            if(response.State == State.Success)
+            {
+                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value);
+                cursor = new Cursor<MultiDataPoint>(segments);
+            }
+            else
+            {
+                throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
+            }
+            return new Response<Cursor<MultiDataPoint>>(cursor, response.Code, response.Message);
+        }
+
         public Response<QueryResult<DataPoint>> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
@@ -349,6 +375,18 @@ namespace TempoDB
             var zone = DateTimeZone.Utc;
             request.AddParameter("start", ZonedDateTimeConverter.ToString(interval.Start.InZone(zone)));
             request.AddParameter("end", ZonedDateTimeConverter.ToString(interval.End.InZone(zone)));
+        }
+
+        private static void ApplyMultiRollupToRequest(IRestRequest request, MultiRollup rollup)
+        {
+            if(rollup != null)
+            {
+                foreach(Fold fold in rollup.Folds)
+                {
+                    request.AddParameter("rollup.fold", fold.ToString().ToLower());
+                }
+                request.AddParameter("rollup.period", PeriodPattern.NormalizingIsoPattern.Format(rollup.Period));
+            }
         }
 
         private static void ApplyPredicateToRequest(IRestRequest request, Predicate predicate)
