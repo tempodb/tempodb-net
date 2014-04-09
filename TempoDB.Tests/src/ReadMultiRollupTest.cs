@@ -114,7 +114,6 @@ namespace TempoDB.Tests
         }
 
         [Test]
-        [Ignore]
         public void MultipleSegmentSmokeTest()
         {
             var response1 = TestCommon.GetResponse(200, json1);

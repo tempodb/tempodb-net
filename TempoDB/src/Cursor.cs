@@ -33,11 +33,13 @@ namespace TempoDB
     {
         private Segment<T> segment;
         private TempoDB client;
+        Type type;
 
-        public SegmentEnumerator(TempoDB client, Segment<T> initial)
+        public SegmentEnumerator(TempoDB client, Segment<T> initial, Type type)
         {
             this.client = client;
             this.segment = initial;
+            this.type = type;
         }
 
         public IEnumerator<Segment<T>> GetEnumerator()
@@ -47,7 +49,7 @@ namespace TempoDB
             {
                 // Add rest call here
                 var request = client.BuildRequest(segment.NextUrl, Method.GET);
-                var result = client.Execute<Segment<T>>(request);
+                var result = client.Execute<Segment<T>>(request, type);
                 if(result.State == State.Success)
                 {
                     segment = result.Value;

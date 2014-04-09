@@ -27,7 +27,9 @@ namespace TempoDB
             get { return getState(Code); }
         }
 
-        public Response(IRestResponse response)
+        public Response(IRestResponse response) : this(response, typeof(T)) { }
+
+        public Response(IRestResponse response, Type type)
         {
             T value = null;
             int code = (int)response.StatusCode;
@@ -37,7 +39,7 @@ namespace TempoDB
             switch(getState(code))
             {
                 case State.Success:
-                    value = newValueFromResponse(response);
+                    value = newValueFromResponse(response, type);
                     break;
                 case State.PartialSuccess:
                     multistatus = JsonConvert.DeserializeObject<MultiStatus>(response.Content);
@@ -77,56 +79,56 @@ namespace TempoDB
             return state;
         }
 
-        private T newValueFromResponse(IRestResponse response)
+        private T newValueFromResponse(IRestResponse response, Type type)
         {
-            if(typeof(T) == typeof(Series))
+            if(type == typeof(Series))
             {
                 return Series.FromResponse(response) as T;
             }
-            else if(typeof(T) == typeof(DeleteSummary))
+            else if(type == typeof(DeleteSummary))
             {
                 return DeleteSummary.FromResponse(response) as T;
             }
-            else if(typeof(T) == typeof(Nothing))
+            else if(type == typeof(Nothing))
             {
                 return Nothing.FromResponse(response) as T;
             }
-            else if(typeof(T) == typeof(SingleValue))
+            else if(type == typeof(SingleValue))
             {
                 return SingleValue.FromResponse(response) as T;
             }
-            else if(typeof(T) == typeof(Segment<Series>))
+            else if(type == typeof(Segment<Series>))
             {
                 var series = JsonConvert.DeserializeObject<List<Series>>(response.Content);
                 var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
                 var segment = new Segment<Series>(series, nextUrl);
                 return segment as T;
             }
-            else if(typeof(T) == typeof(Segment<SingleValue>))
+            else if(type == typeof(Segment<SingleValue>))
             {
                 var value = JsonConvert.DeserializeObject<List<SingleValue>>(response.Content, singlevalueConverter);
                 var nextUrl = HttpHelper.GetLinkFromHeaders("next", response);
                 var segment = new Segment<SingleValue>(value, nextUrl);
                 return segment as T;
             }
-            else if((typeof(T) == typeof(Segment<DataPoint>)) || (typeof(T) == typeof(DataPointSegment)))
+            else if(type == typeof(DataPointSegment))
             {
                return DataPointSegment.FromResponse(response) as T;
             }
-            else if((typeof(T) == typeof(Segment<MultiDataPoint>)) || (typeof(T) == typeof(MultiDataPointSegment)))
+            else if(type == typeof(MultiDataPointSegment))
             {
                return MultiDataPointSegment.FromResponse(response) as T;
             }
-            else if((typeof(T) == typeof(Segment<DataPointFound>)) || (typeof(T) == typeof(DataPointFoundSegment)))
+            else if(type == typeof(DataPointFoundSegment))
             {
                return DataPointFoundSegment.FromResponse(response) as T;
             }
-            else if((typeof(T) == typeof(Segment<MultiDataPoint>)) || (typeof(T) == typeof(MultiRollupDataPointSegment)))
+            else if(type == typeof(MultiRollupDataPointSegment))
             {
                return MultiRollupDataPointSegment.FromResponse(response) as T;
             }
 
-            throw new Exception("Unknown T: " + typeof(T).ToString());
+            throw new Exception("Unknown T: " + type.ToString());
         }
 
         private string messageFromResponse(IRestResponse response)

@@ -1,6 +1,7 @@
 using NodaTime;
 using NodaTime.Text;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using TempoDB.Exceptions;
 using TempoDB.Json;
@@ -93,12 +94,12 @@ namespace TempoDB
             ApplyTimeZoneToRequest(request, zone);
             ApplyPredicateToRequest(request, predicate);
 
-            var response = Execute<DataPointFoundSegment>(request);
+            var response = Execute<DataPointFoundSegment>(request, typeof(DataPointFoundSegment));
 
             Cursor<DataPointFound> cursor = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<DataPointFound>(this, response.Value);
+                var segments = new SegmentEnumerator<DataPointFound>(this, response.Value, typeof(DataPointFoundSegment));
                 cursor = new Cursor<DataPointFound>(segments);
             }
             else
@@ -128,7 +129,7 @@ namespace TempoDB
             Cursor<Series> cursor = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<Series>(this, response.Value);
+                var segments = new SegmentEnumerator<Series>(this, response.Value, typeof(Segment<Series>));
                 cursor = new Cursor<Series>(segments);
             }
             else
@@ -149,12 +150,12 @@ namespace TempoDB
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
 
-            var response = Execute<DataPointSegment>(request);
+            var response = Execute<DataPointSegment>(request, typeof(DataPointSegment));
 
             QueryResult<DataPoint> query = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
+                var segments = new SegmentEnumerator<DataPoint>(this, response.Value, typeof(DataPointSegment));
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
             }
@@ -176,12 +177,12 @@ namespace TempoDB
             ApplyMultiRollupToRequest(request, rollup);
             ApplyTimeZoneToRequest(request, zone);
 
-            var response = Execute<MultiRollupDataPointSegment>(request);
+            var response = Execute<MultiRollupDataPointSegment>(request, typeof(MultiRollupDataPointSegment));
 
             Cursor<MultiDataPoint> cursor = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value);
+                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value, typeof(MultiRollupDataPointSegment));
                 cursor = new Cursor<MultiDataPoint>(segments);
             }
             else
@@ -203,12 +204,12 @@ namespace TempoDB
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
 
-            var response = Execute<DataPointSegment>(request);
+            var response = Execute<DataPointSegment>(request, typeof(DataPointSegment));
 
             QueryResult<DataPoint> query = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<DataPoint>(this, response.Value);
+                var segments = new SegmentEnumerator<DataPoint>(this, response.Value, typeof(DataPointSegment));
                 var cursor = new Cursor<DataPoint>(segments);
                 query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
             }
@@ -230,12 +231,12 @@ namespace TempoDB
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
 
-            var response = Execute<MultiDataPointSegment>(request);
+            var response = Execute<MultiDataPointSegment>(request, typeof(MultiDataPointSegment));
 
             QueryResult<MultiDataPoint> query = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value);
+                var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value, typeof(MultiDataPointSegment));
                 var cursor = new Cursor<MultiDataPoint>(segments);
                 query = new QueryResult<MultiDataPoint>(this, cursor, response.Value.Rollup);
             }
@@ -274,7 +275,7 @@ namespace TempoDB
             Cursor<SingleValue> cursor = null;
             if(response.State == State.Success)
             {
-                var segments = new SegmentEnumerator<SingleValue>(this, response.Value);
+                var segments = new SegmentEnumerator<SingleValue>(this, response.Value, typeof(Segment<SingleValue>));
                 cursor = new Cursor<SingleValue>(segments);
             }
             else
@@ -315,7 +316,12 @@ namespace TempoDB
 
         public Response<T> Execute<T>(RestRequest request) where T : Model
         {
-            var response = new Response<T>(Client.Execute(request));
+            return Execute<T>(request, typeof(T));
+        }
+
+        public Response<T> Execute<T>(RestRequest request, Type type) where T : Model
+        {
+            var response = new Response<T>(Client.Execute(request), type);
             return response;
         }
 
