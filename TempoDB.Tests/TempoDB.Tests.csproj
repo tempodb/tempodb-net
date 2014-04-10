@@ -73,6 +73,7 @@
     <Compile Include="src\FilterTest.cs" />
     <Compile Include="src\GetSeriesTest.cs" />
     <Compile Include="src\GetSeriesByFilterTest.cs" />
+    <Compile Include="src\InterpolationTest.cs" />
     <Compile Include="src\MultiDataPointTest.cs" />
     <Compile Include="src\MultiRollupTest.cs" />
     <Compile Include="src\MultiStatusTest.cs" />
