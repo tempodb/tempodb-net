@@ -191,6 +191,30 @@ namespace TempoDB.Tests
         }
 
         [Test]
+        public void RequestParametersInterpolation()
+        {
+            var response = TestCommon.GetResponse(200, json);
+            var mockclient = TestCommon.GetMockRestClient(response);
+            var client = TestCommon.GetClient(mockclient.Object);
+            var start = zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 0));
+            var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
+            var interval = new Interval(start.ToInstant(), end.ToInstant());
+            var interpolation = new Interpolation(Period.FromMinutes(1), InterpolationFunction.ZOH);
+
+            client.ReadDataPoints(series, interval, zone, rollup, interpolation:interpolation);
+
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.period", "PT1H"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.fold", "max"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.fold", "sum"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "start", "2012-01-01T00:00:00+00:00"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "end", "2012-01-02T00:00:00+00:00"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "tz", "UTC"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "interpolation.period", "PT1M"))));
+            mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "interpolation.function", "zoh"))));
+        }
+
+        [Test]
         [ExpectedException(typeof(TempoDBException))]
         public void Error()
         {

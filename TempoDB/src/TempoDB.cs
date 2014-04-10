@@ -139,13 +139,14 @@ namespace TempoDB
             return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
         }
 
-        public Response<QueryResult<DataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult<DataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/segment/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", series.Key);
+            ApplyInterpolationToRequest(request, interpolation);
             ApplyIntervalToRequest(request, interval);
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
@@ -166,7 +167,7 @@ namespace TempoDB
             return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
-        public Response<Cursor<MultiDataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup)
+        public Response<Cursor<MultiDataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/rollups/segment/";
@@ -174,6 +175,7 @@ namespace TempoDB
             request.AddUrlSegment("version", Version);
             request.AddUrlSegment("key", series.Key);
             ApplyIntervalToRequest(request, interval);
+            ApplyInterpolationToRequest(request, interpolation);
             ApplyMultiRollupToRequest(request, rollup);
             ApplyTimeZoneToRequest(request, zone);
 
@@ -192,13 +194,14 @@ namespace TempoDB
             return new Response<Cursor<MultiDataPoint>>(cursor, response.Code, response.Message);
         }
 
-        public Response<QueryResult<DataPoint>> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult<DataPoint>> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/segment/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             ApplyFilterToRequest(request, filter);
+            ApplyInterpolationToRequest(request, interpolation);
             ApplyIntervalToRequest(request, interval);
             ApplyAggregationToRequest(request, aggregation);
             ApplyTimeZoneToRequest(request, zone);
@@ -220,13 +223,14 @@ namespace TempoDB
             return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
-        public Response<QueryResult<MultiDataPoint>> ReadDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null)
+        public Response<QueryResult<MultiDataPoint>> ReadDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/multi/";
             var request = BuildRequest(url, Method.GET);
             request.AddUrlSegment("version", Version);
             ApplyFilterToRequest(request, filter);
+            ApplyInterpolationToRequest(request, interpolation);
             ApplyIntervalToRequest(request, interval);
             ApplyTimeZoneToRequest(request, zone);
             ApplyRollupToRequest(request, rollup);
@@ -373,6 +377,15 @@ namespace TempoDB
                 {
                     request.AddParameter(string.Format("attr[{0}]", attribute.Key), attribute.Value);
                 }
+            }
+        }
+
+        private static void ApplyInterpolationToRequest(IRestRequest request, Interpolation interpolation)
+        {
+            if(interpolation != null)
+            {
+                request.AddParameter("interpolation.period", PeriodPattern.NormalizingIsoPattern.Format(interpolation.Period));
+                request.AddParameter("interpolation.function", interpolation.Function.ToString().ToLower());
             }
         }
 
