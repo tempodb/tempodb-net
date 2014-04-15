@@ -110,6 +110,7 @@
     <Compile Include="src\Json\SeriesTest.cs" />
     <Compile Include="src\Json\SingleValueTest.cs" />
     <Compile Include="src\Json\StatusTest.cs" />
+    <Compile Include="src\Json\SummaryTest.cs" />
     <Compile Include="src\Json\WriteRequestTest.cs" />
   </ItemGroup>
   <ItemGroup>

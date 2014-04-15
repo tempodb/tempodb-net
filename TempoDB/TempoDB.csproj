@@ -79,6 +79,7 @@
     <Compile Include="src\SingleValue.cs" />
     <Compile Include="src\State.cs" />
     <Compile Include="src\Status.cs" />
+    <Compile Include="src\Summary.cs" />
     <Compile Include="src\TempoDB.cs" />
     <Compile Include="src\WritableDataPoint.cs" />
     <Compile Include="src\WriteRequest.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="src\Json\MultiRollupDataPointSegmentConverter.cs" />
     <Compile Include="src\Json\PeriodConverter.cs" />
     <Compile Include="src\Json\SingleValueConverter.cs" />
+    <Compile Include="src\Json\SummaryConverter.cs" />
     <Compile Include="src\Json\WriteRequestConverter.cs" />
     <Compile Include="src\Json\ZonedDateTimeConverter.cs" />
     <Compile Include="src\Utility\EqualsBuilder.cs" />
