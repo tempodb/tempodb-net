@@ -78,7 +78,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json1);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(filter, interval);
+            var result = client.ReadMultiDataPoints(filter, interval);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
@@ -100,7 +100,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(filter, interval, zone);
+            var result = client.ReadMultiDataPoints(filter, interval, zone);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
@@ -131,7 +131,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadDataPoints(filter, interval);
+            var result = client.ReadMultiDataPoints(filter, interval);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
@@ -154,7 +154,7 @@ namespace TempoDB.Tests
             var mockclient = TestCommon.GetMockRestClient(response);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            client.ReadDataPoints(filter, interval);
+            client.ReadMultiDataPoints(filter, interval);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.GET)));
         }
@@ -166,7 +166,7 @@ namespace TempoDB.Tests
             var mockclient = TestCommon.GetMockRestClient(response);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            client.ReadDataPoints(filter, interval);
+            client.ReadMultiDataPoints(filter, interval);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/multi/")));
         }
@@ -181,7 +181,7 @@ namespace TempoDB.Tests
             var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
             var interval = new Interval(start.ToInstant(), end.ToInstant());
 
-            client.ReadDataPoints(filter, interval);
+            client.ReadMultiDataPoints(filter, interval);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key2"))));
@@ -201,7 +201,7 @@ namespace TempoDB.Tests
             var interval = new Interval(start.ToInstant(), end.ToInstant());
 
             var rollup = new Rollup(Period.FromMinutes(1), Fold.Mean);
-            client.ReadDataPoints(filter, interval, rollup:rollup);
+            client.ReadMultiDataPoints(filter, interval, rollup:rollup);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key2"))));
@@ -224,7 +224,7 @@ namespace TempoDB.Tests
 
             var rollup = new Rollup(Period.FromMinutes(1), Fold.Mean);
             var interpolation = new Interpolation(Period.FromMinutes(1), InterpolationFunction.Linear);
-            client.ReadDataPoints(filter, interval, rollup:rollup, interpolation:interpolation);
+            client.ReadMultiDataPoints(filter, interval, rollup:rollup, interpolation:interpolation);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key2"))));
@@ -244,7 +244,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(403, "You are forbidden");
             var client = TestCommon.GetClient(response);
 
-            client.ReadDataPoints(filter, interval);
+            client.ReadMultiDataPoints(filter, interval);
         }
     }
 }

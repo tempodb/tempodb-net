@@ -76,7 +76,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json1);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(series, interval, zone, rollup);
+            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
@@ -98,7 +98,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(series, interval, zone, rollup);
+            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
@@ -129,7 +129,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadDataPoints(series, interval, zone, rollup);
+            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
@@ -152,7 +152,7 @@ namespace TempoDB.Tests
             var mockclient = TestCommon.GetMockRestClient(response);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            client.ReadDataPoints(series, interval, zone, rollup);
+            client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Method == Method.GET)));
         }
@@ -164,7 +164,7 @@ namespace TempoDB.Tests
             var mockclient = TestCommon.GetMockRestClient(response);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            client.ReadDataPoints(series, interval, zone, rollup);
+            client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => req.Resource == "/{version}/series/key/{key}/data/rollups/segment/")));
         }
@@ -179,7 +179,7 @@ namespace TempoDB.Tests
             var end = zone.AtStrictly(new LocalDateTime(2012, 1, 2, 0, 0, 0));
             var interval = new Interval(start.ToInstant(), end.ToInstant());
 
-            client.ReadDataPoints(series, interval, zone, rollup);
+            client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.period", "PT1H"))));
@@ -201,7 +201,7 @@ namespace TempoDB.Tests
             var interval = new Interval(start.ToInstant(), end.ToInstant());
             var interpolation = new Interpolation(Period.FromMinutes(1), InterpolationFunction.ZOH);
 
-            client.ReadDataPoints(series, interval, zone, rollup, interpolation:interpolation);
+            client.ReadMultiRollupDataPoints(series, interval, zone, rollup, interpolation:interpolation);
 
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "key", "key1"))));
             mockclient.Verify(cl => cl.Execute(It.Is<RestRequest>(req => TestCommon.ContainsParameter(req.Parameters, "rollup.period", "PT1H"))));
@@ -221,7 +221,7 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(403, "You are forbidden");
             var client = TestCommon.GetClient(response);
 
-            client.ReadDataPoints(series, interval, zone, rollup);
+            client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
         }
     }
 }

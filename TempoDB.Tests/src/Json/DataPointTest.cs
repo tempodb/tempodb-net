@@ -25,6 +25,16 @@ namespace TempoDB.Tests.Json
             }
 
             [Test]
+            public void UtcTestInt()
+            {
+                var zone = DateTimeZone.Utc;
+                var converter = new ZonedDateTimeConverter();
+                var datapoint = JsonConvert.DeserializeObject<DataPoint>("{\"t\":\"2012-01-01T00:00:01.000+00:00\",\"v\":12}", converter);
+                var expected = new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 1)), 12.0);
+                Assert.AreEqual(expected, datapoint);
+            }
+
+            [Test]
             public void TimeZoneTest()
             {
                 var zone = DateTimeZoneProviders.Tzdb["America/Chicago"];

@@ -167,7 +167,7 @@ namespace TempoDB
             return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
-        public Response<Cursor<MultiDataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup, Interpolation interpolation=null)
+        public Response<Cursor<MultiDataPoint>> ReadMultiRollupDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/rollups/segment/";
@@ -223,7 +223,7 @@ namespace TempoDB
             return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
         }
 
-        public Response<QueryResult<MultiDataPoint>> ReadDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
+        public Response<QueryResult<MultiDataPoint>> ReadMultiDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/multi/";
