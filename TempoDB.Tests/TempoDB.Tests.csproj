@@ -84,6 +84,7 @@
     <Compile Include="src\ReadMultiRollupTest.cs" />
     <Compile Include="src\ReadSingleValueByFilterTest.cs" />
     <Compile Include="src\ReadSingleValueBySeriesTest.cs" />
+    <Compile Include="src\ReadSummaryBySeriesTest.cs" />
     <Compile Include="src\ResponseTest.cs" />
     <Compile Include="src\RollupTest.cs" />
     <Compile Include="src\SeriesTest.cs" />

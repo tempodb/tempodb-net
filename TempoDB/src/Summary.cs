@@ -3,6 +3,7 @@ using NodaTime;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
+using TempoDB.Json;
 using TempoDB.Utility;
 
 
@@ -10,6 +11,8 @@ namespace TempoDB
 {
     public class Summary : Model, IDictionary<string, double>
     {
+        private static SummaryConverter converter = new SummaryConverter();
+
         private Series series;
         private Interval interval;
         private IDictionary<string, double> data;
@@ -60,7 +63,7 @@ namespace TempoDB
 
         protected internal static Summary FromResponse(IRestResponse response)
         {
-            var summary = JsonConvert.DeserializeObject<Summary>(response.Content);
+            var summary = JsonConvert.DeserializeObject<Summary>(response.Content, converter);
             return summary;
         }
 

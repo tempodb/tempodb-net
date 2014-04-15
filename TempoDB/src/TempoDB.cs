@@ -289,6 +289,19 @@ namespace TempoDB
             return new Response<Cursor<SingleValue>>(cursor, response.Code, response.Message);
         }
 
+        public Response<Summary> ReadSummary(Series series, Interval interval, DateTimeZone zone=null)
+        {
+            if(zone == null) zone = DateTimeZone.Utc;
+            var url = "/{version}/series/key/{key}/summary/";
+            var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
+            request.AddUrlSegment("key", series.Key);
+            ApplyIntervalToRequest(request, interval);
+            ApplyTimeZoneToRequest(request, zone);
+            var response = Execute<Summary>(request);
+            return response;
+        }
+
         public Response<Series> UpdateSeries(Series series)
         {
             var url = "/{version}/series/key/{key}/";

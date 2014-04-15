@@ -97,6 +97,10 @@ namespace TempoDB
             {
                 return SingleValue.FromResponse(response) as T;
             }
+            else if(type == typeof(Summary))
+            {
+                return Summary.FromResponse(response) as T;
+            }
             else if(type == typeof(Segment<Series>))
             {
                 var series = JsonConvert.DeserializeObject<List<Series>>(response.Content);
