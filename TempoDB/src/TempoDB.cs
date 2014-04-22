@@ -119,7 +119,7 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Cursor<Series>> GetSeries(Filter filter)
+        public Cursor<Series> GetSeries(Filter filter)
         {
             var url = "/{version}/series/";
             var request = BuildRequest(url, Method.GET);
@@ -136,10 +136,10 @@ namespace TempoDB
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<Cursor<Series>>(cursor, response.Code, response.Message);
+            return cursor;
         }
 
-        public Response<QueryResult<DataPoint>> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
+        public Cursor<DataPoint> ReadDataPoints(Series series, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/segment/";
@@ -153,21 +153,20 @@ namespace TempoDB
 
             var response = Execute<DataPointSegment>(request, typeof(DataPointSegment));
 
-            QueryResult<DataPoint> query = null;
+            Cursor<DataPoint> cursor = null;
             if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value, typeof(DataPointSegment));
-                var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
+                cursor = new Cursor<DataPoint>(segments);
             }
             else
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
+            return cursor;
         }
 
-        public Response<Cursor<MultiDataPoint>> ReadMultiRollupDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup, Interpolation interpolation=null)
+        public Cursor<MultiDataPoint> ReadMultiRollupDataPoints(Series series, Interval interval, DateTimeZone zone, MultiRollup rollup, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/series/key/{key}/data/rollups/segment/";
@@ -191,10 +190,10 @@ namespace TempoDB
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<Cursor<MultiDataPoint>>(cursor, response.Code, response.Message);
+            return cursor;
         }
 
-        public Response<QueryResult<DataPoint>> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
+        public Cursor<DataPoint> ReadDataPoints(Filter filter, Interval interval, Aggregation aggregation, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/segment/";
@@ -209,21 +208,20 @@ namespace TempoDB
 
             var response = Execute<DataPointSegment>(request, typeof(DataPointSegment));
 
-            QueryResult<DataPoint> query = null;
+            Cursor<DataPoint> cursor = null;
             if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<DataPoint>(this, response.Value, typeof(DataPointSegment));
-                var cursor = new Cursor<DataPoint>(segments);
-                query = new QueryResult<DataPoint>(this, cursor, response.Value.Rollup);
+                cursor = new Cursor<DataPoint>(segments);
             }
             else
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<QueryResult<DataPoint>>(query, response.Code, response.Message);
+            return cursor;
         }
 
-        public Response<QueryResult<MultiDataPoint>> ReadMultiDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
+        public Cursor<MultiDataPoint> ReadMultiDataPoints(Filter filter, Interval interval, DateTimeZone zone=null, Rollup rollup=null, Interpolation interpolation=null)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/multi/";
@@ -237,18 +235,17 @@ namespace TempoDB
 
             var response = Execute<MultiDataPointSegment>(request, typeof(MultiDataPointSegment));
 
-            QueryResult<MultiDataPoint> query = null;
+            Cursor<MultiDataPoint> cursor = null;
             if(response.State == State.Success)
             {
                 var segments = new SegmentEnumerator<MultiDataPoint>(this, response.Value, typeof(MultiDataPointSegment));
-                var cursor = new Cursor<MultiDataPoint>(segments);
-                query = new QueryResult<MultiDataPoint>(this, cursor, response.Value.Rollup);
+                cursor = new Cursor<MultiDataPoint>(segments);
             }
             else
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<QueryResult<MultiDataPoint>>(query, response.Code, response.Message);
+            return cursor;
         }
 
         public Response<SingleValue> ReadSingleValue(Series series, ZonedDateTime timestamp, DateTimeZone zone=null, Direction direction=Direction.Exact)
@@ -265,7 +262,7 @@ namespace TempoDB
             return response;
         }
 
-        public Response<Cursor<SingleValue>> ReadSingleValue(Filter filter, ZonedDateTime timestamp, DateTimeZone zone=null, Direction direction=Direction.Exact)
+        public Cursor<SingleValue> ReadSingleValue(Filter filter, ZonedDateTime timestamp, DateTimeZone zone=null, Direction direction=Direction.Exact)
         {
             if(zone == null) zone = DateTimeZone.Utc;
             var url = "/{version}/single/";
@@ -286,7 +283,7 @@ namespace TempoDB
             {
                 throw new TempoDBException(string.Format("API Error: {0} - {1}", response.Code, response.Message));
             }
-            return new Response<Cursor<SingleValue>>(cursor, response.Code, response.Message);
+            return cursor;
         }
 
         public Response<Summary> ReadSummary(Series series, Interval interval, DateTimeZone zone=null)

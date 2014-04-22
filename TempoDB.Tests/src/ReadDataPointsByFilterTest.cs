@@ -64,14 +64,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json1);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(filter, interval, aggregation);
+            var cursor = client.ReadDataPoints(filter, interval, aggregation);
 
             var expected = new List<DataPoint> {
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 1, 0)), 23.45)
             };
             var output = new List<DataPoint>();
-            foreach(DataPoint dp in result.Value.DataPoints)
+            foreach(DataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -86,14 +86,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(filter, interval, aggregation, zone);
+            var cursor = client.ReadDataPoints(filter, interval, aggregation, zone);
 
             var expected = new List<DataPoint> {
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), 12.34),
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 1, 0)), 23.45)
             };
             var output = new List<DataPoint>();
-            foreach(DataPoint dp in result.Value.DataPoints)
+            foreach(DataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -117,7 +117,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadDataPoints(filter, interval, aggregation);
+            var cursor = client.ReadDataPoints(filter, interval, aggregation);
 
             var expected = new List<DataPoint> {
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 0, 0)), 12.34),
@@ -125,7 +125,7 @@ namespace TempoDB.Tests
                 new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 5, 2, 0)), 34.56)
             };
             var output = new List<DataPoint>();
-            foreach(DataPoint dp in result.Value.DataPoints)
+            foreach(DataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -227,10 +227,10 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(403, "You are forbidden");
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadDataPoints(filter, interval, aggregation);
+            var cursor = client.ReadDataPoints(filter, interval, aggregation);
 
             var output = new List<DataPoint>();
-            foreach(DataPoint dp in result.Value.DataPoints)
+            foreach(DataPoint dp in cursor)
             {
                 output.Add(dp);
             }

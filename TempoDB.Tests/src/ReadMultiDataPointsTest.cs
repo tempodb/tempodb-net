@@ -78,14 +78,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json1);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadMultiDataPoints(filter, interval);
+            var cursor = client.ReadMultiDataPoints(filter, interval);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 1, 0, 0)), new Dictionary<string, double> {{"key1", 23.45}, {"key2", 34.56}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value.DataPoints)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -100,14 +100,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadMultiDataPoints(filter, interval, zone);
+            var cursor = client.ReadMultiDataPoints(filter, interval, zone);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 1, 0, 0)), new Dictionary<string, double> {{"key1", 23.45}, {"key2", 34.56}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value.DataPoints)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -131,7 +131,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadMultiDataPoints(filter, interval);
+            var cursor = client.ReadMultiDataPoints(filter, interval);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"key1", 12.34}, {"key2", 23.45}}),
@@ -139,7 +139,7 @@ namespace TempoDB.Tests
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 2, 0, 0)), new Dictionary<string, double> {{"key1", 34.56}, {"key2", 45.67}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value.DataPoints)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }

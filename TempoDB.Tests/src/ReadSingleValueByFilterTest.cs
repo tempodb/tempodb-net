@@ -105,13 +105,13 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
+            var cursor = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
 
             var expected = new List<SingleValue> {
                 new SingleValue(series1, new DataPoint(timestamp, 12.34))
             };
             var output = new List<SingleValue>();
-            foreach(SingleValue value in result.Value)
+            foreach(SingleValue value in cursor)
             {
                 output.Add(value);
             }
@@ -126,13 +126,13 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
+            var cursor = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
 
             var expected = new List<SingleValue> {
                 new SingleValue(series1, new DataPoint(zone.AtStrictly(new LocalDateTime(2012, 1, 1, 0, 0, 1)), 12.34))
             };
             var output = new List<SingleValue>();
-            foreach(SingleValue value in result.Value)
+            foreach(SingleValue value in cursor)
             {
                 output.Add(value);
             }
@@ -156,7 +156,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
+            var cursor = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
 
             var expected = new List<SingleValue> {
                 new SingleValue(series1, new DataPoint(timestamp, 12.34)),
@@ -164,7 +164,7 @@ namespace TempoDB.Tests
                 new SingleValue(series3, new DataPoint(timestamp, 34.56))
             };
             var output = new List<SingleValue>();
-            foreach(SingleValue value in result.Value)
+            foreach(SingleValue value in cursor)
             {
                 output.Add(value);
             }
@@ -225,10 +225,10 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(403, "You are forbidden");
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
+            var cursor = client.ReadSingleValue(filter, timestamp, zone, Direction.Exact);
 
             var output = new List<SingleValue>();
-            foreach(SingleValue value in result.Value)
+            foreach(SingleValue value in cursor)
             {
                 output.Add(value);
             }

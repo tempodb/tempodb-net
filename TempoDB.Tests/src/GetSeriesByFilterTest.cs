@@ -34,10 +34,10 @@ namespace TempoDB.Tests
             var mockclient = TestCommon.GetMockRestClient(response);
             var client = TestCommon.GetClient(mockclient.Object);
 
-            var result = client.GetSeries(new Filter());
+            var cursor = client.GetSeries(new Filter());
 
             var resultList = new List<Series>();
-            foreach(Series s in result.Value)
+            foreach(Series s in cursor)
             {
                 resultList.Add(s);
             }

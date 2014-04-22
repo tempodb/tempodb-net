@@ -76,14 +76,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, json1);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
+            var cursor = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 1, 0, 0)), new Dictionary<string, double> {{"max", 23.45}, {"sum", 34.56}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -98,14 +98,14 @@ namespace TempoDB.Tests
             var response = TestCommon.GetResponse(200, jsonTz);
             var client = TestCommon.GetClient(response);
 
-            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
+            var cursor = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 1, 0, 0)), new Dictionary<string, double> {{"max", 23.45}, {"sum", 34.56}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }
@@ -129,7 +129,7 @@ namespace TempoDB.Tests
             mockclient.Setup(cl => cl.Execute(It.IsAny<RestRequest>())).Returns(() => responses[calls]).Callback(() => calls++);
 
             var client = TestCommon.GetClient(mockclient.Object);
-            var result = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
+            var cursor = client.ReadMultiRollupDataPoints(series, interval, zone, rollup);
 
             var expected = new List<MultiDataPoint> {
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 0, 0, 0)), new Dictionary<string, double> {{"max", 12.34}, {"sum", 23.45}}),
@@ -137,7 +137,7 @@ namespace TempoDB.Tests
                 new MultiDataPoint(zone.AtStrictly(new LocalDateTime(2012, 3, 27, 2, 0, 0)), new Dictionary<string, double> {{"max", 34.56}, {"sum", 45.67}})
             };
             var output = new List<MultiDataPoint>();
-            foreach(MultiDataPoint dp in result.Value)
+            foreach(MultiDataPoint dp in cursor)
             {
                 output.Add(dp);
             }
