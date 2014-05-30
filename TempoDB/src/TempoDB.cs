@@ -123,6 +123,7 @@ namespace TempoDB
         {
             var url = "/{version}/series/";
             var request = BuildRequest(url, Method.GET);
+            request.AddUrlSegment("version", Version);
             ApplyFilterToRequest(request, filter);
             var response = Execute<Segment<Series>>(request);
 
